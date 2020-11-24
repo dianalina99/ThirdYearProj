@@ -15,6 +15,19 @@ public class EasyMapLayoutGen : MonoBehaviour
     private int noOfRooms = 0, roomPos, row, column, prevMove = -1;
     private bool stopCondition;
 
+    public GameObject[] rooms;
+    public GameObject parent;
+
+    private void DrawRoom(int index, int x, int y)
+    {
+ 
+        GameObject room = Instantiate(rooms[index], new Vector3(y, x, 0), Quaternion.identity) as GameObject;
+        room.transform.SetParent(parent.transform, true);
+
+
+    }
+
+
     void Start()
     {
         System.Random rand = new System.Random();
@@ -24,9 +37,15 @@ public class EasyMapLayoutGen : MonoBehaviour
         row = 0;
         column = roomPos;
 
+        int prevRow;
+        int prevColumn;
 
         while (!stopCondition)
         {
+            prevRow = row;
+            prevColumn = column;
+
+
             //Check if we reached the bottom floor room.
             if (row == 3)
             {
@@ -59,6 +78,8 @@ public class EasyMapLayoutGen : MonoBehaviour
                     if (CanMove(row, column - 1))
                     {
                         prevMove = dir;
+
+
                         column--;
                         noOfRooms++;
                     }
@@ -70,6 +91,7 @@ public class EasyMapLayoutGen : MonoBehaviour
                     if (CanMove(row, column + 1))
                     {
                         prevMove = dir;
+
                         column++;
                         noOfRooms++;
                     }
@@ -85,6 +107,7 @@ public class EasyMapLayoutGen : MonoBehaviour
                         if (map[row, column] == 2)
                         {
                             map[row, column] = 4;
+
                         }
                         else
                         {
@@ -125,7 +148,14 @@ public class EasyMapLayoutGen : MonoBehaviour
                     //Don't move at all.
                     break;
 
+
+
+                   
+
             }
+
+            //Draw room.
+            DrawRoom(map[prevRow, prevColumn], row * 8, column * 10);
         }
         PrintMap();
     }

@@ -38,11 +38,52 @@ public class MapLayoutGeneration : MonoBehaviour
 
     private int noOfRooms = 0, roomPos, row, column;
     private bool stopCondition;
+    private Vector2 firstRoomPos;
+
+    public GameObject[] rooms;
+    public GameObject parent;
+
+    private Dictionary<Vector2, GameObject> gameMap = new Dictionary<Vector2, GameObject>();
+
+    private void DrawRoom(int index, int x, int y)
+    {
+        GameObject room;
+        Vector2 position = new Vector2(-y, -x);
+
+        //Check if dictionary entry exists and remove room before overwriting.
+        if(gameMap.ContainsKey( position ))
+        {
+            gameMap.TryGetValue( position, out room);
+            gameMap.Remove(position);
+            Destroy(room);
+        }
+
+        room = Instantiate(rooms[index], position, Quaternion.identity) as GameObject;
+        room.transform.SetParent(parent.transform, false);
+        gameMap.Add(position, room);
+    }
+
+    private void InitializeGrid()
+    {   
+        for(int i=0; i<=3;i++)
+            for(int j=0; j<=3;j++)
+            {
+                //Draw room.
+                DrawRoom(0, j * 8, i * 10);
+               
+            }
+    }
+    
+
+
 
     void Start()
     {
+        
         //RandomProportional rand = new RandomProportional();
         System.Random rand = new System.Random();
+
+        InitializeGrid();
 
 
         //Pick first room. It is always 1.
@@ -50,19 +91,25 @@ public class MapLayoutGeneration : MonoBehaviour
         row = 0;
         column = roomPos;
         stopCondition = false;
+        int prevRow;
+        int prevColumn;
 
+        firstRoomPos = new Vector2(row, column);
 
-        while (!stopCondition)
+            while (!stopCondition)
         {
-            //Check if we reached the bottom floor room.
-           /* if (row == 3)
-            {
-                stopCondition = true;
-            }*/
 
-            //Check if there are enough rooms generated.
+                prevRow = row;
+                prevColumn = column;
+                //Check if we reached the bottom floor room.
+                /* if (row == 3)
+                 {
+                     stopCondition = true;
+                 }*/
 
-            if (noOfRooms > 8 && row == 3)
+                //Check if there are enough rooms generated.
+
+                if (noOfRooms > 8 && row == 3)
             {
                 stopCondition = true;
             }
@@ -94,8 +141,9 @@ public class MapLayoutGeneration : MonoBehaviour
                     //Move to the left. Perform checks first.
                     if (CanMove(row, column - 1))
                     {
-                        prevMove[row, column] = dir;
                         column--;
+                        prevMove[row, column] = dir;
+                        
                         noOfRooms++;
                     }
 
@@ -105,8 +153,9 @@ public class MapLayoutGeneration : MonoBehaviour
                     //Move to the right.
                     if (CanMove(row, column + 1))
                     {
-                        prevMove[row, column] = dir;
                         column++;
+                        prevMove[row, column] = dir;
+                        
                         noOfRooms++;
                     }
 
@@ -140,9 +189,11 @@ public class MapLayoutGeneration : MonoBehaviour
                             map[row, column] = 3;
                         }
 
-                        prevMove[row, column] = dir;
                         row--;
+                        prevMove[row, column] = dir;
+
                         noOfRooms++;
+
                     }
 
                     break;
@@ -175,8 +226,9 @@ public class MapLayoutGeneration : MonoBehaviour
                             map[row, column] = 2;
                         }
 
-                        prevMove[row, column] = dir;
                         row++;
+                        prevMove[row, column] = dir;
+                        
                         noOfRooms++;
                     }
 
@@ -187,7 +239,8 @@ public class MapLayoutGeneration : MonoBehaviour
                     break;
             }
 
-
+            //Draw room.
+            DrawRoom(map[prevRow, prevColumn], prevRow * 8, prevColumn * 10);
         }
 
         PrintMap();
@@ -202,12 +255,11 @@ public class MapLayoutGeneration : MonoBehaviour
             return false;
         }
 
-        /*
-        if (map[i, j] != 0)
+        //Stop if next room is first room.
+        if(new Vector2(i,j) == firstRoomPos)
         {
-            //We've been here before, so don't pass twice.
             return false;
-        }*/
+        }
 
         return true;
     }
@@ -228,4 +280,6 @@ public class MapLayoutGeneration : MonoBehaviour
             }
         }
     }
+
+    
 }
