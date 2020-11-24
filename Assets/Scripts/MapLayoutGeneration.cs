@@ -41,10 +41,26 @@ public class MapLayoutGeneration : MonoBehaviour
     private Vector2 firstRoomPos;
 
     public GameObject[] rooms;
-    public GameObject parent;
+    public GameObject player, environment, parent;
 
     private Dictionary<Vector2, GameObject> gameMap = new Dictionary<Vector2, GameObject>();
 
+
+
+    private void DrawMap()
+    {
+        GameObject playerInst, room;
+        for(int i=0; i<=3; i++)
+            for(int j=0; j<=3; j++)
+            {
+                DrawRoom(map[i, j], i*8, j*10);
+            }
+
+        //Place player in first room.
+        gameMap.TryGetValue(firstRoomPos, out room);
+        playerInst = Instantiate( player, new Vector2(-131- firstRoomPos.y*8, 96), Quaternion.identity) as GameObject;
+        playerInst.transform.SetParent(environment.transform, false);
+    }
     private void DrawRoom(int index, int x, int y)
     {
         GameObject room;
@@ -101,12 +117,7 @@ public class MapLayoutGeneration : MonoBehaviour
 
                 prevRow = row;
                 prevColumn = column;
-                //Check if we reached the bottom floor room.
-                /* if (row == 3)
-                 {
-                     stopCondition = true;
-                 }*/
-
+              
                 //Check if there are enough rooms generated.
 
                 if (noOfRooms > 8 && row == 3)
@@ -114,16 +125,23 @@ public class MapLayoutGeneration : MonoBehaviour
                 stopCondition = true;
             }
 
-            //Initialize room with 1.
-            map[row, column] = 1;
-
-
             //Check where we came from.
+            if(map[row,column] == 0)
+            {
+                map[row, column] = 1;
+            }
             if (prevMove[row, column] == 3 || prevMove[row, column] == 2)
             {
-                map[row, column] = prevMove[row, column];
+                if(map[row,column] != 1 && map[row, column] != 0)
+                {
+                    map[row, column] = 4;
+                }
+                else
+                {
+                    map[row, column] = prevMove[row, column];
+                }
+                
             }
-
 
 
             /*Choose moving direction:
@@ -170,9 +188,10 @@ public class MapLayoutGeneration : MonoBehaviour
                         {
                             if( prevMove[row - 1, column] == 3)
                             {
+                                //If prev room already has a top exit, add a bottom one.
                                 map[row - 1, column] = 4;
                             }
-                            else if (prevMove[row - 1, column] == 0 && prevMove[row - 1, column] == 1)
+                            else 
                             {
                                 map[row - 1, column] = 2;
                             }
@@ -180,7 +199,7 @@ public class MapLayoutGeneration : MonoBehaviour
                         }
 
                         //Check if current room already has a bottom exit.
-                        if (map[row, column] == 2)
+                        if (map[row, column] == 2 || map[row, column] == 4)
                         {
                             map[row, column] = 4;
                         }
@@ -209,7 +228,7 @@ public class MapLayoutGeneration : MonoBehaviour
                             {
                                 map[row + 1, column] = 4;
                             }
-                            else if (prevMove[row + 1, column] == 0 && prevMove[row + 1, column] == 1)
+                            else 
                             {
                                 map[row + 1, column] = 3;
                             }
@@ -217,7 +236,7 @@ public class MapLayoutGeneration : MonoBehaviour
                         }
 
                         //Check if room already has a top exit.
-                        if (map[row, column] == 3)
+                        if (map[row, column] == 3 || map[row, column] == 4)
                         {
                             map[row, column] = 4;
                         }
@@ -239,12 +258,11 @@ public class MapLayoutGeneration : MonoBehaviour
                     break;
             }
 
-            //Draw room.
-            DrawRoom(map[prevRow, prevColumn], prevRow * 8, prevColumn * 10);
+            
         }
 
         PrintMap();
-
+        DrawMap();
     }
 
     private bool CanMove(int i, int j)
