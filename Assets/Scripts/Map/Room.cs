@@ -5,14 +5,21 @@ using UnityEngine;
 public class Room
 {
     private float[,] map; 
-    private HashSet<Vector2> entries;
-
+    private Vector2 position;
     private int type;
 
-    public Room(int index)
+    public HashSet<Vector2> entryL;
+    public HashSet<Vector2> entryR;
+    public HashSet<Vector2> entryU;
+    public HashSet<Vector2> entryD;
+    public HashSet<Vector2> entries;
+
+    public Room(int index, Vector2 pos)
     {
         this.type = index;
-        this.map = new float[8, 10]{
+        this.map = new float[10, 10]{
+                                {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
+                                {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
                                 {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
                                 {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
                                 {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
@@ -23,24 +30,41 @@ public class Room
                                 {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1}
                             };
         this.entries = new HashSet<Vector2>();
+        this.entryR = new HashSet<Vector2>();
+        this.entryL = new HashSet<Vector2>();
+        this.entryU = new HashSet<Vector2>();
+        this.entryD = new HashSet<Vector2>();
+        this.position = pos;
     }
-
-    public HashSet<Vector2> getEntries()
+    public float[,] getMap()
     {
-        return entries;
+        return this.map;
     }
 
-    public bool addEntry(Vector2 pos)
+    public Vector2 getPosition()
+    {
+        return this.position;
+    }
+
+    public void setPosition(Vector2 newpos)
+    {
+        this.position = newpos;
+    }
+
+    public bool addEntry(Vector2 pos, HashSet<Vector2> entry)
     {
         //Check if entry already exists.
-        if(this.entries.Contains(pos))
+        if(entry.Contains(pos) || this.entries.Contains(pos))
         {
             return false;
         }
 
+        entry.Add(pos);
         this.entries.Add(pos);
+
         return true;
     }
+
 
     public int getType()
     {
@@ -62,19 +86,4 @@ public class Room
         return this.map[x, y];
     }
 
-    /*
-    public void GenerateRoom(bool is_first)
-    {
-        if(!is_first)
-        {
-            switch (type)
-            {
-                case 1:
-                    entries.AddRange(getEntries())
-                    
-                   
-            }
-        }
-
-    } */
 }
