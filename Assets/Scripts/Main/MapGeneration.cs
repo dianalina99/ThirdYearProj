@@ -32,7 +32,7 @@ public class MapGeneration : MonoBehaviour
     public int minNoRooms;
 
     private Dictionary<Vector2, GameObject> gameMap = new Dictionary<Vector2, GameObject>();
- 
+    
 
     private void DrawMap()
     {
@@ -46,9 +46,7 @@ public class MapGeneration : MonoBehaviour
 
         //Place player in first room.
         gameMap.TryGetValue(firstRoomPos, out room);
-        //playerInst = Instantiate(player, new Vector2(-131 - firstRoomPos.y * roomHeight, 96), Quaternion.identity) as GameObject;
-        //playerInst.transform.SetParent(environment.transform, false);
-
+ 
         playerInst = Instantiate(player, new Vector2( -firstRoomPos.x * roomWidth + 3, firstRoomPos.y), Quaternion.identity) as GameObject;
         playerInst.transform.SetParent(environment.transform, false);
     }
@@ -73,6 +71,42 @@ public class MapGeneration : MonoBehaviour
         //Instantiate as GameObject in the game.
         room = Instantiate(rooms[index], position, Quaternion.identity) as GameObject;
         room.transform.SetParent(parent.transform, false);
+
+        float[,] layout =  new float[10, 10]{
+                                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                                {1, -1, -1, -1, -1, -1, -1, -1, -1, 1},
+                                {1, -1, -1, -1, -1, -1, -1, -1, -1, 1},
+                                {1, -1, -1, -1, -1, -1, -1, -1, -1, 1},
+                                {1, -1, -1, -1, -1, -1, -1, -1, -1, 1},
+                                {1, -1, -1, -1, -1, -1, -1, -1, -1, 1},
+                                {1, -1, -1, -1, -1, -1, -1, -1, -1, 1},
+                                {1, -1, -1, -1, -1, -1, -1, -1, -1, 1},
+                                {1, -1, -1, -1, -1, -1, -1, -1, -1, 1},
+                                {1, 1,1, 1, 1, 1, 1, 1,1, 1}
+                            };
+
+        UpdateRoomBorder(room, layout);
+        
+
+    }
+    private void UpdateRoomBorder(GameObject room, float[,] layout)
+    {
+ 
+
+        foreach(Transform child in room.transform)
+        {
+            //int i = (int)(4.5 - Mathf.Abs(child.localPosition.y));
+            //int j = (int)(4.5 - Mathf.Abs(child.localPosition.x));
+
+            int i = Mathf.Abs((int)(-4.5 + child.localPosition.y));
+            int j = Mathf.Abs((int)(4.5 + child.localPosition.x));
+
+            if (layout[i,j] == -1)
+            {
+                //Destroy child.
+                Destroy(child.gameObject);
+            }
+        }
 
     }
 
@@ -118,17 +152,14 @@ public class MapGeneration : MonoBehaviour
         row = 0;
         column = roomPos;
         stopCondition = false;
-        int prevRow;
-        int prevColumn;
+ 
 
         firstRoomPos = new Vector2(column, row);
 
         while (!stopCondition)
         {
 
-            prevRow = row;
-            prevColumn = column;
-
+       
             //Check if there are enough rooms generated.
 
             if (noOfRooms > minNoRooms && row == 3)
@@ -220,7 +251,7 @@ public class MapGeneration : MonoBehaviour
                         //Check if next room was already used.
                         if (map[row - 1, column] != 0)
                         {
-                            if (prevMove[row - 1, column] == 3)
+                            if (map[row - 1, column] == 3 || map[row - 1, column] == 4)
                             {
                                 //If prev room already has a top exit, add a bottom one.
                                 map[row - 1, column] = 4;
@@ -262,7 +293,8 @@ public class MapGeneration : MonoBehaviour
                         //Check if next room was already used.
                         if (map[row + 1, column] != 0)
                         {
-                            if (prevMove[row + 1, column] == 2)
+                            //if (prevMove[row + 1, column] == 2)
+                            if (map[row + 1, column] == 2 || map[row + 1, column] == 4)
                             {
                                 map[row + 1, column] = 4;
                             }

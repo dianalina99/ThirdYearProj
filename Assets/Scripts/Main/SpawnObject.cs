@@ -5,6 +5,8 @@ using UnityEngine;
 public class SpawnObject : MonoBehaviour
 {
     public GameObject[] objects;
+    private int[][] room;
+
     // Start is called before the first frame update
     void Start()
     {
