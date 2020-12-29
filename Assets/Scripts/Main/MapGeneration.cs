@@ -28,27 +28,40 @@ public class MapGeneration : MonoBehaviour
     private Vector2 firstRoomPos;
 
     public GameObject[] rooms;
-    public GameObject player, environment, parent;
+    public GameObject player, environment, parent, baseRoom;
     public int minNoRooms;
 
     private Dictionary<Vector2, GameObject> gameMap = new Dictionary<Vector2, GameObject>();
-    
+    private Dictionary<Vector2, Room> gameObjMap = new Dictionary<Vector2, Room>();
 
     private void DrawMap()
     {
         GameObject playerInst, room;
 
         for (int i = 0; i <= 3; i++)
-           for (int j = 0; j <= 3; j++)
+            for (int j = 0; j <= 3; j++)
             {
                 DrawAndGenerateRoom(map[i, j], i * roomHeight, j * roomWidth);
             }
 
         //Place player in first room.
         gameMap.TryGetValue(firstRoomPos, out room);
- 
-        playerInst = Instantiate(player, new Vector2( -firstRoomPos.x * roomWidth + 3, firstRoomPos.y), Quaternion.identity) as GameObject;
+
+        playerInst = Instantiate(player, new Vector2(-firstRoomPos.x * roomWidth + 3, firstRoomPos.y), Quaternion.identity) as GameObject;
         playerInst.transform.SetParent(environment.transform, false);
+    }
+
+    private Room getRoom(Vector2 pos)
+    {
+        Room room = null;
+
+        if (gameObjMap.ContainsKey(pos))
+        {
+            gameObjMap.TryGetValue(pos, out room);
+
+        }
+
+        return room;
     }
 
 
@@ -72,28 +85,48 @@ public class MapGeneration : MonoBehaviour
         room = Instantiate(rooms[index], position, Quaternion.identity) as GameObject;
         room.transform.SetParent(parent.transform, false);
 
-        float[,] layout =  new float[10, 10]{
-                                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                                {1, -1, -1, -1, -1, -1, -1, -1, -1, 1},
-                                {1, -1, -1, -1, -1, -1, -1, -1, -1, 1},
-                                {1, -1, -1, -1, -1, -1, -1, -1, -1, 1},
-                                {1, -1, -1, -1, -1, -1, -1, -1, -1, 1},
-                                {1, -1, -1, -1, -1, -1, -1, -1, -1, 1},
-                                {1, -1, -1, -1, -1, -1, -1, -1, -1, 1},
-                                {1, -1, -1, -1, -1, -1, -1, -1, -1, 1},
-                                {1, -1, -1, -1, -1, -1, -1, -1, -1, 1},
-                                {1, 1,1, 1, 1, 1, 1, 1,1, 1}
-                            };
+        //Generate a room type object in order to handle exits and entries.
 
-        UpdateRoomBorder(room, layout);
-        
+        // gameObjMap is a collection of rooms. Each room has a type and an array of entries.
+        //Entries = point where the player moves out/in the room = entries + exits
+        if (gameObjMap.ContainsKey(position))
+        {
+            gameObjMap.TryGetValue(position, out roomObj);
+            gameObjMap.Remove(position);
+            roomObj = null;
+
+        }
+
+        //Create new room template.
+        Room newRoom = new Room(index, position);
+        GenerateRoomTemplate(newRoom);
+
+        gameObjMap.Add(position, newRoom);
+
+        /*
+        float[,] layout =  new float[10, 10]{
+                                {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
+                                {1, -1, -1, -1, -1, -1, -1, -1, -1, 1},
+                                {1, -1, -1, -1, -1, -1, -1, -1, -1, 1},
+                                {1, -1, -1, -1, -1, -1, -1, -1, -1, 1},
+                                {1, -1, -1, -1, -1, -1, -1, -1, -1, 1},
+                                {1, -1, -1, -1, -1, -1, -1, -1, -1, 1},
+                                {1, -1, -1, -1, -1, -1, -1, -1, -1, 1},
+                                {1, -1, -1, -1, -1, -1, -1, -1, -1, 1},
+                                {1, -1, -1, -1, -1, -1, -1, -1, -1, 1},
+                                {-1, -1,-1, -1, -1, -1, -1, -1,- 1, -1}
+                            };*/
+
+        UpdateRoomBorder(room, newRoom.getMap());
 
     }
+
+
     private void UpdateRoomBorder(GameObject room, float[,] layout)
     {
- 
 
-        foreach(Transform child in room.transform)
+
+        foreach (Transform child in room.transform)
         {
             //int i = (int)(4.5 - Mathf.Abs(child.localPosition.y));
             //int j = (int)(4.5 - Mathf.Abs(child.localPosition.x));
@@ -101,7 +134,7 @@ public class MapGeneration : MonoBehaviour
             int i = Mathf.Abs((int)(-4.5 + child.localPosition.y));
             int j = Mathf.Abs((int)(4.5 + child.localPosition.x));
 
-            if (layout[i,j] == -1)
+            if (layout[i, j] == 0)
             {
                 //Destroy child.
                 Destroy(child.gameObject);
@@ -109,7 +142,256 @@ public class MapGeneration : MonoBehaviour
         }
 
     }
+    private void GenerateType1Entries(Room room)
+    {
+        Vector2 pos = room.getPosition();
+        Room right, left;
+        int random;
 
+        //Room right, left;
+        //Look left and right to detect already existent entries.
+        right = getRoom(new Vector2(pos.x - 1, pos.y));
+        left = getRoom(new Vector2(pos.x + 1, pos.y));
+
+        if (right != null)
+        {
+            //Create exit to be consistent with right room entry.
+            foreach (Vector2 entry in right.entries)
+            {
+                if (entry.y == 0)
+                {
+                    //Add new "entry" to the right.
+                    room.setMap((int)entry.x, roomWidth - 1, 0);
+                    room.addEntry(new Vector2((int)entry.x, roomWidth - 1), room.entryR);
+                }
+
+            }
+        }
+
+        if (left != null)
+        {
+            //Create entry to be consistent with left room exit.
+            foreach (Vector2 entry in left.entries)
+            {
+                if (entry.y == roomWidth - 1)
+                {
+                    //Add new entry to the left.
+                    room.setMap((int)entry.x, 0, 0);
+                    room.addEntry(new Vector2((int)entry.x, 0), room.entryL);
+                }
+            }
+        }
+
+        //We want to have at least 1 entries/exits (of size 2) on each relevant side. Max is 12.
+        random = rand.Next(1, 10);
+        
+        while (room.getNoOfEntries() <= random || (room.entryL.Count < 2) || (room.entryR.Count < 2))
+        {
+            int pos1 = rand.Next(2, roomHeight-1);
+            int pos2 = rand.Next(2, roomHeight-1);
+
+            //Mark entries. They should be 2 units tall because the player is 2 units tall.
+            room.setMap(pos1, 0, 0);
+            room.setMap(pos1 - 1, 0, 0);
+            room.setMap(pos2, roomWidth - 1, 0);
+            room.setMap(pos2 - 1, roomWidth - 1, 0);
+
+
+            //Add entries to specific side.
+            room.addEntry(new Vector2(pos1, 0), room.entryL);
+            room.addEntry(new Vector2(pos1 - 1, 0), room.entryL);
+            room.addEntry(new Vector2(pos2, roomWidth - 1), room.entryR);
+            room.addEntry(new Vector2(pos2 - 1, roomWidth - 1), room.entryR);
+
+        }
+
+    }
+    private void GenerateType2Entries(Room room)
+    {
+        Vector2 pos = room.getPosition();
+        Room right, left, up, down;
+        int random;
+
+        //Look left and right to detect already existent entries.
+        right = getRoom(new Vector2(pos.x - 1, pos.y));
+        left = getRoom(new Vector2(pos.x + 1, pos.y));
+        down = getRoom(new Vector2(pos.x, pos.y - 1));
+
+        if (right != null)
+        {
+            //Create exit to be consistent with right room entry.
+            foreach (Vector2 entry in right.entries)
+            {
+                if (entry.y == 0)
+                {
+                    room.setMap((int)entry.x, roomWidth - 1, 0);
+                    room.addEntry(new Vector2((int)entry.x, roomWidth - 1), room.entryR);
+                }
+
+            }
+        }
+
+        if (left != null)
+        {
+            //Create entry to be consistent with right room exit.
+            foreach (Vector2 entry in left.entries)
+            {
+                if (entry.y == roomWidth - 1)
+                {
+                    room.setMap((int)entry.x, 0, 0);
+                    room.addEntry(new Vector2((int)entry.x, 0), room.entryL);
+                }
+            }
+        }
+
+        if (down != null)
+        {
+            //Create exit to be consistent with bottom room entry.
+            foreach (Vector2 entry in down.entries)
+            {
+                if (entry.x == 0)
+                {
+                    room.setMap(roomHeight - 1, (int)entry.y, 0);
+                    room.addEntry(new Vector2(roomHeight - 1, (int)entry.y), room.entryD);
+                }
+            }
+        }
+
+        //We want to have at least 1 entries/exits on each relevant side. Max is 18.
+        random = rand.Next(1, 12);
+
+        while (room.getNoOfEntries() <= random || (room.entryL.Count < 2) || (room.entryR.Count < 2) || (room.entryD.Count < 2))
+        {
+            int pos1 = rand.Next(2, roomHeight -1);
+            int pos2 = rand.Next(2, roomHeight - 1);
+            int pos3 = rand.Next(2, roomWidth - 1);
+
+            //Mark entries. They should be 2 units tall because the player is 2 units tall.
+            room.setMap(pos1, 0, 0);
+            room.setMap(pos1 - 1, 0, 0);
+            room.setMap(pos2, roomWidth - 1, 0);
+            room.setMap(pos2 - 1, roomWidth - 1, 0);
+            room.setMap(roomHeight - 1, pos3, 0);
+            room.setMap(roomHeight - 1, pos3 - 1, 0);
+
+            //Add entries to specific side.
+            room.addEntry(new Vector2(pos1, 0), room.entryL);
+            room.addEntry(new Vector2(pos1 - 1, 0), room.entryL);
+            room.addEntry(new Vector2(pos2, roomWidth - 1), room.entryR);
+            room.addEntry(new Vector2(pos2 - 1, roomWidth - 1), room.entryR);
+            room.addEntry(new Vector2(roomHeight - 1, pos3), room.entryD);
+            room.addEntry(new Vector2(roomHeight - 1, pos3 - 1), room.entryD);
+
+        }
+
+    }
+    private void GenerateType3Entries(Room room)
+    {
+        Vector2 pos = room.getPosition();
+        Room right, left, up, down;
+        int random;
+
+        //Look left and right to detect already existent entries.
+        right = getRoom(new Vector2(pos.x - 1, pos.y));
+        left = getRoom(new Vector2(pos.x + 1, pos.y));
+        up = getRoom(new Vector2(pos.x, pos.y + 1));
+
+        if (right != null)
+        {
+            //Create exit to be consistent with right room entry.
+            foreach (Vector2 entry in right.entries)
+            {
+                if (entry.y == 0)
+                {
+                    room.setMap((int)entry.x, roomWidth - 1, 0);
+                    room.addEntry(new Vector2((int)entry.x, roomWidth - 1), room.entryR);
+                }
+
+            }
+        }
+
+        if (left != null)
+        {
+            //Create entry to be consistent with left room exit.
+            foreach (Vector2 entry in left.entries)
+            {
+                if (entry.y == roomWidth - 1)
+                {
+                    room.setMap((int)entry.x, 0, 0);
+                    room.addEntry(new Vector2((int)entry.x, 0), room.entryL);
+                }
+            }
+        }
+
+        if (up != null)
+        {
+            //Create exit to be consistent with bottom room entry.
+            foreach (Vector2 entry in up.entries)
+            {
+                if (entry.x == roomHeight - 1)
+                {
+                    room.setMap(0, (int)entry.y, 0);
+                    room.addEntry(new Vector2(0, (int)entry.y), room.entryU);
+                }
+            }
+        }
+
+        //We want to have at least 1 entries/exits on each relevant side. Max is 18.
+        random = rand.Next(1, 12);
+
+        while (room.getNoOfEntries() <= random || (room.entryL.Count < 2) || (room.entryR.Count < 2) || (room.entryU.Count < 2))
+        {
+            int pos1 = rand.Next(2, roomHeight - 1);
+            int pos2 = rand.Next(2, roomHeight - 1);
+            int pos3 = rand.Next(2, roomWidth - 1);
+
+            //Mark entries. They should be 2 units tall because the player is 2 units tall.
+            room.setMap(pos1, 0, 0);
+            room.setMap(pos1 - 1, 0, 0);
+            room.setMap(pos2, roomWidth - 1, 0);
+            room.setMap(pos2 - 1, roomWidth - 1, 0);
+            room.setMap(0, pos3, 0);
+            room.setMap(0, pos3 - 1, 0);
+
+            //Add entries to specific side.
+            room.addEntry(new Vector2(pos1, 0), room.entryL);
+            room.addEntry(new Vector2(pos1 - 1, 0), room.entryL);
+            room.addEntry(new Vector2(pos2, roomWidth - 1), room.entryR);
+            room.addEntry(new Vector2(pos2 - 1, roomWidth - 1), room.entryR);
+            room.addEntry(new Vector2(0, pos3), room.entryU);
+            room.addEntry(new Vector2(0, pos3 - 1), room.entryU);
+        }
+    }
+    private void GenerateType4Entries(Room room)
+    {
+        Vector2 pos = room.getPosition();
+        Room right, left, up, down;
+        int random;
+
+    }
+    private void GenerateRoomTemplate(Room room)
+    {
+        //Only generate exits and entries for now, everything else should be 1.
+        switch (room.getType())
+        {
+
+            case 0:
+                break;
+            case 1:
+                GenerateType1Entries(room);
+                break;
+            case 2:
+                GenerateType2Entries(room);
+                break;
+            case 3:
+                GenerateType3Entries(room);
+                break;
+            case 4:
+                //GenerateType4Entries(room);
+                break;
+
+        }
+    }
     private void DrawRoom(int index, int x, int y)
     {
         GameObject room;
@@ -124,7 +406,8 @@ public class MapGeneration : MonoBehaviour
             Destroy(room);
         }
 
-        room = Instantiate(rooms[index], position, Quaternion.identity) as GameObject;
+        //room = Instantiate(rooms[index], position, Quaternion.identity) as GameObject;
+        room = Instantiate(baseRoom, position, Quaternion.identity) as GameObject;
         room.transform.SetParent(parent.transform, false);
 
         gameMap.Add(position, room);
@@ -152,14 +435,14 @@ public class MapGeneration : MonoBehaviour
         row = 0;
         column = roomPos;
         stopCondition = false;
- 
+
 
         firstRoomPos = new Vector2(column, row);
 
         while (!stopCondition)
         {
 
-       
+
             //Check if there are enough rooms generated.
 
             if (noOfRooms > minNoRooms && row == 3)
@@ -187,11 +470,11 @@ public class MapGeneration : MonoBehaviour
 
             }*/
 
-            if((prevMove[row,column] == 3 && map[row, column] == 2) || (prevMove[row, column] == 2 && map[row, column] == 3))
+            if ((prevMove[row, column] == 3 && map[row, column] == 2) || (prevMove[row, column] == 2 && map[row, column] == 3))
             {
                 map[row, column] = 4;
             }
-            else if((prevMove[row, column] == 3 || prevMove[row, column] == 2) && (map[row, column] == 1 || map[row, column] == 0))
+            else if ((prevMove[row, column] == 3 || prevMove[row, column] == 2) && (map[row, column] == 1 || map[row, column] == 0))
             {
                 map[row, column] = prevMove[row, column];
             }
@@ -221,7 +504,7 @@ public class MapGeneration : MonoBehaviour
                         column--;
                         prevMove[row, column] = dir;
 
-                       
+
                     }
 
                     break;
@@ -239,7 +522,7 @@ public class MapGeneration : MonoBehaviour
                         column++;
                         prevMove[row, column] = dir;
 
-                        
+
                     }
 
                     break;
@@ -280,7 +563,7 @@ public class MapGeneration : MonoBehaviour
                         row--;
                         prevMove[row, column] = dir;
 
-                       
+
 
                     }
 
@@ -322,7 +605,7 @@ public class MapGeneration : MonoBehaviour
                         row++;
                         prevMove[row, column] = dir;
 
-               
+
                     }
 
                     break;

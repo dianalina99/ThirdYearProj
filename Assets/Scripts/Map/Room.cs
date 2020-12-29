@@ -35,6 +35,8 @@ public class Room
         this.entryU = new HashSet<Vector2>();
         this.entryD = new HashSet<Vector2>();
         this.position = pos;
+
+        
     }
     public float[,] getMap()
     {
