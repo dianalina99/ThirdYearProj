@@ -368,6 +368,96 @@ public class MapGeneration : MonoBehaviour
         Room right, left, up, down;
         int random;
 
+        //Look left and right, up, down to detect already existent entries.
+        right = getRoom(new Vector2(pos.x - 1, pos.y));
+        left = getRoom(new Vector2(pos.x + 1, pos.y));
+        up = getRoom(new Vector2(pos.x, pos.y + 1));
+        down = getRoom(new Vector2(pos.x, pos.y - 1));
+
+        if (right != null)
+        {
+            //Create exit to be consistent with right room entry.
+            foreach (Vector2 entry in right.entries)
+            {
+                if (entry.y == 0)
+                {
+                    room.setMap((int)entry.x, roomWidth - 1, 0);
+                    room.addEntry(new Vector2((int)entry.x, roomWidth - 1), room.entryR);
+                }
+
+            }
+        }
+
+        if (left != null)
+        {
+            //Create entry to be consistent with left room exit.
+            foreach (Vector2 entry in left.entries)
+            {
+                if (entry.y == roomWidth - 1)
+                {
+                    room.setMap((int)entry.x, 0, 0);
+                    room.addEntry(new Vector2((int)entry.x, 0), room.entryL);
+                }
+            }
+        }
+
+        if (up != null)
+        {
+            //Create exit to be consistent with bottom room entry.
+            foreach (Vector2 entry in up.entries)
+            {
+                if (entry.x == roomHeight - 1)
+                {
+                    room.setMap(0, (int)entry.y, 0);
+                    room.addEntry(new Vector2(0, (int)entry.y), room.entryU);
+                }
+            }
+        }
+
+        if (down != null)
+        {
+            //Create exit to be consistent with up room entry.
+            foreach (Vector2 entry in down.entries)
+            {
+                if (entry.x == 0)
+                {
+                    room.setMap(roomHeight - 1, (int)entry.y, 0);
+                    room.addEntry(new Vector2(roomHeight - 1, (int)entry.y), room.entryD);
+                }
+            }
+        }
+
+        //We want to have at least 1 entries/exits on each relevant side. Max is 18.
+        random = rand.Next(1, 12);
+
+        while (room.getNoOfEntries() <= random || (room.entryL.Count < 2) || (room.entryR.Count < 2) || (room.entryU.Count < 2) || (room.entryD.Count < 2))
+        {
+            int pos1 = rand.Next(2, roomHeight - 1);
+            int pos2 = rand.Next(2, roomHeight - 1);
+            int pos3 = rand.Next(2, roomWidth - 1);
+            int pos4 = rand.Next(2, roomWidth - 1);
+
+            //Mark entries. They should be 2 units tall because the player is 2 units tall.
+            room.setMap(pos1, 0, 0);
+            room.setMap(pos1 - 1, 0, 0);
+            room.setMap(pos2, roomWidth - 1, 0);
+            room.setMap(pos2 - 1, roomWidth - 1, 0);
+            room.setMap(0, pos3, 0);
+            room.setMap(0, pos3 - 1, 0);
+            room.setMap(roomHeight -1, pos4, 0);
+            room.setMap(roomHeight - 1, pos4 - 1, 0);
+
+            //Add entries to specific side.
+            room.addEntry(new Vector2(pos1, 0), room.entryL);
+            room.addEntry(new Vector2(pos1 - 1, 0), room.entryL);
+            room.addEntry(new Vector2(pos2, roomWidth - 1), room.entryR);
+            room.addEntry(new Vector2(pos2 - 1, roomWidth - 1), room.entryR);
+            room.addEntry(new Vector2(0, pos3), room.entryU);
+            room.addEntry(new Vector2(0, pos3 - 1), room.entryU);
+            room.addEntry(new Vector2(roomHeight - 1, pos4), room.entryD);
+            room.addEntry(new Vector2(roomHeight - 1, pos4 - 1), room.entryD);
+        }
+
     }
     private void GenerateRoomTemplate(Room room)
     {
@@ -387,7 +477,7 @@ public class MapGeneration : MonoBehaviour
                 GenerateType3Entries(room);
                 break;
             case 4:
-                //GenerateType4Entries(room);
+                GenerateType4Entries(room);
                 break;
 
         }
