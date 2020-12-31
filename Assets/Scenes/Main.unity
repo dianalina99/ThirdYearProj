@@ -505,10 +505,13 @@ MonoBehaviour:
   - {fileID: 1827936343310146462, guid: 0ce8d64d79422b74dbb24e39aed28800, type: 3}
   - {fileID: 6490493719512892569, guid: 3db57a1f1471c054aaed7fdd2e030fa2, type: 3}
   - {fileID: 756413173005248099, guid: bc3a163675bf94942aceafa1027e5ae2, type: 3}
-  player: {fileID: 1470885901846127961, guid: b6ca2df2768fc79408e5d8ad326fb22f, type: 3}
   environment: {fileID: 354278448}
   parent: {fileID: 1098416994}
   baseRoom: {fileID: 6906098449053739112, guid: af6581bec72621a4c8c5a9e180424b83,
+    type: 3}
+  portalEntry: {fileID: 2842152764471269325, guid: 87c2bbb6277622f4299d3e7a228142ff,
+    type: 3}
+  portalExit: {fileID: 2842152764471269325, guid: 894c27ff5b93f0147a7cadff23209cdc,
     type: 3}
   minNoRooms: 11
 --- !u!1 &85374812
@@ -1917,7 +1920,7 @@ GameObject:
   - component: {fileID: 354278449}
   m_Layer: 0
   m_Name: Environment
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -9,6 +9,12 @@ public class FollowPlayer : MonoBehaviour
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
 
-        this.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z - 5);
+        //Check if player is spawned.
+        if(player != null)
+        {
+            this.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z - 5);
+        }
+
+        
     }
 }

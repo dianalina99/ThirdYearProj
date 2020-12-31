@@ -7,7 +7,7 @@ using UnityEngine;
 public class MapGeneration : MonoBehaviour
 {
     private System.Random rand = new System.Random();
-    private int roomWidth = 10, roomHeight = 10;
+    public static int roomWidth = 10, roomHeight = 10;
 
     int[,] map = new int[4, 4]{
                                 {0, 0, 0, 0},
@@ -25,18 +25,26 @@ public class MapGeneration : MonoBehaviour
 
     private int noOfRooms = 1, roomPos, row, column;
     private bool stopCondition;
-    private Vector2 firstRoomPos;
+    public static Vector2 firstRoomPos, lastRoomPos;
 
     public GameObject[] rooms;
-    public GameObject player, environment, parent, baseRoom;
+    public GameObject environment, parent, baseRoom, portalEntry, portalExit; 
     public int minNoRooms;
+    public static bool readyForPlayer = false;
 
     private Dictionary<Vector2, GameObject> gameMap = new Dictionary<Vector2, GameObject>();
     private Dictionary<Vector2, Room> gameObjMap = new Dictionary<Vector2, Room>();
 
+
+
+
+
+
+
+
     private void DrawMap()
     {
-        GameObject playerInst, room;
+        GameObject playerInst, room, portalInst;
 
         for (int i = 0; i <= 3; i++)
             for (int j = 0; j <= 3; j++)
@@ -47,8 +55,14 @@ public class MapGeneration : MonoBehaviour
         //Place player in first room.
         gameMap.TryGetValue(firstRoomPos, out room);
 
-        playerInst = Instantiate(player, new Vector2(-firstRoomPos.x * roomWidth + 3, firstRoomPos.y), Quaternion.identity) as GameObject;
-        playerInst.transform.SetParent(environment.transform, false);
+        
+
+        //Place portal in the first room and last one.
+        portalInst = Instantiate(portalEntry, new Vector2(-firstRoomPos.x * roomWidth + 3, firstRoomPos.y), Quaternion.identity) as GameObject;
+        portalInst.transform.SetParent(environment.transform, false);
+
+        portalInst = Instantiate(portalExit, new Vector2(-lastRoomPos.x * roomWidth , -lastRoomPos.y * roomHeight), Quaternion.identity) as GameObject;
+        portalInst.transform.SetParent(environment.transform, false);
     }
 
     private Room getRoom(Vector2 pos)
@@ -102,20 +116,6 @@ public class MapGeneration : MonoBehaviour
         GenerateRoomTemplate(newRoom);
 
         gameObjMap.Add(position, newRoom);
-
-        /*
-        float[,] layout =  new float[10, 10]{
-                                {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
-                                {1, -1, -1, -1, -1, -1, -1, -1, -1, 1},
-                                {1, -1, -1, -1, -1, -1, -1, -1, -1, 1},
-                                {1, -1, -1, -1, -1, -1, -1, -1, -1, 1},
-                                {1, -1, -1, -1, -1, -1, -1, -1, -1, 1},
-                                {1, -1, -1, -1, -1, -1, -1, -1, -1, 1},
-                                {1, -1, -1, -1, -1, -1, -1, -1, -1, 1},
-                                {1, -1, -1, -1, -1, -1, -1, -1, -1, 1},
-                                {1, -1, -1, -1, -1, -1, -1, -1, -1, 1},
-                                {-1, -1,-1, -1, -1, -1, -1, -1,- 1, -1}
-                            };*/
 
         UpdateRoomBorder(room, newRoom.getMap());
 
@@ -515,10 +515,7 @@ public class MapGeneration : MonoBehaviour
 
     private void GenerateMapGrid()
     {
-        //RandomProportional rand = new RandomProportional();
-
         InitializeGrid();
-
 
         //Pick first room. It is always 1.
         roomPos = rand.Next(0, 4);
@@ -532,12 +529,16 @@ public class MapGeneration : MonoBehaviour
         while (!stopCondition)
         {
 
-
             //Check if there are enough rooms generated.
 
             if (noOfRooms > minNoRooms && row == 3)
             {
                 stopCondition = true;
+            }
+
+            if(row == 3)
+            {
+                lastRoomPos = new Vector2(column, row);
             }
 
             //Check where we came from.
@@ -704,9 +705,15 @@ public class MapGeneration : MonoBehaviour
                     //Don't move at all.
                     break;
             }
+
+
         }
+
         PrintMap();
         DrawMap();
+
+        //Map is ready to spawn a player.
+        readyForPlayer = true;
     }
 
 
