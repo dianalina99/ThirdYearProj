@@ -12,7 +12,7 @@ public class FollowPlayer : MonoBehaviour
         //Check if player is spawned.
         if(player != null)
         {
-            this.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z - 5);
+            this.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z -5);
         }
 
         

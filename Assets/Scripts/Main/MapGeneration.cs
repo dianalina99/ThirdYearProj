@@ -17,8 +17,8 @@ public class MapGeneration : MonoBehaviour
     private bool stopCondition;
     public static Vector2 firstRoomPos, lastRoomPos;
 
-    public GameObject[] rooms;
-    public GameObject environment, parent, baseRoom, portalEntry, portalExit,environmentPrefab, mainMapRef, minimapRef; 
+    public GameObject environment, parent, baseRoom, portalEntry, portalExit,environmentPrefab, mainMapRef, minimapRef, debug;
+    public GameObject[] roomTemplates;
     public int minNoRooms;
     public static bool readyForPlayer = false;
 
@@ -63,8 +63,8 @@ public class MapGeneration : MonoBehaviour
     {
         Init();
         GenerateMapGrid();
-
     }
+
     private void Update()
     {
         //Check to see if new map needs to be generated.
@@ -75,19 +75,14 @@ public class MapGeneration : MonoBehaviour
         }
     }
 
-
-
-
-
-
-
     private void DrawMap()
     {
-        GameObject room, portalInst;
+        GameObject room, portalInst,temp;
 
         for (int i = 0; i <= 3; i++)
             for (int j = 0; j <= 3; j++)
             {
+                // Starting from top left corner. 
                 DrawAndGenerateRoom(map[i, j], i * roomHeight, j * roomWidth);
             }
 
@@ -123,7 +118,7 @@ public class MapGeneration : MonoBehaviour
         GameObject room, tile;
         Room roomObj;
 
-
+        // Room (0,0) grid coordinates is top left corner. 
         Vector2 position = new Vector2(-y, -x);
 
         //Check if dictionary entry exists and remove room before overwriting.
@@ -135,7 +130,8 @@ public class MapGeneration : MonoBehaviour
         }
 
         //Instantiate as GameObject in the game.
-        room = Instantiate(rooms[index], position, Quaternion.identity) as GameObject;
+        int randIndex = rand.Next(0, roomTemplates.Length);
+        room = Instantiate(roomTemplates[randIndex], position, Quaternion.identity) as GameObject;
         room.transform.SetParent(parent.transform, false);
 
         //Generate a room type object in order to handle exits and entries.
@@ -163,8 +159,6 @@ public class MapGeneration : MonoBehaviour
 
     private void UpdateRoomBorder(GameObject room, float[,] layout)
     {
-
-
         foreach (Transform child in room.transform)
         {
             //int i = (int)(4.5 - Mathf.Abs(child.localPosition.y));
@@ -172,8 +166,9 @@ public class MapGeneration : MonoBehaviour
 
             int i = Mathf.Abs((int)(-4.5 + child.localPosition.y));
             int j = Mathf.Abs((int)(4.5 + child.localPosition.x));
-
-            if (layout[i, j] == 0)
+            
+            //Only delete if tile is on the border.
+            if (layout[i, j] == 0 && (i==0 || i == roomHeight -1 || j == 0 || j == roomWidth - 1)) 
             {
                 //Destroy child.
                 Destroy(child.gameObject);
@@ -181,6 +176,7 @@ public class MapGeneration : MonoBehaviour
         }
 
     }
+
     private void GenerateType1Entries(Room room)
     {
         Vector2 pos = room.getPosition();
@@ -189,8 +185,8 @@ public class MapGeneration : MonoBehaviour
 
         //Room right, left;
         //Look left and right to detect already existent entries.
-        right = getRoom(new Vector2(pos.x - 1, pos.y));
-        left = getRoom(new Vector2(pos.x + 1, pos.y));
+        right = getRoom(new Vector2(pos.x + 1*roomWidth, pos.y));
+        left = getRoom(new Vector2(pos.x - 1*roomWidth, pos.y));
 
         if (right != null)
         {
@@ -223,11 +219,11 @@ public class MapGeneration : MonoBehaviour
 
         //We want to have at least 1 entries/exits (of size 2) on each relevant side. Max is 12.
         random = rand.Next(1, 10);
-        
+
         while (room.getNoOfEntries() <= random || (room.entryL.Count < 2) || (room.entryR.Count < 2))
         {
-            int pos1 = rand.Next(2, roomHeight-1);
-            int pos2 = rand.Next(2, roomHeight-1);
+            int pos1 = rand.Next(2, roomHeight - 1);
+            int pos2 = rand.Next(2, roomHeight - 1);
 
             //Mark entries. They should be 2 units tall because the player is 2 units tall.
             room.setMap(pos1, 0, 0);
@@ -244,6 +240,7 @@ public class MapGeneration : MonoBehaviour
 
         }
 
+
     }
     private void GenerateType2Entries(Room room)
     {
@@ -252,9 +249,9 @@ public class MapGeneration : MonoBehaviour
         int random;
 
         //Look left and right to detect already existent entries.
-        right = getRoom(new Vector2(pos.x - 1, pos.y));
-        left = getRoom(new Vector2(pos.x + 1, pos.y));
-        down = getRoom(new Vector2(pos.x, pos.y - 1));
+        right = getRoom(new Vector2(pos.x + 1*roomWidth, pos.y));
+        left = getRoom(new Vector2(pos.x - 1 * roomWidth, pos.y));
+        down = getRoom(new Vector2(pos.x, pos.y - 1*roomHeight));
 
         if (right != null)
         {
@@ -331,9 +328,9 @@ public class MapGeneration : MonoBehaviour
         int random;
 
         //Look left and right to detect already existent entries.
-        right = getRoom(new Vector2(pos.x - 1, pos.y));
-        left = getRoom(new Vector2(pos.x + 1, pos.y));
-        up = getRoom(new Vector2(pos.x, pos.y + 1));
+        right = getRoom(new Vector2(pos.x + 1*roomWidth, pos.y));
+        left = getRoom(new Vector2(pos.x - 1 * roomWidth, pos.y));
+        up = getRoom(new Vector2(pos.x, pos.y + 1*roomHeight));
 
         if (right != null)
         {
@@ -408,10 +405,10 @@ public class MapGeneration : MonoBehaviour
         int random;
 
         //Look left and right, up, down to detect already existent entries.
-        right = getRoom(new Vector2(pos.x - 1, pos.y));
-        left = getRoom(new Vector2(pos.x + 1, pos.y));
-        up = getRoom(new Vector2(pos.x, pos.y + 1));
-        down = getRoom(new Vector2(pos.x, pos.y - 1));
+        right = getRoom(new Vector2(pos.x + 1 * roomWidth, pos.y));
+        left = getRoom(new Vector2(pos.x - 1 * roomWidth, pos.y));
+        up = getRoom(new Vector2(pos.x, pos.y + 1 * roomHeight));
+        down = getRoom(new Vector2(pos.x, pos.y - 1 * roomHeight));
 
         if (right != null)
         {
@@ -467,7 +464,7 @@ public class MapGeneration : MonoBehaviour
         }
 
         //We want to have at least 1 entries/exits on each relevant side. Max is 18.
-        random = rand.Next(1, 12);
+        random = rand.Next(1, 20);
 
         while (room.getNoOfEntries() <= random || (room.entryL.Count < 2) || (room.entryR.Count < 2) || (room.entryU.Count < 2) || (room.entryD.Count < 2))
         {
@@ -536,7 +533,8 @@ public class MapGeneration : MonoBehaviour
         }
 
         //room = Instantiate(rooms[index], position, Quaternion.identity) as GameObject;
-        room = Instantiate(baseRoom, position, Quaternion.identity) as GameObject;
+        int randIndex = rand.Next(0, roomTemplates.Length);
+        room = Instantiate(roomTemplates[randIndex], position, Quaternion.identity) as GameObject;
         room.transform.SetParent(parent.transform, false);
 
         gameMap.Add(position, room);
@@ -741,7 +739,7 @@ public class MapGeneration : MonoBehaviour
 
         }
 
-        //PrintMap();
+        PrintMap();
         DrawMap();
 
         //Map is ready to spawn a player.

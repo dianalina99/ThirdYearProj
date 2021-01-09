@@ -163,12 +163,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5c3729f55cbcf844a9736d3dd7ea6de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rooms:
-  - {fileID: 6906098449053739112, guid: 5cfbca1db35c1984192c30ff09f2d3b2, type: 3}
-  - {fileID: 5600486012308500294, guid: a8d0375465621644e830348a6e38751c, type: 3}
-  - {fileID: 1827936343310146462, guid: 0ce8d64d79422b74dbb24e39aed28800, type: 3}
-  - {fileID: 6490493719512892569, guid: 3db57a1f1471c054aaed7fdd2e030fa2, type: 3}
-  - {fileID: 756413173005248099, guid: bc3a163675bf94942aceafa1027e5ae2, type: 3}
   environment: {fileID: 354278448}
   parent: {fileID: 1098416994}
   baseRoom: {fileID: 6906098449053739112, guid: af6581bec72621a4c8c5a9e180424b83,
@@ -181,6 +175,9 @@ MonoBehaviour:
     type: 3}
   mainMapRef: {fileID: 330879183}
   minimapRef: {fileID: 85374812}
+  debug: {fileID: 5429029329216352583, guid: 90e0750e71d7fcc41831848a3b825aa3, type: 3}
+  roomTemplates:
+  - {fileID: 6906098449053739112, guid: af6581bec72621a4c8c5a9e180424b83, type: 3}
   minNoRooms: 11
 --- !u!1 &85374812
 GameObject:
@@ -416,12 +413,12 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
-  far clip plane: 1000
+  near clip plane: 0.01
+  far clip plane: 20
   field of view: 60
   orthographic: 1
-  orthographic size: 5
-  m_Depth: -10
+  orthographic size: 3
+  m_Depth: -2
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -444,7 +441,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 535653457}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10.5, y: 18.9, z: -20}
+  m_LocalPosition: {x: 10.5, y: 20, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1283,6 +1280,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4102246530118577706, guid: ffe8f031fa9dcdf40859cb0229f9eafd,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4102246530118577706, guid: ffe8f031fa9dcdf40859cb0229f9eafd,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4102246530118577706, guid: ffe8f031fa9dcdf40859cb0229f9eafd,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ffe8f031fa9dcdf40859cb0229f9eafd, type: 3}
