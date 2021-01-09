@@ -165,7 +165,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   environment: {fileID: 354278448}
   parent: {fileID: 1098416994}
-  baseRoom: {fileID: 6906098449053739112, guid: af6581bec72621a4c8c5a9e180424b83,
+  baseRoom: {fileID: 6906098449053739112, guid: 7c8df5713740d104096f79fba61124a1,
     type: 3}
   portalEntry: {fileID: 2842152764471269325, guid: 87c2bbb6277622f4299d3e7a228142ff,
     type: 3}
@@ -175,9 +175,8 @@ MonoBehaviour:
     type: 3}
   mainMapRef: {fileID: 330879183}
   minimapRef: {fileID: 85374812}
-  debug: {fileID: 5429029329216352583, guid: 90e0750e71d7fcc41831848a3b825aa3, type: 3}
   roomTemplates:
-  - {fileID: 6906098449053739112, guid: af6581bec72621a4c8c5a9e180424b83, type: 3}
+  - {fileID: 6906098449053739112, guid: 7c8df5713740d104096f79fba61124a1, type: 3}
   minNoRooms: 11
 --- !u!1 &85374812
 GameObject:
@@ -1280,21 +1279,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4102246530118577706, guid: ffe8f031fa9dcdf40859cb0229f9eafd,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4102246530118577706, guid: ffe8f031fa9dcdf40859cb0229f9eafd,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4102246530118577706, guid: ffe8f031fa9dcdf40859cb0229f9eafd,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ffe8f031fa9dcdf40859cb0229f9eafd, type: 3}

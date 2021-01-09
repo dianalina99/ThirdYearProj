@@ -17,7 +17,7 @@ public class MapGeneration : MonoBehaviour
     private bool stopCondition;
     public static Vector2 firstRoomPos, lastRoomPos;
 
-    public GameObject environment, parent, baseRoom, portalEntry, portalExit,environmentPrefab, mainMapRef, minimapRef, debug;
+    public GameObject environment, parent, portalEntry, portalExit,environmentPrefab, mainMapRef, minimapRef;
     public GameObject[] roomTemplates;
     public int minNoRooms;
     public static bool readyForPlayer = false;
@@ -168,7 +168,8 @@ public class MapGeneration : MonoBehaviour
             int j = Mathf.Abs((int)(4.5 + child.localPosition.x));
             
             //Only delete if tile is on the border.
-            if (layout[i, j] == 0 && (i==0 || i == roomHeight -1 || j == 0 || j == roomWidth - 1)) 
+            
+            if (layout[i, j] == 0 && child.tag == "WallTile") 
             {
                 //Destroy child.
                 Destroy(child.gameObject);
