@@ -124,9 +124,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e163bbafecf91c54889d606e5c4b5c4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerSpawned: 0
-  player: {fileID: 1470885901846127961, guid: b6ca2df2768fc79408e5d8ad326fb22f, type: 3}
-  environment: {fileID: 0}
+  playerPrefab: {fileID: 1470885901846127961, guid: b6ca2df2768fc79408e5d8ad326fb22f,
+    type: 3}
+  environment: {fileID: 4102246531861484476, guid: ffe8f031fa9dcdf40859cb0229f9eafd,
+    type: 3}
 --- !u!61 &6878553031735628032
 BoxCollider2D:
   m_ObjectHideFlags: 0

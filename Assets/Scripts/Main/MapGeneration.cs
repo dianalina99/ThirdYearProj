@@ -9,32 +9,71 @@ public class MapGeneration : MonoBehaviour
     private System.Random rand = new System.Random();
     public static int roomWidth = 10, roomHeight = 10;
 
-    int[,] map = new int[4, 4]{
-                                {0, 0, 0, 0},
-                                {0, 0, 0, 0},
-                                {0, 0, 0, 0},
-                                {0, 0, 0, 0}
-                            };
+    int[,] map;
 
-    int[,] prevMove = new int[4, 4]{
-                                {-1, -1, -1, -1},
-                                {-1, -1, -1, -1},
-                                {-1, -1, -1, -1},
-                                {-1, -1, -1, -1}
-                            };
+    int[,] prevMove;
 
     private int noOfRooms = 1, roomPos, row, column;
     private bool stopCondition;
     public static Vector2 firstRoomPos, lastRoomPos;
 
     public GameObject[] rooms;
-    public GameObject environment, parent, baseRoom, portalEntry, portalExit; 
+    public GameObject environment, parent, baseRoom, portalEntry, portalExit,environmentPrefab, mainMapRef, minimapRef; 
     public int minNoRooms;
     public static bool readyForPlayer = false;
 
     private Dictionary<Vector2, GameObject> gameMap = new Dictionary<Vector2, GameObject>();
     private Dictionary<Vector2, Room> gameObjMap = new Dictionary<Vector2, Room>();
 
+    public static GameObject playerRef, entryPortalRef;
+
+    private void Init()
+    {
+        map = new int[4, 4]{
+                                {0, 0, 0, 0},
+                                {0, 0, 0, 0},
+                                {0, 0, 0, 0},
+                                {0, 0, 0, 0}
+                            };
+
+        prevMove = new int[4, 4]{
+                                {-1, -1, -1, -1},
+                                {-1, -1, -1, -1},
+                                {-1, -1, -1, -1},
+                                {-1, -1, -1, -1}
+                            };
+        noOfRooms = 1;
+        stopCondition = false;
+        gameMap.Clear();
+        gameObjMap.Clear();
+
+    }
+
+    private void InitializeGrid()
+    {
+        for (int i = 0; i <= 3; i++)
+            for (int j = 0; j <= 3; j++)
+            {
+                //Draw room.
+                DrawRoom(0, j * roomHeight, i * roomWidth);
+            }
+    }
+
+    void Start()
+    {
+        Init();
+        GenerateMapGrid();
+
+    }
+    private void Update()
+    {
+        //Check to see if new map needs to be generated.
+        if (PortalExit.generateNewMap)
+        {
+            GenerateNewMap();
+            PortalExit.generateNewMap = false;
+        }
+    }
 
 
 
@@ -44,7 +83,7 @@ public class MapGeneration : MonoBehaviour
 
     private void DrawMap()
     {
-        GameObject playerInst, room, portalInst;
+        GameObject room, portalInst;
 
         for (int i = 0; i <= 3; i++)
             for (int j = 0; j <= 3; j++)
@@ -58,8 +97,8 @@ public class MapGeneration : MonoBehaviour
         
 
         //Place portal in the first room and last one.
-        portalInst = Instantiate(portalEntry, new Vector2(-firstRoomPos.x * roomWidth + 3, firstRoomPos.y), Quaternion.identity) as GameObject;
-        portalInst.transform.SetParent(environment.transform, false);
+        entryPortalRef = Instantiate(portalEntry, new Vector2(-firstRoomPos.x * roomWidth , firstRoomPos.y), Quaternion.identity) as GameObject;
+        entryPortalRef.transform.SetParent(environment.transform, false);
 
         portalInst = Instantiate(portalExit, new Vector2(-lastRoomPos.x * roomWidth , -lastRoomPos.y * roomHeight), Quaternion.identity) as GameObject;
         portalInst.transform.SetParent(environment.transform, false);
@@ -503,19 +542,12 @@ public class MapGeneration : MonoBehaviour
         gameMap.Add(position, room);
     }
 
-    private void InitializeGrid()
-    {
-        for (int i = 0; i <= 3; i++)
-            for (int j = 0; j <= 3; j++)
-            {
-                //Draw room.
-                DrawRoom(0, j * roomHeight, i * roomWidth);
-            }
-    }
+    
 
     private void GenerateMapGrid()
     {
         InitializeGrid();
+        readyForPlayer = false;
 
         //Pick first room. It is always 1.
         roomPos = rand.Next(0, 4);
@@ -709,19 +741,14 @@ public class MapGeneration : MonoBehaviour
 
         }
 
-        PrintMap();
+        //PrintMap();
         DrawMap();
 
         //Map is ready to spawn a player.
         readyForPlayer = true;
+        
     }
 
-
-    void Start()
-    {
-        GenerateMapGrid();
-
-    }
 
     private bool CanMove(int i, int j)
     {
@@ -755,6 +782,32 @@ public class MapGeneration : MonoBehaviour
 
             }
         }
+    }
+
+
+    private void GenerateNewMap()
+    {
+        //Reset map matrix and delete all rooms.
+        Init();
+
+        GameObject envInst, spawnPoint;
+
+        spawnPoint = environment.transform.GetChild(3).gameObject;
+
+        //Instantiate new environment.
+        envInst = Instantiate(environmentPrefab, spawnPoint.transform.position, Quaternion.identity) as GameObject;
+        envInst.transform.SetParent(mainMapRef.transform, true);
+
+        this.environment = envInst;
+        this.parent = environment.transform.GetChild(0).gameObject;
+
+        //Generate new room
+        GenerateMapGrid();
+
+        //See why minimap it not working if I change the position!!!!!!!
+        minimapRef.transform.position = new Vector3(minimapRef.transform.position.x, minimapRef.transform.position.y - 4 * roomHeight, minimapRef.transform.position.z);
+
+        
     }
 
 
