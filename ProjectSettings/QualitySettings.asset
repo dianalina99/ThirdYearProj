@@ -217,6 +217,6 @@ QualitySettings:
     resolutionScalingFixedDPIFactor: 1
     excludedTargetPlatforms: []
   m_PerPlatformDefaultQuality:
-    Standalone: 0
+    Standalone: 5
     WebGL: 0
-    Windows Store Apps: 0
+    Windows Store Apps: 5

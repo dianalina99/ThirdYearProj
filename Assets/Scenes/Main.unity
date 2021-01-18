@@ -165,8 +165,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   environment: {fileID: 354278448}
   parent: {fileID: 1098416994}
-  baseRoom: {fileID: 6906098449053739112, guid: 7c8df5713740d104096f79fba61124a1,
-    type: 3}
   portalEntry: {fileID: 2842152764471269325, guid: 87c2bbb6277622f4299d3e7a228142ff,
     type: 3}
   portalExit: {fileID: 2842152764471269325, guid: 894c27ff5b93f0147a7cadff23209cdc,
@@ -991,6 +989,79 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 4102246531677245324}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1145721969
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1145721971}
+  - component: {fileID: 1145721970}
+  - component: {fileID: 1145721972}
+  m_Layer: 0
+  m_Name: TreeDemo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1145721970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1145721969}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85e6f71e014bce043a859adfe9eb36a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1145721971
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1145721969}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.0482728, y: 15.609516, z: -110.609375}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1145721972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1145721969}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58c697b290b21a14a9434c3186dc060b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  treeStructPrefab: {fileID: 4911775494178423004, guid: dd8d7f8a55c8c0e42aeccfd66a69b49e,
+    type: 3}
+  treesPrefab:
+  - {fileID: 4911775494178423004, guid: dd8d7f8a55c8c0e42aeccfd66a69b49e, type: 3}
+  - {fileID: 2148795547099390551, guid: d8117e990e07dbe4eb4647ad8d704969, type: 3}
+  - {fileID: 2539026130783474265, guid: 5b3219b7b7a85b846990df0eadc16e40, type: 3}
+  - {fileID: 6400368391206676724, guid: d4d15e6d5c9c5c74b806b5b95385d609, type: 3}
+  grassPrefab:
+  - {fileID: 6636709111094825644, guid: 15a3d3ce60d5e2c43a1a1bc285d731f9, type: 3}
+  - {fileID: 3488761404430453466, guid: 9dc74a7e0e33b0148972eb5637f55ece, type: 3}
+  - {fileID: 8388944758785026291, guid: 16a2de372d34cd14a96f23d8437cb3f3, type: 3}
+  - {fileID: 1510580375769931251, guid: 2433ccffd2683e144bbfe91db9e93ed8, type: 3}
+  randObjPrefab:
+  - {fileID: 8046979601088602610, guid: 8735c27420a04fe4babe1563f7cad746, type: 3}
+  - {fileID: 2795827150090183651, guid: 8b60aca01b523504482bb2b3aa4a2db0, type: 3}
+  - {fileID: 397099981709078060, guid: 6ae6c4479bea9f04c8028beffb78ae1c, type: 3}
+  - {fileID: 3900317251702416495, guid: a0f6c6a56f5752347ad353ee367bf318, type: 3}
 --- !u!1 &1256413616
 GameObject:
   m_ObjectHideFlags: 0
@@ -1279,6 +1350,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4102246530118577707, guid: ffe8f031fa9dcdf40859cb0229f9eafd,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ffe8f031fa9dcdf40859cb0229f9eafd, type: 3}
