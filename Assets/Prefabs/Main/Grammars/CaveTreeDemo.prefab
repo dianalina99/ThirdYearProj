@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1815161098226572547
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1815161098226572545}
+  - component: {fileID: 1815161098226572544}
+  - component: {fileID: 1815161098226572550}
+  m_Layer: 0
+  m_Name: CaveTreeDemo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1815161098226572545
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1815161098226572547}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.0482728, y: 15.609516, z: -110.609375}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1815161098226572544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1815161098226572547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85e6f71e014bce043a859adfe9eb36a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  settings: {fileID: 11400000, guid: f8d01e32c8f446744a9e46dbdafe4410, type: 2}
+--- !u!114 &1815161098226572550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1815161098226572547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58c697b290b21a14a9434c3186dc060b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  treeStructPrefab: {fileID: 3370894785179327924, guid: 941f0060ceb604a489e77299e21d9a5a,
+    type: 3}
+  treesPrefab:
+  - {fileID: 3370894785179327924, guid: 941f0060ceb604a489e77299e21d9a5a, type: 3}
+  - {fileID: 170569009902363819, guid: 6f36e14d794735b418086c156e13b3fe, type: 3}
+  - {fileID: 170569009902363819, guid: 6f36e14d794735b418086c156e13b3fe, type: 3}
+  - {fileID: 3370894785179327924, guid: 941f0060ceb604a489e77299e21d9a5a, type: 3}
+  grassPrefab:
+  - {fileID: 7961210666992317128, guid: 7168aedfb92cb664bad7c351e57dda27, type: 3}
+  - {fileID: 7886822694684537095, guid: 6b31491f58114cd49ae13dba8743a6be, type: 3}
+  - {fileID: 2348209898163327748, guid: 92c3b41df25ebb944bf4e86d5ecc32b3, type: 3}
+  - {fileID: 5109440305898426798, guid: fa127dd1f22c86f4f83a725560a7cc7b, type: 3}
+  - {fileID: 3278371631131784337, guid: bae7e3de49fe0814688b4b5e83e4b908, type: 3}
+  - {fileID: 6615092981039539898, guid: 42f19bdf577989e458100ce12b8143ea, type: 3}
+  - {fileID: 170569009902363819, guid: 6f36e14d794735b418086c156e13b3fe, type: 3}
+  - {fileID: 7961210666992317128, guid: 7168aedfb92cb664bad7c351e57dda27, type: 3}
+  - {fileID: 7886822694684537095, guid: 6b31491f58114cd49ae13dba8743a6be, type: 3}
+  - {fileID: 7886822694684537095, guid: 6b31491f58114cd49ae13dba8743a6be, type: 3}
+  randObjPrefab:
+  - {fileID: 4194967550881329330, guid: a9bc2debfab6d0c48ad6caa3cfa8e588, type: 3}
+  - {fileID: 7357471773687742470, guid: e9934ca14c84c2c4899a93894ea9273a, type: 3}
+  - {fileID: 170569009902363819, guid: 6f36e14d794735b418086c156e13b3fe, type: 3}
+  - {fileID: 8591595901237754952, guid: acba984fd5363914894f75d4819d5284, type: 3}
+  - {fileID: 7513697962872110506, guid: c1aae93e5b9b6b949b669314fa35e0d6, type: 3}

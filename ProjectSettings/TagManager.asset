@@ -9,6 +9,8 @@ TagManager:
   - MiniMapMin
   - Environment
   - WallTile
+  - EmptyTile
+  - DecorTile
   layers:
   - Default
   - TransparentFX
@@ -18,9 +20,9 @@ TagManager:
   - UI
   - 
   - 
+  - Decorations
   - Player
-  - 
-  - 
+  - MinimapGizmo
   - 
   - 
   - 
@@ -45,4 +47,13 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Decorations
+    uniqueID: 1101020043
+    locked: 0
+  - name: Player
+    uniqueID: 2838482631
+    locked: 0
+  - name: MinimapGizmo
+    uniqueID: 3723813859
     locked: 0

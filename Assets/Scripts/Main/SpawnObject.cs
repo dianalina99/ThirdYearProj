@@ -11,7 +11,7 @@ public class SpawnObject : MonoBehaviour
     void Start()
     {
         int rand = Random.Range(0, objects.Length);
-        GameObject tile = Instantiate(objects[rand], transform.position, Quaternion.identity) as GameObject;
+        GameObject tile = Instantiate(objects[rand], this.transform.position, Quaternion.identity) as GameObject;
         tile.transform.parent = this.transform;
     }
 

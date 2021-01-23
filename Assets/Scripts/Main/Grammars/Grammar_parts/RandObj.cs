@@ -8,6 +8,11 @@ public class RandObj
 
     public RandObjType Type { get => type; }
 
+    public RandObj()
+    {
+        this.type = DecorGenerator.GetRandomEnum<RandObjType>();
+    }
+
     public RandObj(RandObjType type)
     {
         this.type = type;
@@ -25,6 +30,7 @@ public enum RandObjType
     Type1,
     Type2,
     Type3,
-    Type4
+    Type4,
+    Type5
 }
 
