@@ -740,7 +740,7 @@ public class MapGeneration : MonoBehaviour
 
         }
 
-        PrintMap();
+        //PrintMap();
         DrawMap();
 
         //Map is ready to spawn a player.
