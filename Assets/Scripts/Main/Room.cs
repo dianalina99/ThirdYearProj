@@ -7,6 +7,7 @@ public class Room
     private float[,] map; 
     private Vector2 position;
     private int type;
+    public bool hasHiddenDoor;
 
     public HashSet<Vector2> entryL;
     public HashSet<Vector2> entryR;
@@ -35,8 +36,8 @@ public class Room
         this.entryU = new HashSet<Vector2>();
         this.entryD = new HashSet<Vector2>();
         this.position = pos;
+        this.hasHiddenDoor = false;
 
-        
     }
     public float[,] getMap()
     {

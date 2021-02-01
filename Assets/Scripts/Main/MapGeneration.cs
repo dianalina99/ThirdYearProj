@@ -17,8 +17,7 @@ public class MapGeneration : MonoBehaviour
     private bool stopCondition;
     public static Vector2 firstRoomPos, lastRoomPos;
 
-    public GameObject environment, parent, portalEntry, portalExit,environmentPrefab, mainMapRef, minimapRef;
-    public GameObject[] roomTemplates;
+    public GameObject environment, parent, portalEntry, portalExit,hiddenRoomDoorPrefab ,environmentPrefab, mainMapRef, minimapRef, baseRoom, hiddenRoom;
     public int minNoRooms;
     public static bool readyForPlayer = false;
 
@@ -49,16 +48,6 @@ public class MapGeneration : MonoBehaviour
 
     }
 
-    private void InitializeGrid()
-    {
-        for (int i = 0; i <= 3; i++)
-            for (int j = 0; j <= 3; j++)
-            {
-                //Draw room.
-                DrawRoom(0, j * roomHeight, i * roomWidth);
-            }
-    }
-
     void Start()
     {
         Init();
@@ -77,19 +66,22 @@ public class MapGeneration : MonoBehaviour
 
     private void DrawMap()
     {
-        GameObject room, portalInst,temp;
+        GameObject portalInst;
+        bool temp;
 
         for (int i = 0; i <= 3; i++)
             for (int j = 0; j <= 3; j++)
             {
                 // Starting from top left corner. 
-                DrawAndGenerateRoom(map[i, j], i * roomHeight, j * roomWidth);
+                temp = false;
+
+                //Check if left neighbour room is empty = type 0.
+                if( j < 3 && map[i,j + 1] == 0)
+                {
+                    temp = true;
+                }
+                DrawAndGenerateRoom(map[i, j], i * roomHeight, j * roomWidth, temp);
             }
-
-        //Place player in first room.
-        gameMap.TryGetValue(firstRoomPos, out room);
-
-        
 
         //Place portal in the first room and last one.
         entryPortalRef = Instantiate(portalEntry, new Vector2(-firstRoomPos.x * roomWidth , firstRoomPos.y), Quaternion.identity) as GameObject;
@@ -97,6 +89,7 @@ public class MapGeneration : MonoBehaviour
 
         portalInst = Instantiate(portalExit, new Vector2(-lastRoomPos.x * roomWidth , -lastRoomPos.y * roomHeight), Quaternion.identity) as GameObject;
         portalInst.transform.SetParent(environment.transform, false);
+
     }
 
     private Room getRoom(Vector2 pos)
@@ -113,26 +106,15 @@ public class MapGeneration : MonoBehaviour
     }
 
 
-    private void DrawAndGenerateRoom(int index, int x, int y)
+    private void DrawAndGenerateRoom(int index, int x, int y, bool LeftIsEmpty)
     {
-        GameObject room, tile;
+        GameObject room;
         Room roomObj;
 
         // Room (0,0) grid coordinates is top left corner. 
         Vector2 position = new Vector2(-y, -x);
 
-        //Check if dictionary entry exists and remove room before overwriting.
-        if (gameMap.ContainsKey(position))
-        {
-            gameMap.TryGetValue(position, out room);
-            gameMap.Remove(position);
-            Destroy(room);
-        }
-
-        //Instantiate as GameObject in the game.
-        int randIndex = rand.Next(0, roomTemplates.Length);
-        room = Instantiate(roomTemplates[randIndex], position, Quaternion.identity) as GameObject;
-        room.transform.SetParent(parent.transform, false);
+        room = DrawRoom(index, x, y);
 
         //Generate a room type object in order to handle exits and entries.
 
@@ -152,27 +134,69 @@ public class MapGeneration : MonoBehaviour
 
         gameObjMap.Add(position, newRoom);
 
-        UpdateRoomBorder(room, newRoom.getMap());
+        UpdateRoomBorder(room, newRoom.getMap(), newRoom, LeftIsEmpty);
 
     }
 
 
-    private void UpdateRoomBorder(GameObject room, float[,] layout)
+    private void UpdateRoomBorder(GameObject room, float[,] layout, Room roomObj, bool leftIsEmpty)
     {
+        Room right, left;
+        bool placedRoomRight = false, placedRoomLeft = false;
+
+        gameObjMap.TryGetValue(new Vector2(roomObj.getPosition().x + 10, roomObj.getPosition().y), out right);
+        gameObjMap.TryGetValue(new Vector2(roomObj.getPosition().x - 10, roomObj.getPosition().y), out left);
+
+        
+
+
         foreach (Transform child in room.transform)
         {
-            //int i = (int)(4.5 - Mathf.Abs(child.localPosition.y));
-            //int j = (int)(4.5 - Mathf.Abs(child.localPosition.x));
-
+         
             int i = Mathf.Abs((int)(-4.5 + child.localPosition.y));
             int j = Mathf.Abs((int)(4.5 + child.localPosition.x));
-            
+
+
             //Only delete if tile is on the border.
-            
-            if (layout[i, j] == 0 && child.tag == "WallTile") 
+
+            if (child.tag == "WallTile" ) 
             {
-                //Destroy child.
-                Destroy(child.gameObject);
+                
+                //Place door for each entry to empty room.
+
+
+                //Mark the room as having a hidden door....for the left it does not work, so maybe do this after all rooms have been generated.
+                
+                if (right != null && right.getType() == 0 && !placedRoomRight && j == (roomWidth - 1) && layout[i, j] == 0 && roomObj.getType() != 0 && !right.hasHiddenDoor)
+                {
+                    //Place door.
+                    GameObject door = Instantiate(hiddenRoomDoorPrefab, new Vector3( child.position.x + 1, child.position.y + 0.5f, child.position.z), Quaternion.identity) as GameObject;
+                    door.transform.SetParent(room.transform, true);
+
+                    placedRoomRight = true;
+                
+                }
+
+
+                //if (leftIsEmpty && !placedRoomLeft && j == 0 && (layout[i, j] == 0 || roomObj.getType() == 0) )
+                if (leftIsEmpty && !placedRoomLeft && j == 0 && layout[i, j] == 0 && roomObj.getType() != 0)
+                {
+                    //Place door.
+                    GameObject door = Instantiate(hiddenRoomDoorPrefab, new Vector3(child.position.x - 1 , child.position.y - 0.5f, child.position.z), Quaternion.identity) as GameObject;
+                    door.transform.SetParent(room.transform, true);
+
+                    placedRoomLeft = true;
+
+                }
+
+                if(layout[i, j] == 0)
+                {
+                    //Destroy child.
+                    Destroy(child.gameObject);
+                }
+
+                    
+
             }
         }
 
@@ -246,7 +270,7 @@ public class MapGeneration : MonoBehaviour
     private void GenerateType2Entries(Room room)
     {
         Vector2 pos = room.getPosition();
-        Room right, left, up, down;
+        Room right, left, down;
         int random;
 
         //Look left and right to detect already existent entries.
@@ -519,7 +543,8 @@ public class MapGeneration : MonoBehaviour
 
         }
     }
-    private void DrawRoom(int index, int x, int y)
+
+    public GameObject DrawRoom(int index, int x, int y)
     {
         GameObject room;
 
@@ -533,19 +558,20 @@ public class MapGeneration : MonoBehaviour
             Destroy(room);
         }
 
-        //room = Instantiate(rooms[index], position, Quaternion.identity) as GameObject;
-        int randIndex = rand.Next(0, roomTemplates.Length);
-        room = Instantiate(roomTemplates[randIndex], position, Quaternion.identity) as GameObject;
+        //Instantiate the base room template for non empty rooms.
+        room = Instantiate(baseRoom, position, Quaternion.identity) as GameObject;
         room.transform.SetParent(parent.transform, false);
 
         gameMap.Add(position, room);
+
+        return room;
     }
 
     
 
     private void GenerateMapGrid()
     {
-        InitializeGrid();
+       
         readyForPlayer = false;
 
         //Pick first room. It is always 1.
@@ -577,20 +603,6 @@ public class MapGeneration : MonoBehaviour
             {
                 map[row, column] = 1;
             }
-
-            /*
-            if (prevMove[row, column] == 3 || prevMove[row, column] == 2)
-            {
-                if (map[row, column] != 1 && map[row, column] != 0)
-                {
-                    map[row, column] = 4;
-                }
-                else
-                {
-                    map[row, column] = prevMove[row, column];
-                }
-
-            }*/
 
             if ((prevMove[row, column] == 3 && map[row, column] == 2) || (prevMove[row, column] == 2 && map[row, column] == 3))
             {
@@ -803,7 +815,7 @@ public class MapGeneration : MonoBehaviour
         //Generate new room
         GenerateMapGrid();
 
-        //See why minimap it not working if I change the position!!!!!!!
+        //Show new map on the minimap view.
         minimapRef.transform.position = new Vector3(minimapRef.transform.position.x, minimapRef.transform.position.y - 4 * roomHeight, minimapRef.transform.position.z);
 
         

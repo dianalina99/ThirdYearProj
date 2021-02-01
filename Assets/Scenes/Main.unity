@@ -120,62 +120,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &62406825
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 62406826}
-  - component: {fileID: 62406827}
-  m_Layer: 0
-  m_Name: Map Generation
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &62406826
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 62406825}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 14.04493, y: 31.80364, z: -21.453125}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &62406827
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 62406825}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5c3729f55cbcf844a9736d3dd7ea6de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  environment: {fileID: 354278448}
-  parent: {fileID: 1098416994}
-  portalEntry: {fileID: 2842152764471269325, guid: 87c2bbb6277622f4299d3e7a228142ff,
-    type: 3}
-  portalExit: {fileID: 2842152764471269325, guid: 894c27ff5b93f0147a7cadff23209cdc,
-    type: 3}
-  environmentPrefab: {fileID: 4102246531861484476, guid: ffe8f031fa9dcdf40859cb0229f9eafd,
-    type: 3}
-  mainMapRef: {fileID: 330879183}
-  minimapRef: {fileID: 85374812}
-  roomTemplates:
-  - {fileID: 6906098449053739112, guid: 7c8df5713740d104096f79fba61124a1, type: 3}
-  minNoRooms: 11
 --- !u!1 &85374812
 GameObject:
   m_ObjectHideFlags: 0
@@ -332,6 +276,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 330879184}
+  - component: {fileID: 330879185}
   m_Layer: 0
   m_Name: MainMap
   m_TagString: Untagged
@@ -352,8 +297,37 @@ Transform:
   m_Children:
   - {fileID: 4102246531677245325}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &330879185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330879183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5c3729f55cbcf844a9736d3dd7ea6de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  environment: {fileID: 354278448}
+  parent: {fileID: 1098416994}
+  portalEntry: {fileID: 2842152764471269325, guid: 87c2bbb6277622f4299d3e7a228142ff,
+    type: 3}
+  portalExit: {fileID: 2842152764471269325, guid: 894c27ff5b93f0147a7cadff23209cdc,
+    type: 3}
+  hiddenRoomDoorPrefab: {fileID: 8401266908609541976, guid: 98c32cc813f890d499f9f4596e53bd69,
+    type: 3}
+  environmentPrefab: {fileID: 4102246531861484476, guid: ffe8f031fa9dcdf40859cb0229f9eafd,
+    type: 3}
+  mainMapRef: {fileID: 330879183}
+  minimapRef: {fileID: 85374812}
+  baseRoom: {fileID: 6906098449053739112, guid: 7c8df5713740d104096f79fba61124a1,
+    type: 3}
+  hiddenRoom: {fileID: 6906098449053739112, guid: 142bb0496963ce448ae4027ff0a2ceb1,
+    type: 3}
+  minNoRooms: 11
 --- !u!1 &354278448 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4102246531861484476, guid: ffe8f031fa9dcdf40859cb0229f9eafd,
@@ -584,7 +558,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &753568363
 GameObject:
@@ -1011,7 +985,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1098416994 stripped
 GameObject:
@@ -1144,7 +1118,7 @@ Transform:
   - {fileID: 85374815}
   - {fileID: 658149887}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1556261294
 GameObject:
