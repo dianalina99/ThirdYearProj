@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4754000753230438764}
   - component: {fileID: -2654751583932434906}
   - component: {fileID: -2289659918338208740}
-  m_Layer: 8
+  m_Layer: 19
   m_Name: spike-skull
   m_TagString: DecorTile
   m_Icon: {fileID: 0}

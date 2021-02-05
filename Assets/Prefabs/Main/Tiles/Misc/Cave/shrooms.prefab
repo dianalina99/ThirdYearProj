@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3064399530982058750}
   - component: {fileID: -6845607898922683522}
   - component: {fileID: -2755739285710066639}
-  m_Layer: 8
+  m_Layer: 19
   m_Name: shrooms
   m_TagString: DecorTile
   m_Icon: {fileID: 0}

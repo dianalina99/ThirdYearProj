@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5946746200826934261}
   - component: {fileID: -5922169267022096703}
   - component: {fileID: -1645422097959394063}
-  m_Layer: 8
+  m_Layer: 19
   m_Name: Medieval_props_free_21
   m_TagString: DecorTile
   m_Icon: {fileID: 0}

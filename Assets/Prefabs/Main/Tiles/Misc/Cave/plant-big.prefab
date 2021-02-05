@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8463376155067405814}
   - component: {fileID: 8048934577042743240}
   - component: {fileID: 6575218224418984145}
-  m_Layer: 8
+  m_Layer: 19
   m_Name: plant-big
   m_TagString: DecorTile
   m_Icon: {fileID: 0}

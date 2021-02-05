@@ -20,20 +20,20 @@ TagManager:
   - UI
   - 
   - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - Interactables
   - Decorations
   - Player
   - MinimapGizmo
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
   - 
   - 
   - 
@@ -50,6 +50,9 @@ TagManager:
     locked: 0
   - name: Decorations
     uniqueID: 1101020043
+    locked: 0
+  - name: Interactables
+    uniqueID: 3124353
     locked: 0
   - name: Player
     uniqueID: 2838482631

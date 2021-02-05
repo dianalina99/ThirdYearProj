@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 6050534715798628808}
   - component: {fileID: 6050534715798628815}
   - component: {fileID: -5556219636198526088}
-  - component: {fileID: 9195395616323077599}
   - component: {fileID: -2093451892796956164}
-  m_Layer: 8
+  - component: {fileID: 8395121517123311706}
+  m_Layer: 18
   m_Name: Medieval_props_free_5
   m_TagString: DecorTile
   m_Icon: {fileID: 0}
@@ -108,27 +108,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.71875, y: 0.46875}
   m_EdgeRadius: 0
---- !u!50 &9195395616323077599
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6050534715798628814}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 0.0001
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 4
 --- !u!114 &-2093451892796956164
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -141,3 +120,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 351392ad562362e4eb823aa9741a32bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8395121517123311706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6050534715798628814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: feaf7d6c08d475c4182eb5e43eba0f58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 1

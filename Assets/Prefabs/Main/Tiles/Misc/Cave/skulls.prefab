@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4249145619924961174}
   - component: {fileID: -3260208281443487300}
   - component: {fileID: 1703327416193256978}
-  m_Layer: 8
+  m_Layer: 19
   m_Name: skulls
   m_TagString: DecorTile
   m_Icon: {fileID: 0}

@@ -106,7 +106,7 @@ public class MapGeneration : MonoBehaviour
     }
 
 
-    private void DrawAndGenerateRoom(int index, int x, int y, bool LeftIsEmpty)
+    private void DrawAndGenerateRoom(int roomType, int x, int y, bool LeftIsEmpty)
     {
         GameObject room;
         Room roomObj;
@@ -114,7 +114,7 @@ public class MapGeneration : MonoBehaviour
         // Room (0,0) grid coordinates is top left corner. 
         Vector2 position = new Vector2(-y, -x);
 
-        room = DrawRoom(index, x, y);
+        room = DrawRoom(roomType, x, y);
 
         //Generate a room type object in order to handle exits and entries.
 
@@ -129,7 +129,7 @@ public class MapGeneration : MonoBehaviour
         }
 
         //Create new room template.
-        Room newRoom = new Room(index, position);
+        Room newRoom = new Room(roomType, position);
         GenerateRoomTemplate(newRoom);
 
         gameObjMap.Add(position, newRoom);
@@ -177,7 +177,6 @@ public class MapGeneration : MonoBehaviour
                 
                 }
 
-
                 //if (leftIsEmpty && !placedRoomLeft && j == 0 && (layout[i, j] == 0 || roomObj.getType() == 0) )
                 if (leftIsEmpty && !placedRoomLeft && j == 0 && layout[i, j] == 0 && roomObj.getType() != 0)
                 {
@@ -194,9 +193,6 @@ public class MapGeneration : MonoBehaviour
                     //Destroy child.
                     Destroy(child.gameObject);
                 }
-
-                    
-
             }
         }
 
@@ -349,7 +345,7 @@ public class MapGeneration : MonoBehaviour
     private void GenerateType3Entries(Room room)
     {
         Vector2 pos = room.getPosition();
-        Room right, left, up, down;
+        Room right, left, up;
         int random;
 
         //Look left and right to detect already existent entries.
@@ -544,7 +540,7 @@ public class MapGeneration : MonoBehaviour
         }
     }
 
-    public GameObject DrawRoom(int index, int x, int y)
+    public GameObject DrawRoom(int roomType, int x, int y)
     {
         GameObject room;
 
@@ -559,7 +555,15 @@ public class MapGeneration : MonoBehaviour
         }
 
         //Instantiate the base room template for non empty rooms.
-        room = Instantiate(baseRoom, position, Quaternion.identity) as GameObject;
+        if(roomType != 0 )
+        {
+            room = Instantiate(baseRoom, position, Quaternion.identity) as GameObject;
+        }
+        else
+        {
+            room = Instantiate(hiddenRoom, position, Quaternion.identity) as GameObject;
+        }
+        
         room.transform.SetParent(parent.transform, false);
 
         gameMap.Add(position, room);

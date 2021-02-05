@@ -7,7 +7,7 @@ public class DecorFadeOnCollision : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Collision"); //Collision is true
+        //Debug.Log("Collision"); //Collision is true
         StartCoroutine(FadeAlphaToZero(GetComponent<SpriteRenderer>(), 0.2f));
     }
     private void OnTriggerExit2D(Collider2D collision)

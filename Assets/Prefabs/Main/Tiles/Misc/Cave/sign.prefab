@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2931676030058217072}
   - component: {fileID: 2351900998671543386}
   - component: {fileID: -4774658197043444031}
-  m_Layer: 8
+  m_Layer: 19
   m_Name: sign
   m_TagString: DecorTile
   m_Icon: {fileID: 0}

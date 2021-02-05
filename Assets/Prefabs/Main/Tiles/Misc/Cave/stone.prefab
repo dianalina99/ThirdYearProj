@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7080988997522804003}
   - component: {fileID: 3675037315219153626}
   - component: {fileID: -2631038998198348999}
-  m_Layer: 8
+  m_Layer: 19
   m_Name: stone
   m_TagString: DecorTile
   m_Icon: {fileID: 0}
