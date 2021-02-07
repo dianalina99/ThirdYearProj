@@ -11,10 +11,11 @@ GameObject:
   - component: {fileID: 1470885901846127270}
   - component: {fileID: 1470885901846127271}
   - component: {fileID: 1470885901846127268}
-  - component: {fileID: 1470885901846127269}
   - component: {fileID: 1470885901846127266}
   - component: {fileID: -3183061617983155203}
   - component: {fileID: -5984286806492577093}
+  - component: {fileID: 1470885901846127269}
+  - component: {fileID: 4791442339335940358}
   m_Layer: 20
   m_Name: Player
   m_TagString: Player
@@ -106,26 +107,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &1470885901846127269
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1470885901846127961}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1ca5c9eedec272428ac4b73ce0c5874, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 5
-  player: {fileID: 1470885901846127268}
-  animator: {fileID: 1470885901846127266}
-  cam: {fileID: 0}
-  interactablesMask:
-    serializedVersion: 2
-    m_Bits: 262144
-  focus: {fileID: 0}
 --- !u!95 &1470885901846127266
 Animator:
   serializedVersion: 3
@@ -187,6 +168,46 @@ CircleCollider2D:
   m_Offset: {x: -0.024819314, y: -0.53090644}
   serializedVersion: 2
   m_Radius: 0.32519233
+--- !u!114 &1470885901846127269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1470885901846127961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1ca5c9eedec272428ac4b73ce0c5874, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 5
+  player: {fileID: 1470885901846127268}
+  animator: {fileID: 1470885901846127266}
+  cam: {fileID: 0}
+  interactablesMask:
+    serializedVersion: 2
+    m_Bits: 262144
+  collectiblesMask:
+    serializedVersion: 2
+    m_Bits: 0
+  focus: {fileID: 0}
+--- !u!114 &4791442339335940358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1470885901846127961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98a0948419b9bff488898ab009902dae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  damage:
+    baseValue: 5
+  protection:
+    baseValue: 0
 --- !u!1 &6736626860552410302
 GameObject:
   m_ObjectHideFlags: 0
