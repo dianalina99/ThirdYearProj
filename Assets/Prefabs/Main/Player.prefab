@@ -204,10 +204,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
-  damage:
-    baseValue: 5
+  strength:
+    baseValue: 0
   protection:
     baseValue: 0
+  healthBar: {fileID: 8086994368755243689, guid: 21d9b6fc89f80fe4bbfd2c229364af09,
+    type: 3}
+  strengthBar: {fileID: 3998815087364105730, guid: 2609161e0e987a64798e3a6c22e2c018,
+    type: 3}
+  protectionBar: {fileID: 5438938483030600959, guid: 52fc2bd91fdb4bf44a9c843804488009,
+    type: 3}
 --- !u!1 &6736626860552410302
 GameObject:
   m_ObjectHideFlags: 0

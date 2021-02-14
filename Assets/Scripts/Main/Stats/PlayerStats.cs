@@ -1,14 +1,29 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerStats : CharacterStats
 {
+    private StatUI healthStatUI;
+    private StatUI strengthStatUI;
+    private StatUI protectionStatUI;
+
+
     // Start is called before the first frame update
     void Start()
     {
+        healthStatUI = GameObject.Find("PlayerHealthBar") .GetComponent<StatUI>();
+        strengthStatUI = GameObject.Find("PlayerStrengthBar").GetComponent<StatUI>();
+        protectionStatUI = GameObject.Find("PlayerProtectionBar").GetComponent<StatUI>();
+
        EquipmentManager.instance.onEquipmentChanged += OnEquipmentChanged;
-        
+
+        InitializeSliders();
+    }
+
+    void InitializeSliders()
+    {
+        healthStatUI.SetAllSliderValues(0, maxHealth, maxHealth - 2);
+        strengthStatUI.SetAllSliderValues(10, 100, 98);
+        protectionStatUI.SetAllSliderValues(10, 100,98);
     }
 
     void OnEquipmentChanged( Equipment newItem, Equipment oldItem)
@@ -16,19 +31,27 @@ public class PlayerStats : CharacterStats
         if(newItem != null)
         {
             protection.AddModifier(newItem.armorModifier);
-            damage.AddModifier(newItem.damageModifier);
+            strength.AddModifier(newItem.damageModifier);
         }
 
         if(oldItem != null)
         {
             protection.RemoveModifier(oldItem.armorModifier);
-            damage.RemoveModifier(oldItem.damageModifier);
+            strength.RemoveModifier(oldItem.damageModifier);
         }
+
+
+        //Update protection and strength UI.
+        protectionStatUI.SetValue(protection.GetValue());
+        strengthStatUI.SetValue(strength.GetValue());
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void TakeDamage(int damage)
     {
-       
+        base.TakeDamage(damage);
+
+        //Update health bar UI.
+        healthStatUI.SetValue(currentHealth);
     }
+
 }
