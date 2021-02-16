@@ -1,5 +1,4 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Interactable : MonoBehaviour
 {
@@ -10,8 +9,14 @@ public class Interactable : MonoBehaviour
 
     public virtual void Interact ()
     {
-        //Method made to be oberwritten.
-        Debug.Log("Interacting with " + player.name);
+        //Method made to be overwritten.
+        Debug.Log("Interactable: Interacting with " + player.name);
+    }
+
+    public virtual void FinishInteract()
+    {
+        //Method made to be overwritten.
+        Debug.Log("Interactable: Finish interacting with " + player.name);
     }
 
     private void Update()
@@ -37,6 +42,8 @@ public class Interactable : MonoBehaviour
 
     public void OnDefocused()
     {
+        FinishInteract();
+
         isFocus = false;
         player = null;
         hasInteracted = false;

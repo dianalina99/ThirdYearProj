@@ -10,7 +10,7 @@ public class DecorationDemo : MonoBehaviour
     {
         TreeStruct tree = DecorGenerator.GenerateTreeStruct(settings);
         GetComponent<DecorRenderer>().Render(tree);
-        Debug.Log(tree.ToString()); 
+        //Debug.Log(tree.ToString()); 
     }
 
 }

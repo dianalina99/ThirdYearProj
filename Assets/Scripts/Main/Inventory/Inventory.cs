@@ -23,8 +23,9 @@ public class Inventory : MonoBehaviour
     public delegate void OnItemChanged();
     public OnItemChanged onItemChangedCallback;
 
-    public int noOfSlots = 10;
+    public int noOfSlots = 9;
     public List<Item> items = new List<Item>();
+    public Transform interactingWithChest = null;
 
     public bool Add(Item item)
     {
@@ -60,6 +61,7 @@ public class Inventory : MonoBehaviour
         if (onItemChangedCallback != null)
         {
             onItemChangedCallback.Invoke();
-        }
+        }    
+
     }
 }

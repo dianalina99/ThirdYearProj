@@ -12,7 +12,7 @@ public class EquipmentManager : MonoBehaviour
         instance = this;
     }
     #endregion
-    Equipment[] currentEquipment;
+    public Equipment[] currentEquipment;
 
     public delegate void OnEquipmentChanged(Equipment newItem, Equipment oldItem);
     public OnEquipmentChanged onEquipmentChanged;
@@ -39,12 +39,12 @@ public class EquipmentManager : MonoBehaviour
             inventory.Add(oldItem);
         }
 
-        if(onEquipmentChanged != null)
+        currentEquipment[slotIndex] = newItem;
+
+        if (onEquipmentChanged != null)
         {
             onEquipmentChanged.Invoke(newItem, oldItem);
         }
-
-        currentEquipment[slotIndex] = newItem;
     }
 
     public void Unequip(int slotIndex)

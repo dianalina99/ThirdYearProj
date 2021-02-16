@@ -8,16 +8,12 @@ public class SpawnObject : MonoBehaviour
     private int[][] room;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         int rand = Random.Range(0, objects.Length);
         GameObject tile = Instantiate(objects[rand], this.transform.position, Quaternion.identity) as GameObject;
         tile.transform.parent = this.transform;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
 }

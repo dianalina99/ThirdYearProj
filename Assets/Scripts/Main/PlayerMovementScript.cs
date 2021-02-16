@@ -26,7 +26,6 @@ public class PlayerMovementScript : MonoBehaviour
         if(movement.x < 0.0f)
         {
             //Flip sprite
-            //this.transform.SetPositionAndRotation(this.transform.position, new Quaternion(-1, this.transform.rotation.y, this.transform.rotation.z, this.transform.rotation.w));
             this.transform.localScale = new Vector3(-1, this.transform.localScale.y, this.transform.localScale.z);
         }
         else
@@ -41,9 +40,9 @@ public class PlayerMovementScript : MonoBehaviour
 
         //Handle mouse inputs.
         HandleInteractables();
-        //HandleCollectibles();
 
-        
+        //Collecting items is managed by ItemCollect.cs which extends Collecticle.cs.
+  
     }
 
     private void HandleInteractables()
@@ -70,17 +69,24 @@ public class PlayerMovementScript : MonoBehaviour
             }
         }
 
+        //Unfocus when moving too far away.
+        float distance = 0;
+
+        if(focus != null)
+        {
+           distance = Vector3.Distance(this.gameObject.transform.position, focus.transform.position);
+           
+            if(distance > focus.radius)
+            {
+                RemoveFocus();
+            }
+        }
+
         //Unfocus interactables when hitting ESC.
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             RemoveFocus();
         }
-    }
-
-    private void HandleCollectibles()
-    {
-   
-
     }
 
     void SetFocus(Interactable newFocus)

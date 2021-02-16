@@ -20,9 +20,12 @@ public class Equipment : Item
 
         //Remove from inventory
         RemoveFromInventory();
+
+        //Add it to equipment bar.
+
     }
 
 
 }
 
-public enum EquipmentSlot { Head, Chest, Legs, Weapon, Shield, Feet}
+public enum EquipmentSlot { Head, Body, Feet, Weapon}
