@@ -31,6 +31,12 @@ public class InventorySlot : MonoBehaviour
         icon.sprite = null;
         icon.enabled = false;
         removeButton.interactable = false;
+
+        //Check if it's an inventory slot for the equip bar - doesn't have text.
+        if (noOfItems != null)
+        {
+            noOfItems.text = "0";
+        }
     }
 
     public void OnRemoveButton()

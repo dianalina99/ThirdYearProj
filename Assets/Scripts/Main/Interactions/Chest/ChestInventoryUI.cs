@@ -17,16 +17,24 @@ public class ChestInventoryUI : MonoBehaviour
 
         Debug.Log("Updating chest inventory UI");
 
+
         for (int i = 0; i < slots.Length; i++)
         {
-            if (i < chestInventory.items.Count)
+            //Check if slot has item using its index.
+            if (chestInventory.itemAtIndex.ContainsKey(i))
             {
-                slots[i].AddItem(chestInventory.items[i]);
+                //Get the item.
+                Item item;
+                chestInventory.itemAtIndex.TryGetValue(i, out item);
+
+                //Add the item in the slot.
+                slots[i].AddItem(item, chestInventory.itemsCount[i]);
             }
             else
             {
                 slots[i].ClearSlot();
             }
+
         }
 
     }

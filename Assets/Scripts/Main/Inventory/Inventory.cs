@@ -27,8 +27,6 @@ public class Inventory : MonoBehaviour
 
     public Dictionary<int, Item> itemAtIndex = new Dictionary<int, Item>();
     public Dictionary<Item, int> indexForItem = new Dictionary<Item, int>();
-    //public List<int> itemsCount = new List<int> { 0, 0, 0, 0,0,0,0,0,0 };
-    //public List<int> itemsCount = new List<int>();
     public int[] itemsCount;
 
     private void Start()
