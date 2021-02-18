@@ -25,7 +25,7 @@ public class EquipBarUI : MonoBehaviour
         {
             if (equipment.currentEquipment[i] != null)
             {
-                equipSlots[i].AddItem(equipment.currentEquipment[i]);
+                equipSlots[i].AddItem(equipment.currentEquipment[i],i);
             }
             else
             {

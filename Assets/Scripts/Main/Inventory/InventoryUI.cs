@@ -31,6 +31,26 @@ public class InventoryUI : MonoBehaviour
     {
        Debug.Log("Updating inventory UI");
 
+        for (int i = 0; i < slots.Length; i++)
+        {
+            //Check if slot has item using its index.
+            if(Inventory.instance.itemAtIndex.ContainsKey(i))
+            {
+                //Get the item.
+                Item item;
+                inventory.itemAtIndex.TryGetValue(i, out item);
+
+                //Add the item in the slot.
+                slots[i].AddItem(item, inventory.itemsCount[i]);
+            }
+            else
+            {
+                slots[i].ClearSlot();
+            }
+
+        }
+
+        /*
         for(int i=0; i< slots.Length; i++ )
         {
             if(i< inventory.items.Count)
@@ -41,7 +61,7 @@ public class InventoryUI : MonoBehaviour
             {
                 slots[i].ClearSlot();
             }
-        }
+        }*/
 
     }
 }

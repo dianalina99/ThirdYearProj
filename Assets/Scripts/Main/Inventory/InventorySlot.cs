@@ -6,14 +6,22 @@ public class InventorySlot : MonoBehaviour
     Item item;
     public Image icon;
     public Button removeButton;
+    public TMPro.TextMeshProUGUI noOfItems;
 
-    public void AddItem(Item newItem)
+    public void AddItem(Item newItem, int number)
     {
         item = newItem;
 
         icon.sprite = item.icon;
         icon.enabled = true;
         removeButton.interactable = true;
+
+        //Check if it's an inventory slot for the equip bar - doesn't have text.
+        if(noOfItems != null)
+        {
+            noOfItems.text = number.ToString();
+        }
+        
     }
 
     public void ClearSlot()
