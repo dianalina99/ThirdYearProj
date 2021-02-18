@@ -9,9 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d29af13aeb6cad144aa4f7dfe89ecb64, type: 3}
-  m_Name: HealthBoost
+  m_Script: {fileID: 11500000, guid: c7219e5e69542284689132fa83a14189, type: 3}
+  m_Name: Helmet of Fire
   m_EditorClassIdentifier: 
-  name: Health boost
-  icon: {fileID: 21300000, guid: bdce2a9cb3d0242958c2593a3b8d8742, type: 3}
+  name: Helmet of Fire
+  icon: {fileID: 21300000, guid: f683841be7595e6438b943365a4d6279, type: 3}
   isStorable: 1
+  equipSlot: 0
+  armorModifier: 2
+  damageModifier: 1

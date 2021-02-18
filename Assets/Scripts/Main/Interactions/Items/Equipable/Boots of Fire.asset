@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c7219e5e69542284689132fa83a14189, type: 3}
-  m_Name: Helmet of Fire
+  m_Name: Boots of Fire
   m_EditorClassIdentifier: 
-  name: Helmet of Fire
-  icon: {fileID: 21300000, guid: 69b6fac54bf33d94f8b56a037beeb7bf, type: 3}
+  name: Boots of Fire
+  icon: {fileID: 21300000, guid: ae3208216b9856e408dcff020513465f, type: 3}
   isStorable: 1
-  equipSlot: 0
-  armorModifier: 2
-  damageModifier: 1
+  equipSlot: 2
+  armorModifier: 0
+  damageModifier: 2
