@@ -2050,11 +2050,17 @@ MonoBehaviour:
   noOfSlots: 9
   itemsCount: 
   possibleItems:
-  - {fileID: 11400000, guid: e25c8557b4cdb5642b0dcd107e0033ae, type: 2}
+  - {fileID: 11400000, guid: 5bbf12f8c49ffa148ab077be2cbbb56f, type: 2}
+  - {fileID: 11400000, guid: 738e29fa2ce7dc1479bd2335de6ed8a2, type: 2}
+  - {fileID: 11400000, guid: 7ac226196f29b354ca1b9533140e4658, type: 2}
+  - {fileID: 11400000, guid: c303195706fb6eb409b6b3c11be02178, type: 2}
+  - {fileID: 11400000, guid: f310ed388d1078c4aaf45786c8b28f78, type: 2}
+  - {fileID: 11400000, guid: 39b70dec1562c4e43bdef674b9f7683f, type: 2}
+  - {fileID: 11400000, guid: 615bbaf28d15ecc49996be4fdeba9190, type: 2}
   - {fileID: 11400000, guid: ca0ff203cebb1bd488732636302ac301, type: 2}
   - {fileID: 11400000, guid: 8c6ed9808fb839040a8021a4ca8df8e8, type: 2}
-  - {fileID: 11400000, guid: 5facab5575e0d3545993b4beaa73dc67, type: 2}
-  - {fileID: 11400000, guid: 03b5ebced4625674d9e2c16e2bc7f08c, type: 2}
+  - {fileID: 11400000, guid: d5111424ca8c2494e88040ec193978b6, type: 2}
+  - {fileID: 11400000, guid: ac77bfe7446faaa4b9f987af6c9851ac, type: 2}
 --- !u!114 &1651623421421865594
 MonoBehaviour:
   m_ObjectHideFlags: 0

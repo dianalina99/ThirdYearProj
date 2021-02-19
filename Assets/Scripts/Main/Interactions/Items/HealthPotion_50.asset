@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d29af13aeb6cad144aa4f7dfe89ecb64, type: 3}
-  m_Name: HealthBoost_30
+  m_Script: {fileID: 11500000, guid: 2fa34c9e1802db045817d97c9f485e4c, type: 3}
+  m_Name: HealthPotion_50
   m_EditorClassIdentifier: 
-  name: Health boost_30
-  icon: {fileID: 21300000, guid: 5bfad33111cd74875afe141dc1db8c66, type: 3}
+  name: Health Potion_50
+  icon: {fileID: 21300000, guid: 19576ffc906f90b4a80790bea1c14ffa, type: 3}
   isStorable: 1
+  healAmount: 50

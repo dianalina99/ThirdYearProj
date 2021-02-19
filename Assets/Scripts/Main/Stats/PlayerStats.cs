@@ -2,6 +2,22 @@
 
 public class PlayerStats : CharacterStats
 {
+    #region Singleton
+    public static PlayerStats instance;
+
+    private void Awake()
+    {
+        if (instance != null)
+        {
+            Debug.LogWarning("More player stats found!");
+            return;
+        }
+        instance = this;
+    }
+
+    #endregion
+
+
     private StatUI healthStatUI;
     private StatUI strengthStatUI;
     private StatUI protectionStatUI;
@@ -17,6 +33,9 @@ public class PlayerStats : CharacterStats
        EquipmentManager.instance.onEquipmentChanged += OnEquipmentChanged;
 
         InitializeSliders();
+
+        //Set player health to be max on awake.
+        this.IncreaseHealth(maxHealth);
     }
 
     void InitializeSliders()
@@ -49,6 +68,14 @@ public class PlayerStats : CharacterStats
     public override void TakeDamage(int damage)
     {
         base.TakeDamage(damage);
+
+        //Update health bar UI.
+        healthStatUI.SetValue(currentHealth);
+    }
+
+    public override void IncreaseHealth(int amount)
+    {
+        base.IncreaseHealth(amount);
 
         //Update health bar UI.
         healthStatUI.SetValue(currentHealth);
