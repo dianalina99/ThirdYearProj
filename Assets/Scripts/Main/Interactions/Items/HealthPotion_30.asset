@@ -15,4 +15,5 @@ MonoBehaviour:
   name: Health Potion_30
   icon: {fileID: 21300000, guid: ba277220d79b8d34a99a39932ea08859, type: 3}
   isStorable: 1
+  isForActiveBar: 1
   healAmount: 30
