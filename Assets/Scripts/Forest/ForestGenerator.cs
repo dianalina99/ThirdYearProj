@@ -13,7 +13,7 @@ public class ForestGenerator : MonoBehaviour
     
 
     private int[,] map;
-   
+
     // Start is called before the first frame update
     void Start()
     {
@@ -34,6 +34,9 @@ public class ForestGenerator : MonoBehaviour
         map = new int[width, height];
         // map = GenerateNoiseGrid(noiseDensity);
         map = ApplyCellularAutomata(GenerateNoiseGrid(map, noiseDensity), iterationsCount, majority);
+
+        VoxelGenerator voxGen = GetComponent<VoxelGenerator>();
+        voxGen.GenerateMesh(map, 2);
     }
 
     private int[,] GenerateNoiseGrid(int[,] noiseMap, int density)
@@ -80,6 +83,7 @@ public class ForestGenerator : MonoBehaviour
         return noiseMap;
     }
 
+    /*
     private void OnDrawGizmos()
     {
         if (map != null)
@@ -96,7 +100,7 @@ public class ForestGenerator : MonoBehaviour
             }
 
         }
-    }
+    }*/
 
     private bool IsInMapBounds(int x, int y)
     {
