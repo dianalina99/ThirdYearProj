@@ -37,6 +37,9 @@ public class ForestGenerator : MonoBehaviour
 
         VoxelGenerator voxGen = GetComponent<VoxelGenerator>();
         voxGen.GenerateMesh(map, 2);
+
+        //MeshGenerator gen = GetComponent<MeshGenerator>();
+        //gen.GenerateMesh(map, 2);
     }
 
     private int[,] GenerateNoiseGrid(int[,] noiseMap, int density)

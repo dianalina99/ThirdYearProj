@@ -11,6 +11,10 @@ public class VoxelGenerator : MonoBehaviour
     private List<Vector3> vertices;
     private List<int> triangles;
 
+    public MeshFilter walls;
+    public MeshFilter generatedMap;
+    public float wallHeight;
+
     //Dictionary to return the list of triangles a vertex is part of.
     Dictionary<int, List<Triangle>> triangleDictionary = new Dictionary<int, List<Triangle>>();
 
@@ -77,7 +81,7 @@ public class VoxelGenerator : MonoBehaviour
         }
 
         Mesh mesh = new Mesh();
-        GetComponent<MeshFilter>().mesh = mesh;
+        generatedMap.mesh = mesh;
 
         mesh.vertices = vertices.ToArray();
         mesh.triangles = triangles.ToArray();
@@ -85,11 +89,49 @@ public class VoxelGenerator : MonoBehaviour
 
         //Apply texture to the map.
         ApplyTexture(map, squareSize, mesh);
-        
+
+        //Create walls.
+        CreateWallMesh();
+
         //Create custom collider for generated map.
         GenerateColliders2D();
+            
+    }
 
-        
+    void CreateWallMesh()
+    {
+        CalculateMeshOutlines();
+
+        List<Vector3> wallVertices = new List<Vector3>();
+        List<int> wallTriangles = new List<int>();
+        Mesh wallMesh = new Mesh();
+       
+
+        foreach (List<int> outline in outlines)
+        {
+            for (int i = 0; i < outline.Count - 1; i++)
+            {
+                int startIndex = wallVertices.Count;
+                wallVertices.Add(vertices[outline[i]]); // left
+                wallVertices.Add(vertices[outline[i + 1]]); // right
+                wallVertices.Add(vertices[outline[i]] - Vector3.up * wallHeight); // bottom left
+                wallVertices.Add(vertices[outline[i + 1]] - Vector3.up * wallHeight); // bottom right
+
+                wallTriangles.Add(startIndex + 0);
+                wallTriangles.Add(startIndex + 2);
+                wallTriangles.Add(startIndex + 3);
+
+                wallTriangles.Add(startIndex + 3);
+                wallTriangles.Add(startIndex + 1);
+                wallTriangles.Add(startIndex + 0);
+            }
+        }
+        wallMesh.vertices = wallVertices.ToArray();
+        wallMesh.triangles = wallTriangles.ToArray();
+        walls.mesh = wallMesh;
+
+        MeshCollider wallCollider = walls.gameObject.AddComponent<MeshCollider>();
+        wallCollider.sharedMesh = wallMesh;
     }
 
     void GenerateColliders2D()
@@ -102,7 +144,7 @@ public class VoxelGenerator : MonoBehaviour
             Destroy(colliders[i]);
         }
 
-        CalculateMeshOutlines();
+        //CalculateMeshOutlines();
 
         //Generate edge collider based on extracted outline and add it to map object.
         foreach( List<int> outline in outlines)
