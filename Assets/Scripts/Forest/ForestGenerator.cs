@@ -17,15 +17,43 @@ public class ForestGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        GameManagerScript.instance.Reset();
+        GameManagerScript.instance.forestMapRef = this.gameObject;
+        GameManagerScript.instance.forestInUse = true;
         GenerateMap();
+
+        GameManagerScript.instance.forestReadyForPlayer = true;
+
+        //Spawn entry and exit rooms.
+
+
+        //Place player in map - to be moved as a logic for a separate object maybe?
+        GameManagerScript.instance.playerRef = Instantiate(GameManagerScript.instance.playerPrefab, this.transform.position, Quaternion.identity) as GameObject;
+
+        GameManagerScript.instance.forestReadyForPlayer = false;
+        
+    }
+
+    public void Reset()
+    {
+        GameManagerScript.instance.Reset();
     }
 
     private void Update()
     {
-        if(regenerate)
+        if(GameManagerScript.instance.forestInUse && GameManagerScript.instance.forestNeedsRegeneration)
         {
-            regenerate = false;
+            Reset();
             GenerateMap();
+            GameManagerScript.instance.forestReadyForPlayer = true;
+            GameManagerScript.instance.forestInUse = true;
+
+            //Move player to be in this map.
+            GameManagerScript.instance.playerRef.transform.position = new Vector3(198, 47, 0);
+
+            GameManagerScript.instance.forestReadyForPlayer = false;
+
+            GameManagerScript.instance.forestNeedsRegeneration = false;
         }
     }
 

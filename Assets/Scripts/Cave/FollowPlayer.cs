@@ -7,12 +7,11 @@ public class FollowPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-
+        
         //Check if player is spawned.
-        if(player != null)
+        if(GameManagerScript.instance.playerRef != null)
         {
-            this.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z -5);
+            this.transform.position = new Vector3(GameManagerScript.instance.playerRef.transform.position.x, GameManagerScript.instance.playerRef.transform.position.y, GameManagerScript.instance.playerRef.transform.position.z -5);
         }
 
         
