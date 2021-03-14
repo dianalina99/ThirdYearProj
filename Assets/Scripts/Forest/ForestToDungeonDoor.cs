@@ -5,9 +5,16 @@ using UnityEngine;
 public class ForestToDungeonDoor : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D other)
-    {
-        GameManagerScript.instance.Reset();
-        GameManagerScript.instance.dungeonInUse = true;
-        GameManagerScript.instance.dungeonNeedsRegeneration = true;
+    {      
+        if(!GameManagerScript.instance.playerIsCurrentlyTeleporting)
+        {
+            Debug.Log("Exit forest. Entering dungeon...");
+
+            GameManagerScript.instance.Reset();
+            GameManagerScript.instance.dungeonInUse = true;
+            GameManagerScript.instance.dungeonNeedsRegeneration = true;
+
+            GameManagerScript.instance.playerIsCurrentlyTeleporting = true;
+        }
     }
 }

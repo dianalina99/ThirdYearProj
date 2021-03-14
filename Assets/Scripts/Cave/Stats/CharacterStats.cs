@@ -45,7 +45,7 @@ public class CharacterStats : MonoBehaviour
 
         currentHealth = amount;
 
-        Debug.Log(transform.name + " increased health is " + amount);
+        //Debug.Log(transform.name + " increased health is " + amount);
 
     }
 

@@ -32,14 +32,13 @@ public class GameManagerScript : MonoBehaviour
     public bool dungeonInUse = false;
     public bool forestInUse = false;
 
-    public bool movePlayer = false;
-
     public GameObject forestMapRef;
     public GameObject dungeonMapRef;
 
     public GameObject latestPlayerEntryPoint;
-    public GameObject latestGeneratedEnvironment;
+    public GameObject latestGeneratedEnvironmentDungeon;
 
+    public bool playerIsCurrentlyTeleporting = false;
 
     public void Reset()
     {
@@ -50,5 +49,7 @@ public class GameManagerScript : MonoBehaviour
         forestInUse = false;
         forestNeedsRegeneration = false;
         forestReadyForPlayer = false;
+
+       // playerIsCurrentlyTeleporting = false;
     }
 }

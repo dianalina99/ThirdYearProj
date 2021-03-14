@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8129493483841068442}
   - component: {fileID: 8226826007882991694}
-  - component: {fileID: 8133489272308467786}
   - component: {fileID: 8133489272308467785}
+  - component: {fileID: 8133489272308467786}
   - component: {fileID: 5308433853838365336}
   m_Layer: 0
   m_Name: ForestToDungeon
@@ -28,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8132338876205345018}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.98, y: 2.04, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -82,6 +82,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &8133489272308467785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8132338876205345018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47aea4e0bac3a4d4aa209fc40f01eff0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!61 &8133489272308467786
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -108,18 +120,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.1065862, y: 1.2006445}
   m_EdgeRadius: 0
---- !u!114 &8133489272308467785
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8132338876205345018}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47aea4e0bac3a4d4aa209fc40f01eff0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!50 &5308433853838365336
 Rigidbody2D:
   serializedVersion: 4

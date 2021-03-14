@@ -59,6 +59,8 @@ public class MapGeneration : MonoBehaviour
     {
         if(GameManagerScript.instance.dungeonInUse && GameManagerScript.instance.dungeonNeedsRegeneration)
         {
+            Debug.Log("Generating dungeon...");
+
             GameManagerScript.instance.Reset();
             GameManagerScript.instance.dungeonInUse = true;
 
@@ -68,7 +70,7 @@ public class MapGeneration : MonoBehaviour
 
     private void DrawMap()
     {
-        GameObject portalInst;
+        GameObject portalInst1, portalInst2;
         bool temp;
 
         for (int i = 0; i <= 3; i++)
@@ -87,17 +89,16 @@ public class MapGeneration : MonoBehaviour
 
         //Instantiate entry point.
         GameManagerScript.instance.latestPlayerEntryPoint = Instantiate(portalEntryPrefab, new Vector2(-firstRoomPos.x * roomWidth, firstRoomPos.y), Quaternion.identity) as GameObject;
-        GameManagerScript.instance.latestPlayerEntryPoint.transform.SetParent(GameManagerScript.instance.latestGeneratedEnvironment.transform, false);
+        GameManagerScript.instance.latestPlayerEntryPoint.transform.SetParent(GameManagerScript.instance.latestGeneratedEnvironmentDungeon.transform, false);
 
         //Instantiate portal to next dungeon room.
-        portalInst = Instantiate(portalExitPrefab, new Vector2(-lastRoomPos.x * roomWidth , -lastRoomPos.y * roomHeight), Quaternion.identity) as GameObject;
-        portalInst.transform.SetParent(GameManagerScript.instance.latestGeneratedEnvironment.transform, false);
+        portalInst1 = Instantiate(portalExitPrefab, new Vector2(-lastRoomPos.x * roomWidth , -lastRoomPos.y * roomHeight), Quaternion.identity) as GameObject;
+        portalInst1.transform.SetParent(GameManagerScript.instance.latestGeneratedEnvironmentDungeon.transform, false);
 
         //Instantiate portal to forest.
-        portalInst = Instantiate(portalForestPrefab, new Vector2(-lastRoomPos.x * roomWidth + 2, -lastRoomPos.y * roomHeight + 2), Quaternion.identity) as GameObject;
-        portalInst.transform.SetParent(GameManagerScript.instance.latestGeneratedEnvironment.transform, false);
-
-
+        //portalInst2 = Instantiate(portalForestPrefab, GameManagerScript.instance.latestGeneratedEnvironmentDungeon.transform.GetChild(4).transform.position, Quaternion.identity) as GameObject;
+        portalInst2 = Instantiate(portalForestPrefab, new Vector2(-lastRoomPos.x * roomWidth + 2, -lastRoomPos.y * roomHeight), Quaternion.identity) as GameObject;
+        portalInst2.transform.SetParent(GameManagerScript.instance.latestGeneratedEnvironmentDungeon.transform, false);
 
     }
 
@@ -573,7 +574,7 @@ public class MapGeneration : MonoBehaviour
             room = Instantiate(hiddenRoom, position, Quaternion.identity) as GameObject;
         }
         
-        room.transform.SetParent(GameManagerScript.instance.latestGeneratedEnvironment.transform.GetChild(0).gameObject.transform, false);
+        room.transform.SetParent(GameManagerScript.instance.latestGeneratedEnvironmentDungeon.transform.GetChild(0).gameObject.transform, false);
 
         gameMap.Add(position, room);
 
@@ -812,15 +813,16 @@ public class MapGeneration : MonoBehaviour
         GameObject spawnPoint;
 
 
-        spawnPoint = GameManagerScript.instance.latestGeneratedEnvironment.transform.GetChild(3).gameObject;
+        spawnPoint = GameManagerScript.instance.latestGeneratedEnvironmentDungeon.transform.GetChild(3).gameObject;
         
         //Instantiate new environment.
-        GameManagerScript.instance.latestGeneratedEnvironment = Instantiate(environmentPrefab, spawnPoint.transform.position, Quaternion.identity) as GameObject;
-        GameManagerScript.instance.latestGeneratedEnvironment.transform.SetParent(GameManagerScript.instance.dungeonMapRef.transform, true);
+        GameManagerScript.instance.latestGeneratedEnvironmentDungeon = Instantiate(environmentPrefab, spawnPoint.transform.position, Quaternion.identity) as GameObject;
+        GameManagerScript.instance.latestGeneratedEnvironmentDungeon.transform.SetParent(GameManagerScript.instance.dungeonMapRef.transform, true);
 
         //Generate new room
         GenerateMapGrid();
 
+        Debug.Log("Dungeon generated, ready for player...");
         GameManagerScript.instance.dungeonReadyForPlayer = true;
 
         //Show new map on the minimap view.

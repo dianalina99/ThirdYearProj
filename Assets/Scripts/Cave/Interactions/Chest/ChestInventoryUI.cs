@@ -15,7 +15,7 @@ public class ChestInventoryUI : MonoBehaviour
 
         slots = itemsParent.GetComponentsInChildren<ChestInventorySlot>();
 
-        Debug.Log("Updating chest inventory UI");
+        //Debug.Log("Updating chest inventory UI");
 
 
         for (int i = 0; i < slots.Length; i++)

@@ -10,32 +10,61 @@ public class ForestGenerator : MonoBehaviour
     public int width, height, iterationsCount, majority;
     public bool regenerate = false, useCustomSeed = false;
     public string seed;
-    
+    public GameObject portalToDungeonPrefab;
+    public GameObject forestEntrancePrefab;
+
+    private GameObject entryRef;
+    private GameObject exitRef;
+
 
     private int[,] map;
 
     // Start is called before the first frame update
     void Start()
-    {
+    { 
+        //Spawn player as first thing when hitting play - it'll be moved after.
+        GameManagerScript.instance.playerRef = Instantiate(GameManagerScript.instance.playerPrefab, new Vector3(55, 55, 0), Quaternion.identity) as GameObject;
+        GameManagerScript.instance.playerRef.transform.SetParent(this.transform, false);
+
+
         GameManagerScript.instance.Reset();
         GameManagerScript.instance.forestMapRef = this.gameObject;
         GameManagerScript.instance.forestInUse = true;
+        GameManagerScript.instance.forestNeedsRegeneration = true;
+
+    }
+
+    private void GenerateAllForest()
+    {
+        
+        Reset();
+        GameManagerScript.instance.forestInUse = true;
         GenerateMap();
 
+        
+
+        //Place entry and exit points.
+        exitRef = Instantiate(this.portalToDungeonPrefab, new Vector3(50, 50, 0), Quaternion.identity) as GameObject;
+        exitRef.transform.SetParent(this.transform, false);
+
+        //Spawn entry point portal and save it as lastest entry point.
+        entryRef = Instantiate(this.forestEntrancePrefab, new Vector3(60, 50, 0), Quaternion.identity) as GameObject;
+        entryRef.transform.SetParent(this.transform, false);
+        GameManagerScript.instance.latestPlayerEntryPoint = entryRef;
+
+        //Mark map generation as done.
         GameManagerScript.instance.forestReadyForPlayer = true;
 
-        //Spawn entry and exit rooms.
+        Debug.Log("Forest generated, ready for player...");
 
-
-        //Place player in map - to be moved as a logic for a separate object maybe?
-        GameManagerScript.instance.playerRef = Instantiate(GameManagerScript.instance.playerPrefab, this.transform.position, Quaternion.identity) as GameObject;
-
-        GameManagerScript.instance.forestReadyForPlayer = false;
-        
     }
 
     public void Reset()
     {
+        //Delete entry and exits.
+        GameObject.Destroy(entryRef);
+        GameObject.Destroy(exitRef);
+
         GameManagerScript.instance.Reset();
     }
 
@@ -43,31 +72,20 @@ public class ForestGenerator : MonoBehaviour
     {
         if(GameManagerScript.instance.forestInUse && GameManagerScript.instance.forestNeedsRegeneration)
         {
-            Reset();
-            GenerateMap();
-            GameManagerScript.instance.forestReadyForPlayer = true;
-            GameManagerScript.instance.forestInUse = true;
-
-            //Move player to be in this map.
-            GameManagerScript.instance.playerRef.transform.position = new Vector3(198, 47, 0);
-
-            GameManagerScript.instance.forestReadyForPlayer = false;
+            Debug.Log("Generating forest...");
 
             GameManagerScript.instance.forestNeedsRegeneration = false;
+            GenerateAllForest();
         }
     }
 
     private void GenerateMap()
     {
         map = new int[width, height];
-        // map = GenerateNoiseGrid(noiseDensity);
         map = ApplyCellularAutomata(GenerateNoiseGrid(map, noiseDensity), iterationsCount, majority);
 
         VoxelGenerator voxGen = GetComponent<VoxelGenerator>();
         voxGen.GenerateMesh(map, 2);
-
-        //MeshGenerator gen = GetComponent<MeshGenerator>();
-        //gen.GenerateMesh(map, 2);
     }
 
     private int[,] GenerateNoiseGrid(int[,] noiseMap, int density)
