@@ -5,9 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class PortalExit : MonoBehaviour
 {
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D collider)
     {
-        if(!GameManagerScript.instance.playerIsCurrentlyTeleporting)
+        if(!GameManagerScript.instance.playerIsCurrentlyTeleporting && collider.tag == "Player")
         {
             //Move to next dungeon room.
             Debug.Log("Generate new dungeon level...");

@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class DungeonToForestDoor : MonoBehaviour
 {
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (!GameManagerScript.instance.playerIsCurrentlyTeleporting)
+        if (!GameManagerScript.instance.playerIsCurrentlyTeleporting && collider.tag == "Player")
         {
             Debug.Log("Exit dungeon. Entering forest...");
 
