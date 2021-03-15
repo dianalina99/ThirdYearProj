@@ -826,7 +826,20 @@ public class MapGeneration : MonoBehaviour
         GameManagerScript.instance.dungeonReadyForPlayer = true;
 
         //Show new map on the minimap view.
-        minimapRef.transform.position = new Vector3(minimapRef.transform.position.x, minimapRef.transform.position.y - 4 * roomHeight, minimapRef.transform.position.z);
+        GameManagerScript.instance.minimapCamera.orthographicSize = 20;
+        if(GameManagerScript.instance.minimapRef.transform.position.x > 1000)
+        {
+            GameManagerScript.instance.minimapRef.transform.position = new Vector3(GameManagerScript.instance.minimapRef.transform.position.x - 200,
+                                                                                GameManagerScript.instance.minimapRef.transform.position.y - 4 * roomHeight,
+                                                                                GameManagerScript.instance.minimapRef.transform.position.z);
+        }
+        else
+        {
+            GameManagerScript.instance.minimapRef.transform.position = new Vector3(GameManagerScript.instance.minimapRef.transform.position.x,
+                                                                               GameManagerScript.instance.minimapRef.transform.position.y - 4 * roomHeight,
+                                                                               GameManagerScript.instance.minimapRef.transform.position.z);
+        }
+        
 
         
     }

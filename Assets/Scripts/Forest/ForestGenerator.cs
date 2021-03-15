@@ -10,13 +10,15 @@ public class ForestGenerator : MonoBehaviour
     public int width, height, iterationsCount, majority;
     public bool regenerate = false, useCustomSeed = false;
     public string seed;
+
+
     public GameObject portalToDungeonPrefab;
     public GameObject forestEntrancePrefab;
 
     private GameObject entryRef;
     private GameObject exitRef;
 
-
+   
     private int[,] map;
 
     // Start is called before the first frame update
@@ -70,8 +72,9 @@ public class ForestGenerator : MonoBehaviour
 
     private void Update()
     {
-        if(GameManagerScript.instance.forestInUse && GameManagerScript.instance.forestNeedsRegeneration)
+        if(GameManagerScript.instance.forestInUse && GameManagerScript.instance.forestNeedsRegeneration || regenerate)
         {
+            regenerate = false;
             Debug.Log("Generating forest...");
 
             GameManagerScript.instance.forestNeedsRegeneration = false;
@@ -122,17 +125,29 @@ public class ForestGenerator : MonoBehaviour
                 if( x == 0 || y == 0 || x == width - 1 || y == height - 1)
                 {
                     noiseMap[x, y] = 1;
-                } 
+                }
 
+                //We want the map to have 4 exit ways: up,down,left,right.
+                //So, make sure we create a bunch of 0s on each edge so player can exit.
             }
 
         }
-            
+        /*
+        noiseMap[0, height / 2] = 0;
+        noiseMap[0, height / 2 + 1] = 0;
+        noiseMap[0, height / 2 + 2] = 0;
+        noiseMap[0, height / 2 + 3] = 0;
+
+        noiseMap[width - 1, height / 2] = 0;
+        noiseMap[width - 1, height / 2 + 1] = 0;
+        noiseMap[width - 1, height / 2 + 2] = 0;
+        noiseMap[width - 1, height / 2 + 3] = 0;
+        */
 
         return noiseMap;
     }
 
-    /*
+    
     private void OnDrawGizmos()
     {
         if (map != null)
@@ -149,7 +164,7 @@ public class ForestGenerator : MonoBehaviour
             }
 
         }
-    }*/
+    }
 
     private bool IsInMapBounds(int x, int y)
     {

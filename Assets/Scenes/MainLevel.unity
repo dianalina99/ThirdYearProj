@@ -150,13 +150,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e21dc6754b0041040bc87df2c7961711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noiseDensity: 45
+  noiseDensity: 47
   width: 50
   height: 50
-  iterationsCount: 20
+  iterationsCount: 15
   majority: 4
   regenerate: 0
-  useCustomSeed: 0
+  useCustomSeed: 1
   seed: diana
   portalToDungeonPrefab: {fileID: 8132338876205345018, guid: 54bdb0e04629647418ab10cff296bffb,
     type: 3}
@@ -170,7 +170,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3300257}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 151.1, y: -24.5, z: 0}
+  m_LocalPosition: {x: 151.8, y: -12.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 603604850}
@@ -193,7 +193,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walls: {fileID: 603604852}
   generatedMap: {fileID: 341298104}
-  wallHeight: 0.5
+  wallHeight: 3
+  wallTest: 0
 --- !u!1 &84238921
 GameObject:
   m_ObjectHideFlags: 0
@@ -358,7 +359,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 85374812}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -980.2, y: -527.6, z: 162.78448}
+  m_LocalPosition: {x: -980.2, y: -527.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1545120461}
@@ -748,7 +749,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 55a0bb870ff0c9346b272ad344bfb165, type: 2}
+  - {fileID: 2100000, guid: 4dde917c8527c624e83678a79be4b448, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -828,12 +829,13 @@ MonoBehaviour:
   forestNeedsRegeneration: 0
   dungeonInUse: 0
   forestInUse: 0
-  movePlayer: 0
   forestMapRef: {fileID: 0}
   dungeonMapRef: {fileID: 330879183}
   latestPlayerEntryPoint: {fileID: 0}
   latestGeneratedEnvironmentDungeon: {fileID: 2733156820604224557}
   playerIsCurrentlyTeleporting: 0
+  minimapRef: {fileID: 1545120460}
+  minimapCamera: {fileID: 85374814}
 --- !u!1 &658149883
 GameObject:
   m_ObjectHideFlags: 0
@@ -1414,7 +1416,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1545120460}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 980.8474, y: 564.3801, z: -176.1875}
+  m_LocalPosition: {x: 980.8474, y: 564.3801, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 85374815}

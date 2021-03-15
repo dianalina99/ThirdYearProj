@@ -40,6 +40,9 @@ public class GameManagerScript : MonoBehaviour
 
     public bool playerIsCurrentlyTeleporting = false;
 
+    public GameObject minimapRef;
+    public Camera minimapCamera;
+
     public void Reset()
     {
         dungeonInUse = false;

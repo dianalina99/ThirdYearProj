@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ForestEntry : MonoBehaviour
 {
+    public int distanceBetweenMaps;
+    
     // Update is called once per frame
     void Update()
     {
@@ -19,6 +21,18 @@ public class ForestEntry : MonoBehaviour
             GameManagerScript.instance.playerIsCurrentlyTeleporting = false;
 
             Debug.Log("Spawing player in forest STOP...");
+
+            //Show new map on the minimap view.
+            GameManagerScript.instance.minimapCamera.orthographicSize = 50;
+
+            if (GameManagerScript.instance.minimapRef.transform.position.x < 1000)
+            {
+                GameManagerScript.instance.minimapRef.transform.position = new Vector3(GameManagerScript.instance.minimapRef.transform.position.x + distanceBetweenMaps,
+                                                                                    565f,
+                                                                                    GameManagerScript.instance.minimapRef.transform.position.z);
+
+            }
+                
         }        
     }
 }

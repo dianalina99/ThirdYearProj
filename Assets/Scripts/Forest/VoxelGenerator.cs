@@ -15,6 +15,9 @@ public class VoxelGenerator : MonoBehaviour
     public MeshFilter generatedMap;
     public float wallHeight;
 
+    public bool wallTest = true;
+
+
     //Dictionary to return the list of triangles a vertex is part of.
     Dictionary<int, List<Triangle>> triangleDictionary = new Dictionary<int, List<Triangle>>();
 
@@ -124,6 +127,16 @@ public class VoxelGenerator : MonoBehaviour
                 wallTriangles.Add(startIndex + 3);
                 wallTriangles.Add(startIndex + 1);
                 wallTriangles.Add(startIndex + 0);
+
+
+                /*
+                wallTriangles.Add(startIndex + 3);
+                wallTriangles.Add(startIndex + 2);
+                wallTriangles.Add(startIndex + 0);
+
+                wallTriangles.Add(startIndex + 3);
+                wallTriangles.Add(startIndex + 1);
+                wallTriangles.Add(startIndex + 0);*/
             }
         }
         wallMesh.vertices = wallVertices.ToArray();
@@ -132,6 +145,8 @@ public class VoxelGenerator : MonoBehaviour
 
         MeshCollider wallCollider = walls.gameObject.AddComponent<MeshCollider>();
         wallCollider.sharedMesh = wallMesh;
+        
+       
     }
 
     void GenerateColliders2D()
@@ -323,7 +338,8 @@ public class VoxelGenerator : MonoBehaviour
 
                 if(sharedTriangleCount > 1)
                 {
-                    //Found shared triangle! See definition of outline edge in OutlineEdges() method for further explanation on this.
+                    //Found shared triangle! 2 points form an outline edge if and only if they share one single triangle.
+                    //See https://stackoverflow.com/questions/63676225/find-the-outline-of-a-roughly-2d-mesh for image for this rule.
                     break;
 
                 }
@@ -337,6 +353,7 @@ public class VoxelGenerator : MonoBehaviour
     {
         List<Triangle> trianglesContainingVertex = triangleDictionary[vertIndex];
 
+        //Find first vertex that forms an outline edge with vertIndex.
         for( int i = 0; i< trianglesContainingVertex.Count; i++)
         {
             Triangle triangle = trianglesContainingVertex[i];
@@ -364,16 +381,25 @@ public class VoxelGenerator : MonoBehaviour
             if(! checkedVertices.Contains(vertIndex))
             {
                 int newOutlineVertex = GetConnectedOutlineVertex(vertIndex);
+
+                //If we found second point that forms edge with vertIndex.
                 if(newOutlineVertex != -1)
                 {
-                    //Didn't find any connected vertices.
+                    //Mark it as checked.
                     checkedVertices.Add(vertIndex);
 
                     List<int> newOutline = new List<int>();
                     newOutline.Add(vertIndex);
                     outlines.Add(newOutline);
+
+                    //outlines.Count - 1 is the index for the outline list we have just added to the list of outlines.
                     FollowOutline(newOutlineVertex, outlines.Count - 1);
-                    outlines[outlines.Count - 1].Add(vertIndex);
+
+                    if(wallTest)
+                    {
+                        outlines[outlines.Count - 1].Add(vertIndex);
+                    }
+                    
                 }
             }
         }
