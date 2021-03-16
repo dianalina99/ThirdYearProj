@@ -15,8 +15,6 @@ public class VoxelGenerator : MonoBehaviour
     public MeshFilter generatedMap;
     public float wallHeight;
 
-    public bool wallTest = true;
-
 
     //Dictionary to return the list of triangles a vertex is part of.
     Dictionary<int, List<Triangle>> triangleDictionary = new Dictionary<int, List<Triangle>>();
@@ -120,6 +118,7 @@ public class VoxelGenerator : MonoBehaviour
                 wallVertices.Add(vertices[outline[i]] - Vector3.up * wallHeight); // bottom left
                 wallVertices.Add(vertices[outline[i + 1]] - Vector3.up * wallHeight); // bottom right
 
+                
                 wallTriangles.Add(startIndex + 0);
                 wallTriangles.Add(startIndex + 2);
                 wallTriangles.Add(startIndex + 3);
@@ -129,14 +128,117 @@ public class VoxelGenerator : MonoBehaviour
                 wallTriangles.Add(startIndex + 0);
 
 
-                /*
+                ///////////////////////////////////
+                //wallTriangles.Add(startIndex + 0);
+                //wallTriangles.Add(startIndex + 1);
+                //wallTriangles.Add(startIndex + 2);
+
+                wallTriangles.Add(startIndex + 0);
+                wallTriangles.Add(startIndex + 1);
+                wallTriangles.Add(startIndex + 3);
+
+                //wallTriangles.Add(startIndex + 0);
+                //wallTriangles.Add(startIndex + 2);
+                //wallTriangles.Add(startIndex + 1);
+
+                //wallTriangles.Add(startIndex + 0);
+                //wallTriangles.Add(startIndex + 2);
+                //wallTriangles.Add(startIndex + 3);
+
+                //wallTriangles.Add(startIndex + 0);
+                //wallTriangles.Add(startIndex + 3);
+                //wallTriangles.Add(startIndex + 1);
+
+                wallTriangles.Add(startIndex + 0);
                 wallTriangles.Add(startIndex + 3);
                 wallTriangles.Add(startIndex + 2);
-                wallTriangles.Add(startIndex + 0);
 
-                wallTriangles.Add(startIndex + 3);
-                wallTriangles.Add(startIndex + 1);
-                wallTriangles.Add(startIndex + 0);*/
+                /////////////////////////////////////
+                ///
+
+                //wallTriangles.Add(startIndex + 1);
+                //wallTriangles.Add(startIndex + 0);
+                //wallTriangles.Add(startIndex + 2);
+
+                //wallTriangles.Add(startIndex + 1);
+                //wallTriangles.Add(startIndex + 0);
+                //wallTriangles.Add(startIndex + 3);
+
+                //wallTriangles.Add(startIndex + 1);
+                //wallTriangles.Add(startIndex + 2);
+                //wallTriangles.Add(startIndex + 0);
+
+                //wallTriangles.Add(startIndex + 1);
+                //wallTriangles.Add(startIndex + 2);
+                //wallTriangles.Add(startIndex + 3);
+
+                //wallTriangles.Add(startIndex + 1);
+                //wallTriangles.Add(startIndex + 3);
+                //wallTriangles.Add(startIndex + 0);
+
+                //wallTriangles.Add(startIndex + 1);
+                //wallTriangles.Add(startIndex + 3);
+                //wallTriangles.Add(startIndex + 2);
+
+                //////////////////////////////////
+                ///
+
+                //wallTriangles.Add(startIndex + 2);
+                //wallTriangles.Add(startIndex + 0);
+                //wallTriangles.Add(startIndex + 1);
+
+                //wallTriangles.Add(startIndex + 2);
+                //wallTriangles.Add(startIndex + 0);
+                //wallTriangles.Add(startIndex + 3);
+
+                //wallTriangles.Add(startIndex + 2);
+                //wallTriangles.Add(startIndex + 1);
+                //wallTriangles.Add(startIndex + 0);
+
+                //wallTriangles.Add(startIndex + 2);
+                //wallTriangles.Add(startIndex + 1);
+                //wallTriangles.Add(startIndex + 3);
+
+                //wallTriangles.Add(startIndex + 2);
+                //wallTriangles.Add(startIndex + 3);
+                //wallTriangles.Add(startIndex + 0);
+
+                //wallTriangles.Add(startIndex + 2);
+                //wallTriangles.Add(startIndex + 3);
+                //wallTriangles.Add(startIndex + 1);
+
+                /////////////////////////////////
+                ///
+
+                //wallTriangles.Add(startIndex + 3);
+                //wallTriangles.Add(startIndex + 0);
+                //wallTriangles.Add(startIndex + 1);
+
+                //wallTriangles.Add(startIndex + 3);
+                //wallTriangles.Add(startIndex + 0);
+                //wallTriangles.Add(startIndex + 2);
+
+                //wallTriangles.Add(startIndex + 3);
+                //wallTriangles.Add(startIndex + 1);
+                //wallTriangles.Add(startIndex + 0);
+
+                //wallTriangles.Add(startIndex + 3);
+                //wallTriangles.Add(startIndex + 1);
+                //wallTriangles.Add(startIndex + 2);
+
+                //wallTriangles.Add(startIndex + 3);
+                //wallTriangles.Add(startIndex + 2);
+                //wallTriangles.Add(startIndex + 0);
+
+                //wallTriangles.Add(startIndex + 3);
+                //wallTriangles.Add(startIndex + 2);
+                //wallTriangles.Add(startIndex + 1);
+
+
+
+
+
+
             }
         }
         wallMesh.vertices = wallVertices.ToArray();
@@ -349,7 +451,7 @@ public class VoxelGenerator : MonoBehaviour
         return sharedTriangleCount == 1;
     }
 
-    private int GetConnectedOutlineVertex(int vertIndex)
+    private int GetConnectedOutlineVertex(int first, int vertIndex)
     {
         List<Triangle> trianglesContainingVertex = triangleDictionary[vertIndex];
 
@@ -363,7 +465,32 @@ public class VoxelGenerator : MonoBehaviour
             {
                 int secondVert = triangle[j];
 
-                if(secondVert != vertIndex && !checkedVertices.Contains(secondVert) && IsEdgeOnOutline(vertIndex, secondVert))
+                if((secondVert != vertIndex && !checkedVertices.Contains(secondVert) && IsEdgeOnOutline(vertIndex, secondVert))
+                    ||(secondVert != vertIndex && secondVert == first && IsEdgeOnOutline(vertIndex, secondVert)))
+                {
+                    return secondVert;
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    private int GetConnectedOutlineVertexExceptFirstPathVertex(int vertIndex)
+    {
+        List<Triangle> trianglesContainingVertex = triangleDictionary[vertIndex];
+
+        //Find first vertex that forms an outline edge with vertIndex.
+        for (int i = 0; i < trianglesContainingVertex.Count; i++)
+        {
+            Triangle triangle = trianglesContainingVertex[i];
+
+            //Check which vertex from triangles creates an outline edge.
+            for (int j = 0; j < 3; j++)
+            {
+                int secondVert = triangle[j];
+
+                if (secondVert != vertIndex && !checkedVertices.Contains(secondVert) && IsEdgeOnOutline(vertIndex, secondVert))
                 {
                     return secondVert;
                 }
@@ -380,40 +507,49 @@ public class VoxelGenerator : MonoBehaviour
         {
             if(! checkedVertices.Contains(vertIndex))
             {
-                int newOutlineVertex = GetConnectedOutlineVertex(vertIndex);
+                int newOutlineVertex = GetConnectedOutlineVertexExceptFirstPathVertex(vertIndex);
 
                 //If we found second point that forms edge with vertIndex.
                 if(newOutlineVertex != -1)
                 {
-                    //Mark it as checked.
-                    checkedVertices.Add(vertIndex);
+                    
 
                     List<int> newOutline = new List<int>();
                     newOutline.Add(vertIndex);
                     outlines.Add(newOutline);
 
-                    //outlines.Count - 1 is the index for the outline list we have just added to the list of outlines.
-                    FollowOutline(newOutlineVertex, outlines.Count - 1);
+                    checkedVertices.Add(vertIndex);
 
-                    if(wallTest)
+                    //outlines.Count - 1 is the index for the outline list we have just added to the list of outlines.
+                    FollowOutline(vertIndex, newOutlineVertex, outlines.Count - 1);
+
+
+                    //Mark it as checked.
+
+                    //Somehow check here if vertIndex is connected with last node from path. If it is, add it.
+                    int last = outlines[outlines.Count - 1][outlines[outlines.Count - 1].Count - 1];
+                    if(IsEdgeOnOutline(last, vertIndex))
                     {
                         outlines[outlines.Count - 1].Add(vertIndex);
                     }
-                    
+                        
+                    //outlines[outlines.Count - 1].Add(vertIndex);
+
                 }
             }
         }
     }
 
-    private void FollowOutline(int vertexIndex, int outlineIndex)
+    private void FollowOutline(int first, int vertexIndex, int outlineIndex)
     {
         outlines[outlineIndex].Add(vertexIndex);
         checkedVertices.Add(vertexIndex);
-        int nextVertexIndex = GetConnectedOutlineVertex(vertexIndex);
+        //int nextVertexIndex = GetConnectedOutlineVertex(first, vertexIndex);
+        int nextVertexIndex = GetConnectedOutlineVertexExceptFirstPathVertex(vertexIndex);
 
-        if(nextVertexIndex != -1)
+        if (nextVertexIndex != -1)
         {
-            FollowOutline(nextVertexIndex, outlineIndex);
+            FollowOutline(first, nextVertexIndex, outlineIndex);
         } 
     }
 

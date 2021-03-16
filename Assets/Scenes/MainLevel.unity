@@ -194,7 +194,6 @@ MonoBehaviour:
   walls: {fileID: 603604852}
   generatedMap: {fileID: 341298104}
   wallHeight: 3
-  wallTest: 0
 --- !u!1 &84238921
 GameObject:
   m_ObjectHideFlags: 0

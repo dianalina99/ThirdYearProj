@@ -120,12 +120,12 @@ public class ForestGenerator : MonoBehaviour
                     noiseMap[x, y] = 1;
                 }
 
-                
+                /*
                 //Check if tile is border - if true mark it as 1.
                 if( x == 0 || y == 0 || x == width - 1 || y == height - 1)
                 {
                     noiseMap[x, y] = 1;
-                }
+                }*/
 
                 //We want the map to have 4 exit ways: up,down,left,right.
                 //So, make sure we create a bunch of 0s on each edge so player can exit.
