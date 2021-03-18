@@ -44,8 +44,6 @@ public class ForestGenerator : MonoBehaviour
         GameManagerScript.instance.forestInUse = true;
         GenerateMap();
 
-        
-
         //Place entry and exit points.
         exitRef = Instantiate(this.portalToDungeonPrefab, new Vector3(50, 50, 0), Quaternion.identity) as GameObject;
         exitRef.transform.SetParent(this.transform, false);
@@ -93,31 +91,7 @@ public class ForestGenerator : MonoBehaviour
         //Generate map from noise and Cellular Automata.
         map = ApplyCellularAutomata(GenerateNoiseGrid(map, noiseDensity), iterationsCount, majority);
 
-        //Identify main walkable area - we want it to be "centered" so we start from the closest ground tile to the center of the map.
-        int[,] checkedTiles = new int[width, height];
-
-        for(int x = 0; x < width; x++)
-        {
-            for(int y = 0; y< height; y++)
-            {
-                checkedTiles[x, y] = 0;
-            }
-        }
-
-        Vector2 pos = FindClosestTileWithValue(map, checkedTiles, width / 2, height / 2, 0);
-
-        if(pos != new Vector2(-1,-1))
-        {
-            FloodFill(map, (int)pos.x, (int)pos.y, walkableArea);
-            //Remove unreachable areas.
-            EliminateUnreachableAreas(map, walkableArea);
-        }
-        else
-        {
-            //Code shouldn't get here unless map is all empty, but we can print an error just in case.
-            Debug.LogError("Why is map all empty??");
-            return;
-        }
+        EliminateUnreachableAreas(map, walkableArea);
 
         VoxelGenerator voxGen = GetComponent<VoxelGenerator>();
         voxGen.GenerateMesh(map, 2);
@@ -293,6 +267,32 @@ public class ForestGenerator : MonoBehaviour
 
     private void EliminateUnreachableAreas(int[,] map, List<Vector2> walkableAreaCoords)
     {
+        //Identify main walkable area - we want it to be "centered" so we start from the closest ground tile to the center of the map.
+        int[,] checkedTiles = new int[width, height];
+
+        for(int x = 0; x < width; x++)
+        {
+            for(int y = 0; y< height; y++)
+            {
+                checkedTiles[x, y] = 0;
+            }
+        }
+
+        Vector2 pos = FindClosestTileWithValue(map, checkedTiles, width / 2, height / 2, 0);
+
+        if(pos != new Vector2(-1,-1))
+        {
+            FloodFill(map, (int)pos.x, (int)pos.y, walkableAreaCoords);
+        }
+        else
+        {
+            //Code shouldn't get here unless map is all empty, but we can print an error just in case.
+            Debug.LogError("Why is map all empty??");
+            return;
+        }
+
+
+
         //Go over all map points. If within walkable area, do nothing, else make it a wall.
         for(int x = 0; x < width; x++)
         {
