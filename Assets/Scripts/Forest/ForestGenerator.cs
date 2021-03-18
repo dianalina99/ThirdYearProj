@@ -2,23 +2,73 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
+public class ForestGrid
+{
+    private int[,] map;
+    private List<Vector2> walkableArea;
+
+    private string seed;
+
+    ForestGrid left, right, up, down;
+
+
+    public ForestGrid(string seed, int width, int height)
+    {
+        this.seed = seed;
+        this.map = new int[width, height];
+        this.walkableArea = new List<Vector2>();
+
+        left = right = up = down = null;
+    }
+
+    public void SetAdjacentForestGrids(ForestGrid left, ForestGrid right, ForestGrid up, ForestGrid down)
+    {
+        this.left = left;
+        this.right = right;
+        this.up = up;
+        this.down = down;
+    }
+
+    public int[,] GetMap()
+    {
+        return this.map;
+    }
+
+    public void SetMap(int[,] givenMap)
+    {
+        this.map = givenMap;
+    }
+
+    public List<Vector2> GetWalkableArea()
+    {
+        return this.walkableArea;
+    }
+
+    public void SetWalkableArea(List<Vector2> givenArea)
+    {
+        this.walkableArea = givenArea;
+    }
+
+}
+
 public class ForestGenerator : MonoBehaviour
 {
     [Range(0, 100)]
     public int noiseDensity;
 
     public int width, height, iterationsCount, majority;
-    public bool regenerate = false, useCustomSeed = false;
-    public string seed;
+    public bool regenerate = false;
 
     public GameObject portalToDungeonPrefab;
     public GameObject forestEntrancePrefab;
 
     private GameObject entryRef;
     private GameObject exitRef;
+    private Dictionary<string, ForestGrid> listOfForests;
 
-    private int[,] map;
-    private List<Vector2> walkableArea;
+
 
 
     // Start is called before the first frame update
@@ -34,15 +84,35 @@ public class ForestGenerator : MonoBehaviour
         GameManagerScript.instance.forestInUse = true;
         GameManagerScript.instance.forestNeedsRegeneration = true;
 
-        walkableArea = new List<Vector2>();
+        listOfForests = new Dictionary<string, ForestGrid>();
+    }
+
+    public void Reset()
+    {
+        //Delete entry and exits.
+        GameObject.Destroy(entryRef);
+        GameObject.Destroy(exitRef);
+
+        GameManagerScript.instance.Reset();
+    }
+
+    private void Update()
+    {
+        if(GameManagerScript.instance.forestInUse && GameManagerScript.instance.forestNeedsRegeneration || regenerate)
+        {
+            regenerate = false;
+            Debug.Log("Generating forest...");
+
+            GameManagerScript.instance.forestNeedsRegeneration = false;
+            GenerateAllForest();
+        }
     }
 
     private void GenerateAllForest()
     {
-        
         Reset();
         GameManagerScript.instance.forestInUse = true;
-        GenerateMap();
+        GenerateMap(null);
 
         //Place entry and exit points.
         exitRef = Instantiate(this.portalToDungeonPrefab, new Vector3(50, 50, 0), Quaternion.identity) as GameObject;
@@ -60,51 +130,48 @@ public class ForestGenerator : MonoBehaviour
 
     }
 
-    public void Reset()
+    private void GenerateMap(string seed)
     {
-        //Delete entry and exits.
-        GameObject.Destroy(entryRef);
-        GameObject.Destroy(exitRef);
-
-        GameManagerScript.instance.Reset();
-
-        //Reset walkable area.
-        walkableArea.Clear();
-    }
-
-    private void Update()
-    {
-        if(GameManagerScript.instance.forestInUse && GameManagerScript.instance.forestNeedsRegeneration || regenerate)
-        {
-            regenerate = false;
-            Debug.Log("Generating forest...");
-
-            GameManagerScript.instance.forestNeedsRegeneration = false;
-            GenerateAllForest();
-        }
-    }
-
-    private void GenerateMap()
-    {
-        map = new int[width, height];
-
-        //Generate map from noise and Cellular Automata.
-        map = ApplyCellularAutomata(GenerateNoiseGrid(map, noiseDensity), iterationsCount, majority);
-
-        EliminateUnreachableAreas(map, walkableArea);
-
         VoxelGenerator voxGen = GetComponent<VoxelGenerator>();
-        voxGen.GenerateMesh(map, 2);
-    }
 
-    private int[,] GenerateNoiseGrid(int[,] noiseMap, int density)
-    {
-        //Check if we should use a custom seed. If not generate unique seed using time function.
-        if (!useCustomSeed)
+        //Check if we have to use custom seed.
+        if (seed != null)
+        {
+            //Get forest and display it.
+            ForestGrid forest;
+            listOfForests.TryGetValue(seed, out forest);
+
+            if(forest == null)
+            {
+                Debug.LogError("No forest exists with this seed!");
+                return;
+            }
+            else
+            {
+                //Display forest on screen.
+                voxGen.GenerateMesh(forest.GetMap(), 2);
+            }
+        }
+        else
         {
             seed = Time.time.ToString();
-        }
 
+            //If no custom seed was provided, generate new forest with new random seed.
+            ForestGrid newForest = new ForestGrid(seed, this.width, this.height);
+            newForest.SetMap(ApplyCellularAutomata(GenerateNoiseGrid(newForest.GetMap(), noiseDensity, seed), iterationsCount, majority));
+            EliminateUnreachableAreas(newForest.GetMap(), newForest.GetWalkableArea());
+
+            //Add forest to dictionary of maps.
+            this.listOfForests.Add(seed, newForest);
+
+            //Display it in screen.
+            voxGen.GenerateMesh(newForest.GetMap(), 2);
+        }
+    }
+
+    private int[,] GenerateNoiseGrid(int[,] noiseMap, int density, string seed)
+    {
+        
         //Trnasform string seed into random unique integer.
         System.Random randSeed = new System.Random(seed.GetHashCode());
 
@@ -138,21 +205,11 @@ public class ForestGenerator : MonoBehaviour
             }
 
         }
-        /*
-        noiseMap[0, height / 2] = 0;
-        noiseMap[0, height / 2 + 1] = 0;
-        noiseMap[0, height / 2 + 2] = 0;
-        noiseMap[0, height / 2 + 3] = 0;
-
-        noiseMap[width - 1, height / 2] = 0;
-        noiseMap[width - 1, height / 2 + 1] = 0;
-        noiseMap[width - 1, height / 2 + 2] = 0;
-        noiseMap[width - 1, height / 2 + 3] = 0;
-        */
-
+        
         return noiseMap;
     }
 
+    /*
     private void OnDrawGizmos()
     {
         if (map != null)
@@ -169,7 +226,7 @@ public class ForestGenerator : MonoBehaviour
             }
 
         }
-    }
+    }*/
 
     private bool IsInMapBounds(int x, int y)
     {
@@ -183,7 +240,7 @@ public class ForestGenerator : MonoBehaviour
 
     private int[,] ApplyCellularAutomata(int[,] noiseMap, int noOfIterations, int majority)
     {
-        int[,] tempMap = new int[map.GetLength(0), map.GetLength(1)];
+        int[,] tempMap = new int[noiseMap.GetLength(0), noiseMap.GetLength(1)];
 
         for (int count = 0; count< noOfIterations; count ++)
         {
@@ -353,3 +410,5 @@ public class ForestGenerator : MonoBehaviour
 
     }
 }
+
+
