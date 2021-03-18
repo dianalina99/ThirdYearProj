@@ -11,15 +11,15 @@ public class ForestGenerator : MonoBehaviour
     public bool regenerate = false, useCustomSeed = false;
     public string seed;
 
-
     public GameObject portalToDungeonPrefab;
     public GameObject forestEntrancePrefab;
 
     private GameObject entryRef;
     private GameObject exitRef;
 
-   
     private int[,] map;
+    private List<Vector2> walkableArea;
+
 
     // Start is called before the first frame update
     void Start()
@@ -34,6 +34,7 @@ public class ForestGenerator : MonoBehaviour
         GameManagerScript.instance.forestInUse = true;
         GameManagerScript.instance.forestNeedsRegeneration = true;
 
+        walkableArea = new List<Vector2>();
     }
 
     private void GenerateAllForest()
@@ -68,6 +69,9 @@ public class ForestGenerator : MonoBehaviour
         GameObject.Destroy(exitRef);
 
         GameManagerScript.instance.Reset();
+
+        //Reset walkable area.
+        walkableArea.Clear();
     }
 
     private void Update()
@@ -85,7 +89,35 @@ public class ForestGenerator : MonoBehaviour
     private void GenerateMap()
     {
         map = new int[width, height];
+
+        //Generate map from noise and Cellular Automata.
         map = ApplyCellularAutomata(GenerateNoiseGrid(map, noiseDensity), iterationsCount, majority);
+
+        //Identify main walkable area - we want it to be "centered" so we start from the closest ground tile to the center of the map.
+        int[,] checkedTiles = new int[width, height];
+
+        for(int x = 0; x < width; x++)
+        {
+            for(int y = 0; y< height; y++)
+            {
+                checkedTiles[x, y] = 0;
+            }
+        }
+
+        Vector2 pos = FindClosestTileWithValue(map, checkedTiles, width / 2, height / 2, 0);
+
+        if(pos != new Vector2(-1,-1))
+        {
+            FloodFill(map, (int)pos.x, (int)pos.y, walkableArea);
+            //Remove unreachable areas.
+            EliminateUnreachableAreas(map, walkableArea);
+        }
+        else
+        {
+            //Code shouldn't get here unless map is all empty, but we can print an error just in case.
+            Debug.LogError("Why is map all empty??");
+            return;
+        }
 
         VoxelGenerator voxGen = GetComponent<VoxelGenerator>();
         voxGen.GenerateMesh(map, 2);
@@ -147,7 +179,6 @@ public class ForestGenerator : MonoBehaviour
         return noiseMap;
     }
 
-    
     private void OnDrawGizmos()
     {
         if (map != null)
@@ -240,5 +271,85 @@ public class ForestGenerator : MonoBehaviour
         return noiseMap;
     }
 
-    
+    private void FloodFill(int[,] map, int x, int y, List<Vector2> walkableAreaCoords)
+    {
+        if(!IsInMapBounds(x,y) || map[x,y] == 1)
+        {
+            return;
+        }
+
+        if(map[x, y] == 0 && !walkableAreaCoords.Contains(new Vector2(x,y)))
+        {
+            //Add it to walkable area if it's not already present.
+            walkableAreaCoords.Add(new Vector2(x, y));
+
+            //Continue looking in all 4 neighbouring directions.
+            FloodFill(map, x + 1, y, walkableAreaCoords);
+            FloodFill(map, x - 1, y, walkableAreaCoords);
+            FloodFill(map, x, y + 1, walkableAreaCoords);
+            FloodFill(map, x, y - 1, walkableAreaCoords);
+        }
+    }
+
+    private void EliminateUnreachableAreas(int[,] map, List<Vector2> walkableAreaCoords)
+    {
+        //Go over all map points. If within walkable area, do nothing, else make it a wall.
+        for(int x = 0; x < width; x++)
+        {
+            for(int y = 0; y < height; y++)
+            {
+                if(!walkableAreaCoords.Contains(new Vector2(x,y)))
+                {
+                    map[x,y] = 1;
+                }
+            }
+        }
+
+    }
+
+    private Vector2 FindClosestTileWithValue(int[,] map, int[,] checkedTiles, int x, int y, int value)
+    {
+        Vector2 notGroundReturn = new Vector2(-1, -1);
+
+        if(!IsInMapBounds(x,y) || checkedTiles[x,y] == 1)
+        {
+            return notGroundReturn;
+        }
+
+        //Mark it as checked.
+        checkedTiles[x, y] = 1;
+
+        if (map[x, y] == value)
+        {
+            return new Vector2(x, y); 
+        }
+
+        //Else, continue looking in 4 neighbouring directions until we find the first ground tile.
+        Vector2 n1 = FindClosestTileWithValue(map, checkedTiles, x + 1, y + 0, value);
+        Vector2 n2 = FindClosestTileWithValue(map, checkedTiles, x - 1, y + 0, value);
+        Vector2 n3 = FindClosestTileWithValue(map, checkedTiles, x + 0, y + 1, value);
+        Vector2 n4 = FindClosestTileWithValue(map, checkedTiles, x + 0, y - 1, value);
+
+        if (n1 != notGroundReturn)
+        {
+            return n1;
+        }
+        else if(n2 != notGroundReturn)
+        {
+            return n2;
+        }
+        else if (n3 != notGroundReturn)
+        {
+            return n3;
+        }
+        else if (n4 != notGroundReturn)
+        {
+            return n4;
+        }
+        else
+        {
+            return notGroundReturn;
+        }
+
+    }
 }

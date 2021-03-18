@@ -156,7 +156,7 @@ MonoBehaviour:
   iterationsCount: 15
   majority: 4
   regenerate: 0
-  useCustomSeed: 1
+  useCustomSeed: 0
   seed: diana
   portalToDungeonPrefab: {fileID: 8132338876205345018, guid: 54bdb0e04629647418ab10cff296bffb,
     type: 3}
@@ -193,7 +193,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walls: {fileID: 603604852}
   generatedMap: {fileID: 341298104}
-  wallHeight: 3
+  wallHeight: 0.5
 --- !u!1 &84238921
 GameObject:
   m_ObjectHideFlags: 0
