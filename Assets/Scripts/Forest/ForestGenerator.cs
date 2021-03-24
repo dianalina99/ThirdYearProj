@@ -3,52 +3,51 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-
-public class ForestGrid
+public class ForestGrid 
 {
+    #region Properties
+    private int width, height, iterationsCount, majority;
     private int[,] map;
     private List<Vector2> walkableArea;
 
     private string seed;
+    private ForestGrid left, right, up, down;
 
-    ForestGrid left, right, up, down;
+    public int Width { get => width; set => width = value; }
+    public int Height { get => height; set => height = value; }
+    public int IterationsCount { get => iterationsCount; set => iterationsCount = value; }
+    public int Majority { get => majority; set => majority = value; }
+    public ForestGrid Left { get => left; set => left = value; }
+    public ForestGrid Right { get => right; set => right = value; }
+    public ForestGrid Up { get => up; set => up = value; }
+    public ForestGrid Down { get => down; set => down = value; }
+    public int[,] Map { get => map; set => map = value; }
+    public List<Vector2> WalkableArea { get => walkableArea; set => walkableArea = value; }
+    public string Seed { get => seed; set => seed = value; }
+
+    #endregion
 
 
-    public ForestGrid(string seed, int width, int height)
+    public ForestGrid(string seed, int width, int height, int iterationCount, int majority)
     {
-        this.seed = seed;
-        this.map = new int[width, height];
-        this.walkableArea = new List<Vector2>();
+        this.Seed = seed;
+        this.Map = new int[width, height];
+        this.WalkableArea = new List<Vector2>();
+        this.iterationsCount = iterationCount;
+        this.majority = majority;
 
-        left = right = up = down = null;
+        Left = Right = Up = Down = null;
+
+        this.width = width;
+        this.height = height;
     }
 
     public void SetAdjacentForestGrids(ForestGrid left, ForestGrid right, ForestGrid up, ForestGrid down)
     {
-        this.left = left;
-        this.right = right;
-        this.up = up;
-        this.down = down;
-    }
-
-    public int[,] GetMap()
-    {
-        return this.map;
-    }
-
-    public void SetMap(int[,] givenMap)
-    {
-        this.map = givenMap;
-    }
-
-    public List<Vector2> GetWalkableArea()
-    {
-        return this.walkableArea;
-    }
-
-    public void SetWalkableArea(List<Vector2> givenArea)
-    {
-        this.walkableArea = givenArea;
+        this.Left = left;
+        this.Right = right;
+        this.Up = up;
+        this.Down = down;
     }
 
 }
@@ -64,10 +63,14 @@ public class ForestGenerator : MonoBehaviour
     public GameObject portalToDungeonPrefab;
     public GameObject forestEntrancePrefab;
 
+    public MeshGenerator centerMesh, rightMesh, leftMesh, upMesh, downMesh;
+
     private GameObject entryRef;
     private GameObject exitRef;
     private Dictionary<string, ForestGrid> listOfForests;
+    ForestGrid centerMap;
 
+    private int[,] concatenatedMap;
 
 
 
@@ -112,7 +115,7 @@ public class ForestGenerator : MonoBehaviour
     {
         Reset();
         GameManagerScript.instance.forestInUse = true;
-        GenerateMap(null);
+        GenerateCenterMap(null);
 
         //Place entry and exit points.
         exitRef = Instantiate(this.portalToDungeonPrefab, new Vector3(50, 50, 0), Quaternion.identity) as GameObject;
@@ -130,10 +133,8 @@ public class ForestGenerator : MonoBehaviour
 
     }
 
-    private void GenerateMap(string seed)
+    private void GenerateCenterMap(string seed)
     {
-        VoxelGenerator voxGen = GetComponent<VoxelGenerator>();
-
         //Check if we have to use custom seed.
         if (seed != null)
         {
@@ -149,24 +150,341 @@ public class ForestGenerator : MonoBehaviour
             else
             {
                 //Display forest on screen.
-                voxGen.GenerateMesh(forest.GetMap(), 2);
+                this.centerMap = forest;
+                centerMesh.GenerateMesh(forest.Map, 2);
             }
         }
         else
         {
+            /*  When generating a new "center/main" map, we need to also generate adjacent grids.
+            *   The reason is, we need to ensure connectivity, hence create "tunnels" that connect the
+            *   main grid with the adjacent ones.
+            *   After tunnels are created, we run cellular automata for a few iterations on the whole 5 grids
+            *   in order to smooth everything out.
+            */ 
+
             seed = Time.time.ToString();
+            ForestGrid center = GenerateAndDisplayMap(seed, centerMesh);
 
-            //If no custom seed was provided, generate new forest with new random seed.
-            ForestGrid newForest = new ForestGrid(seed, this.width, this.height);
-            newForest.SetMap(ApplyCellularAutomata(GenerateNoiseGrid(newForest.GetMap(), noiseDensity, seed), iterationsCount, majority));
-            EliminateUnreachableAreas(newForest.GetMap(), newForest.GetWalkableArea());
+            seed = (Time.time + 1).ToString();
+            ForestGrid right = GenerateAndDisplayMap(seed, rightMesh);
 
-            //Add forest to dictionary of maps.
-            this.listOfForests.Add(seed, newForest);
+            seed = (Time.time + 2).ToString();
+            ForestGrid left = GenerateAndDisplayMap(seed, leftMesh);
 
-            //Display it in screen.
-            voxGen.GenerateMesh(newForest.GetMap(), 2);
+            seed = (Time.time + 3).ToString();
+            ForestGrid up = GenerateAndDisplayMap(seed, upMesh);
+
+            seed = (Time.time + 4).ToString();
+            ForestGrid down = GenerateAndDisplayMap(seed, downMesh);
+
+            this.centerMap = center;
+            this.centerMap.SetAdjacentForestGrids(left, right, up, down);
+
+
+            //Ensure connectivity.
+            EnsureConnectivity(center, right, left, up, down);
         }
+    }
+
+    private void EnsureConnectivity(ForestGrid center, ForestGrid right, ForestGrid left, ForestGrid up, ForestGrid down)
+    {
+        /* We need to construct tunnels between center map and each adjacent map.
+         * To do this, we need to find the closest ground tile to border in each 4 directions for center map.
+         * Once done, create straight rectangular areas of set width from found ground tiles towards adjacent map grids.
+         * Lastly, we run cellular automata for a few iterations on all maps to "blend" tunnel edges
+         */
+
+        Vector2 centerRight, centerLeft, centerUp, centerDown, rightLeft, leftRight, upDown, downUp;
+        centerRight = centerLeft = centerUp = centerDown = rightLeft = leftRight = upDown = downUp =  new Vector2(0, 0);
+
+        /* When finding the tunnel points, we need to use the normal coordinate system (screen).
+         * So we don't treat the (0,0) as top left corner, but instead as bottom left corner.
+         * 
+         * See axis in following comment.
+         *
+         */
+        
+        
+        for ( int x = 0; x < center.Width; x++)
+        {
+            for( int y = 0; y < center.Height; y++)
+            {
+                if(center.Map[x,y] == 0)
+                {
+                    //LEFT-SIDE on screen
+                    centerLeft = new Vector2(x, y);
+                    x = center.Width;
+                    break;
+                }
+            }
+        }
+        
+        for (int x = center.Width - 1; x >= 0; x--)
+        {
+            for (int y = 0; y < center.Height; y++)
+            {
+                if (center.Map[x, y] == 0)
+                {
+                    //RIGHT-SIDE on screen
+                    centerRight = new Vector2(x, y);
+                    x = -1;
+                    break;
+                }
+            }
+        }
+        
+        for (int y = 0; y < center.Height; y++)
+        {
+            for (int x = 0; x < center.Width; x++)
+            {
+                if (center.Map[x, y] == 0)
+                {
+                    //DOWN-SIDE on screen
+                    centerDown = new Vector2(x, y);
+                    y = center.Height;
+                    break;
+                }
+            }
+        }
+        
+        for (int y = center.Height - 1; y >= 0; y--)
+        {
+            for (int x = 0; x < center.Width; x++)
+            {
+                if (center.Map[x, y] == 0)
+                {
+                    //UP-SIDE on screen
+                    centerUp = new Vector2(x, y);
+                    y = -1;
+                    break;
+                }
+            }
+        }
+        
+        for (int x = 0; x < right.Width; x++)
+        {
+            for (int y = 0; y < right.Height; y++)
+            {
+                if (right.Map[x, y] == 0)
+                {
+                    //LEFT-SIDE on screen
+                    rightLeft = new Vector2(x, y);
+                    x = right.Width;
+                    break;
+                }
+            }
+        }
+
+
+        for (int x = left.Width - 1; x >= 0; x--)
+        {
+            for (int y = 0; y < left.Height; y++)
+            {
+                if (left.Map[x, y] == 0)
+                {
+                    //RIGHT-SIDE on screen
+                    leftRight = new Vector2(x, y);
+                    x = -1;
+                    break;
+                }
+            }
+        }
+
+
+        for (int y = 0; y < up.Height; y++)
+        {
+            for (int x = 0; x < up.Width; x++)
+            {
+                if (up.Map[x, y] == 0)
+                {
+                    //DOWN-SIDE on screen
+                    upDown = new Vector2(x, y);
+                    y = center.Height;
+                    break;
+                }
+            }
+        }
+
+        
+        for (int y = down.Height - 1; y >= 0; y--)
+        {
+            for (int x = 0; x < down.Width; x++)
+            {
+                if (down.Map[x, y] == 0)
+                {
+                    //UP-SIDE on screen
+                    downUp = new Vector2(x, y);
+                    y = -1;
+                    break;
+                }
+            }
+        }
+
+        /* Concatenate all maps into one big map.
+         * Keep in mind our map axis is inverted (because our (0,0) point is top left corner.
+         * Take a normal matrix with (i,j) coords. In our case, we have (x,y) coords,
+         * where x -> width and y -> height. 
+         * This basically means that what we would normally think of when saying "up"
+         * is "left" in our concatenated map.
+         * 
+         * Axis looks like this:
+         *      /\ y                -------> y
+         *      |                   |
+         *      |    x        =>    | 
+         *      ----->              \/ x
+         *      
+         *  Screen uses the normal map coordinates.
+         */
+
+        concatenatedMap = new int[this.width * 3, this.height * 3];
+
+        //Concatenate all maps.
+        for(int x = 0; x< this.width * 3; x++)
+        {
+            for(int y = 0; y< this.height * 3; y++)
+            {
+                if (x < this.width && y < this.height)
+                {
+                    concatenatedMap[x, y] = 1;
+                }
+                else if (x < this.width && y >= this.height && y < this.height * 2)
+                {
+                    //Up in matrix coord system.
+                    concatenatedMap[x, y] = left.Map[x % this.width, y % this.height];
+                }
+                else if (x < this.width && y >= this.height * 2 && y < this.height * 3)
+                {
+                    concatenatedMap[x, y] = 1;
+                }
+                else if(x >= this.width && x < this.width * 2 && y < this.height)
+                {
+                    //Left in matrix coord system.
+                    concatenatedMap[x, y] = down.Map[x % this.width, y % this.height];
+                }
+                else if(x >= this.width && x < this.width * 2 && y >= this.height && y < this.height * 2)
+                {
+                    concatenatedMap[x, y] = center.Map[x % this.width, y % this.height];
+                }
+                else if (x >= this.width && x < this.width * 2 && y >= this.height * 2)
+                {
+                    //Right in matrix coord system.
+                    concatenatedMap[x, y] = up.Map[x % this.width, y % this.height];
+                }
+                else if (x >= this.width * 2 && y < this.height)
+                {
+                    concatenatedMap[x, y] = 1;
+                }
+                else if (x >= this.width * 2 && y >= this.height && y < this.height * 2)
+                {
+                    //Down in matrix coord system.
+                    concatenatedMap[x, y] = right.Map[x % this.width, y % this.height];
+                }
+                else if (x >= this.width * 2 && y >= this.height * 2)
+                {
+                    concatenatedMap[x, y] = 1;
+                }
+            }
+        }
+
+
+        //Display tunnel connection points by setting map value at given x, y to 2.
+        concatenatedMap[(int)ConvertCoordsFromSingleToConcatenatedMap(centerUp, "center").x, (int)ConvertCoordsFromSingleToConcatenatedMap(centerUp, "center").y] = 2;
+        concatenatedMap[(int)ConvertCoordsFromSingleToConcatenatedMap(centerDown, "center").x, (int)ConvertCoordsFromSingleToConcatenatedMap(centerDown, "center").y] = 2;
+        concatenatedMap[(int)ConvertCoordsFromSingleToConcatenatedMap(centerLeft, "center").x, (int)ConvertCoordsFromSingleToConcatenatedMap(centerLeft, "center").y] = 2;
+        concatenatedMap[(int)ConvertCoordsFromSingleToConcatenatedMap(centerRight, "center").x, (int)ConvertCoordsFromSingleToConcatenatedMap(centerRight, "center").y] = 2;
+        concatenatedMap[(int)ConvertCoordsFromSingleToConcatenatedMap(leftRight, "left").x, (int)ConvertCoordsFromSingleToConcatenatedMap(leftRight, "left").y] = 2;
+        concatenatedMap[(int)ConvertCoordsFromSingleToConcatenatedMap(rightLeft, "right").x, (int)ConvertCoordsFromSingleToConcatenatedMap(rightLeft, "right").y] = 2;
+        concatenatedMap[(int)ConvertCoordsFromSingleToConcatenatedMap(upDown, "up").x, (int)ConvertCoordsFromSingleToConcatenatedMap(upDown, "up").y] = 2;
+        concatenatedMap[(int)ConvertCoordsFromSingleToConcatenatedMap(downUp, "down").x, (int)ConvertCoordsFromSingleToConcatenatedMap(downUp, "down").y] = 2;
+
+
+
+
+
+
+
+
+        // !!!!!!!!!!!!!! I can't do straight lines because the other map might be to the side and a straight line would never connect it.
+
+        /* 
+         //Draw rectangular ground area of set width.
+         int width = 2;
+
+         int xCoord = (int)centerUp.x;
+         int yCoord = (int)centerUp.y;
+         bool stop = false;
+
+         while (!stop)
+         {
+             //Go up until no longer in center map bounds.
+             if(IsInMapBounds(xCoord,yCoord))
+             {
+                 center.Map[xCoord, yCoord] = 0;
+                 xCoord--;
+             }
+             else
+             {
+                 //Transition into upper map grid.
+                 xCoord = up.Width - 1;
+
+                 if(up.Map[xCoord,yCoord] != 0)
+                 {
+                     up.Map[xCoord, yCoord] = 0;
+                     xCoord--;
+                 }
+                 else
+                 {
+                     stop = true;
+                 }
+             }
+         } */
+    }
+
+
+    private Vector2 ConvertCoordsFromSingleToConcatenatedMap(Vector2 coords, string singleType)
+    {
+        if (singleType == "center")
+        {
+            return new Vector2(coords.x + this.width, coords.y + this.height);
+
+        }
+        else if (singleType == "up")
+        {
+            return new Vector2(coords.x + this.width, coords.y + this.height * 2);
+        }
+        else if( singleType == "down")
+        {
+            return new Vector2(coords.x + this.width, coords.y);
+        }
+        else if( singleType == "left")
+        {
+            return new Vector2(coords.x , coords.y + this.height);
+        }
+        else if(singleType == "right")
+        {
+            return new Vector2(coords.x + this.width * 2, coords.y + this.height);
+        }
+        else
+        {
+            return new Vector2(-1, -1);
+        }
+    }
+
+    private ForestGrid GenerateAndDisplayMap(string seed, MeshGenerator mesh)
+    {
+        //If no custom seed was provided, generate new forest with new random seed.
+        ForestGrid newForest = new ForestGrid(seed, this.width, this.height, this.iterationsCount, this.majority);
+        newForest.Map = ApplyCellularAutomata(GenerateNoiseGrid(newForest.Map, noiseDensity, seed), iterationsCount, majority);
+        EliminateUnreachableAreas(newForest.Map, newForest.WalkableArea);
+
+        //Add forest to dictionary of maps.
+        this.listOfForests.Add(seed, newForest);
+
+        //Display it in screen.
+        mesh.GenerateMesh(newForest.Map, 2);
+
+        return newForest;
     }
 
     private int[,] GenerateNoiseGrid(int[,] noiseMap, int density, string seed)
@@ -193,15 +511,12 @@ public class ForestGenerator : MonoBehaviour
                     noiseMap[x, y] = 1;
                 }
 
-                /*
+                
                 //Check if tile is border - if true mark it as 1.
                 if( x == 0 || y == 0 || x == width - 1 || y == height - 1)
                 {
                     noiseMap[x, y] = 1;
-                }*/
-
-                //We want the map to have 4 exit ways: up,down,left,right.
-                //So, make sure we create a bunch of 0s on each edge so player can exit.
+                }
             }
 
         }
@@ -209,24 +524,67 @@ public class ForestGenerator : MonoBehaviour
         return noiseMap;
     }
 
-    /*
+    
     private void OnDrawGizmos()
     {
-        if (map != null)
+        /*
+        if ( centerMap.Up.Map != null)
         {
-            for (int x = 0; x < width; x++)
+            for (int x = 0; x < width ; x++)
             {
-                for (int y = 0; y < height; y++)
+                for (int y = 0; y < height ; y++)
                 {
-                    Gizmos.color = (map[x, y] == 1) ? Color.black : Color.white;
-                    Vector3 pos = new Vector3(-width / 2 + x + .5f, -height / 2 + y + .5f, 0 );
+                    if (centerMap.Up.Map[x, y] == 0)
+                    {
+                        Gizmos.color = Color.white;
+                    }
+                    else if (centerMap.Up.Map[x, y] == 1)
+                    {
+                        Gizmos.color = Color.black;
+                    }
+                    else if (centerMap.Up.Map[x, y] == 2)
+                    {
+                        Gizmos.color = Color.red;
+                    }
+
+                    Vector3 pos = new Vector3(-5 * width + x + .5f, -height / 2 + y + .5f, 0);
                     Gizmos.DrawCube(pos, Vector3.one);
                 }
 
             }
 
-        }
-    }*/
+        } */
+
+        
+        if (concatenatedMap != null)
+        {
+            for (int x = 0; x < width * 3; x++)
+            {
+                for (int y = 0; y < height * 3; y++)
+                {
+                    if(concatenatedMap[x, y] == 0)
+                    {
+                        Gizmos.color = Color.white;
+                    }
+                    else if (concatenatedMap[x, y] == 1)
+                    {
+                        Gizmos.color = Color.black;
+                    }
+                    else if (concatenatedMap[x, y] == 2)
+                    {
+                        Gizmos.color = Color.red;
+                    }
+                    
+                    Vector3 pos = new Vector3(-5* width  + x + .5f, -height/2 + y + .5f, 0 );
+                    Gizmos.DrawCube(pos, Vector3.one);
+                }
+
+            }
+
+        } 
+
+
+    }
 
     private bool IsInMapBounds(int x, int y)
     {
@@ -366,6 +724,11 @@ public class ForestGenerator : MonoBehaviour
 
     private Vector2 FindClosestTileWithValue(int[,] map, int[,] checkedTiles, int x, int y, int value)
     {
+        /* This method finds the closest tile to a set (x,y) that is not ground.
+         * It returns the (x,y) map grid coordinates of the found tile.
+         * If no ground tile is found, it returns (-1,-1).
+         */
+
         Vector2 notGroundReturn = new Vector2(-1, -1);
 
         if(!IsInMapBounds(x,y) || checkedTiles[x,y] == 1)
@@ -410,5 +773,4 @@ public class ForestGenerator : MonoBehaviour
 
     }
 }
-
 

@@ -5,7 +5,7 @@ using UnityEngine;
 
 
 //Class to generate voxels given a noise map. This will be used afterwards to generate a mesh using the marching squares algorithm.
-public class VoxelGenerator : MonoBehaviour
+public class MeshGenerator : MonoBehaviour
 {
     public SquareGrid squareGrid;
     private List<Vector3> vertices;
@@ -296,7 +296,6 @@ public class VoxelGenerator : MonoBehaviour
         mesh.uv = uvs;
     }
 
-   
     public void TriangulateSquare(Square square)
     {
         switch(square.configNo)
