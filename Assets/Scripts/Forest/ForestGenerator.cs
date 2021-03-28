@@ -389,56 +389,137 @@ public class ForestGenerator : MonoBehaviour
 
 
         //Display tunnel connection points by setting map value at given x, y to 2.
-        concatenatedMap[(int)ConvertCoordsFromSingleToConcatenatedMap(centerUp, "center").x, (int)ConvertCoordsFromSingleToConcatenatedMap(centerUp, "center").y] = 2;
-        concatenatedMap[(int)ConvertCoordsFromSingleToConcatenatedMap(centerDown, "center").x, (int)ConvertCoordsFromSingleToConcatenatedMap(centerDown, "center").y] = 2;
-        concatenatedMap[(int)ConvertCoordsFromSingleToConcatenatedMap(centerLeft, "center").x, (int)ConvertCoordsFromSingleToConcatenatedMap(centerLeft, "center").y] = 2;
-        concatenatedMap[(int)ConvertCoordsFromSingleToConcatenatedMap(centerRight, "center").x, (int)ConvertCoordsFromSingleToConcatenatedMap(centerRight, "center").y] = 2;
-        concatenatedMap[(int)ConvertCoordsFromSingleToConcatenatedMap(leftRight, "left").x, (int)ConvertCoordsFromSingleToConcatenatedMap(leftRight, "left").y] = 2;
-        concatenatedMap[(int)ConvertCoordsFromSingleToConcatenatedMap(rightLeft, "right").x, (int)ConvertCoordsFromSingleToConcatenatedMap(rightLeft, "right").y] = 2;
-        concatenatedMap[(int)ConvertCoordsFromSingleToConcatenatedMap(upDown, "up").x, (int)ConvertCoordsFromSingleToConcatenatedMap(upDown, "up").y] = 2;
-        concatenatedMap[(int)ConvertCoordsFromSingleToConcatenatedMap(downUp, "down").x, (int)ConvertCoordsFromSingleToConcatenatedMap(downUp, "down").y] = 2;
+        centerUp = new Vector2(ConvertCoordsFromSingleToConcatenatedMap(centerUp, "center").x, ConvertCoordsFromSingleToConcatenatedMap(centerUp, "center").y);
+        centerDown = new Vector2(ConvertCoordsFromSingleToConcatenatedMap(centerDown, "center").x, ConvertCoordsFromSingleToConcatenatedMap(centerDown, "center").y);
+        centerLeft = new Vector2(ConvertCoordsFromSingleToConcatenatedMap(centerLeft, "center").x, ConvertCoordsFromSingleToConcatenatedMap(centerLeft, "center").y);
+        centerRight = new Vector2(ConvertCoordsFromSingleToConcatenatedMap(centerRight, "center").x, ConvertCoordsFromSingleToConcatenatedMap(centerRight, "center").y);
+        leftRight = new Vector2(ConvertCoordsFromSingleToConcatenatedMap(leftRight, "left").x, ConvertCoordsFromSingleToConcatenatedMap(leftRight, "left").y);
+        rightLeft = new Vector2(ConvertCoordsFromSingleToConcatenatedMap(rightLeft, "right").x, ConvertCoordsFromSingleToConcatenatedMap(rightLeft, "right").y);
+        upDown = new Vector2(ConvertCoordsFromSingleToConcatenatedMap(upDown, "up").x, ConvertCoordsFromSingleToConcatenatedMap(upDown, "up").y);
+        downUp = new Vector2(ConvertCoordsFromSingleToConcatenatedMap(downUp, "down").x, ConvertCoordsFromSingleToConcatenatedMap(downUp, "down").y);
+
+        int groundTunnelValue = -1;
+        concatenatedMap[(int)centerUp.x,(int) centerUp.y] = groundTunnelValue;
+        concatenatedMap[(int) centerDown.x, (int) centerDown.y] = groundTunnelValue;
+        concatenatedMap[(int) centerLeft.x, (int) centerLeft.y] = groundTunnelValue;
+        concatenatedMap[(int) centerRight.x, (int) centerRight.y] = groundTunnelValue;
+        concatenatedMap[(int) leftRight.x, (int) leftRight.y] = groundTunnelValue;
+        concatenatedMap[(int) rightLeft.x, (int) rightLeft.y] = groundTunnelValue;
+        concatenatedMap[(int) upDown.x, (int) upDown.y] = groundTunnelValue;
+        concatenatedMap[(int) downUp.x, (int) downUp.y] = groundTunnelValue;
+
+        //Draw tunnel to connect adjacent points.
+        
+        Vector2 temp = centerUp;
+
+        //CenterUp
+        while(temp.y < upDown.y)
+        {
+            temp.y++;
+            concatenatedMap[(int)temp.x, (int)temp.y] = groundTunnelValue;
+        }
+        
+        if(upDown.x < temp.x)
+        {
+            do
+            {
+                temp.x--;
+                concatenatedMap[(int)temp.x, (int)temp.y] = groundTunnelValue;
+
+            } while (upDown.x < temp.x);
+        }
+        else if (upDown.x > temp.x)
+        {
+            do
+            {
+                concatenatedMap[(int)temp.x, (int)temp.y] = groundTunnelValue;
+                temp.x++;
+            } while (upDown.x > temp.x);
+        }
+
+        //CenterDown
+        temp = centerDown;
+
+        while (temp.y > downUp.y)
+        {
+            temp.y--;
+            concatenatedMap[(int)temp.x, (int)temp.y] = groundTunnelValue;
+        }
+        if (downUp.x < temp.x)
+        {
+            do
+            {
+                temp.x--;
+                concatenatedMap[(int)temp.x, (int)temp.y] = groundTunnelValue;
+
+            } while (downUp.x < temp.x);
+        }
+        else if (downUp.x > temp.x)
+        {
+            do
+            {
+                concatenatedMap[(int)temp.x, (int)temp.y] = groundTunnelValue;
+                temp.x++;
+            } while (downUp.x > temp.x);
+        }
+
+        //CenterLeft
+        temp = centerLeft;
+
+        while(temp.x > leftRight.x)
+        {
+            temp.x--;
+            concatenatedMap[(int)temp.x, (int)temp.y] = groundTunnelValue;
+        }
+        if(leftRight.y < temp.y)
+        {
+            do
+            {
+                temp.y--;
+                concatenatedMap[(int)temp.x, (int)temp.y] = groundTunnelValue;
+            } while (leftRight.y < temp.y);
+         
+        }
+        else if(leftRight.y > temp.y)
+        {
+            do
+            {
+                temp.y++;
+                concatenatedMap[(int)temp.x, (int)temp.y] = groundTunnelValue;
+            } while (leftRight.y > temp.y);
+
+        }
+
+        //CenterRight
+        temp = centerRight;
+
+        while (temp.x < rightLeft.x)
+        {
+            temp.x++;
+            concatenatedMap[(int)temp.x, (int)temp.y] = groundTunnelValue;
+        }
+        if (rightLeft.y < temp.y)
+        {
+            do
+            {
+                temp.y--;
+                concatenatedMap[(int)temp.x, (int)temp.y] = groundTunnelValue;
+            } while (rightLeft.y < temp.y);
+
+        }
+        else if (rightLeft.y > temp.y)
+        {
+            do
+            {
+                temp.y++;
+                concatenatedMap[(int)temp.x, (int)temp.y] = groundTunnelValue;
+            } while (rightLeft.y > temp.y);
+
+        }
 
 
-
-
-
-
-
-
-        // !!!!!!!!!!!!!! I can't do straight lines because the other map might be to the side and a straight line would never connect it.
-
-        /* 
-         //Draw rectangular ground area of set width.
-         int width = 2;
-
-         int xCoord = (int)centerUp.x;
-         int yCoord = (int)centerUp.y;
-         bool stop = false;
-
-         while (!stop)
-         {
-             //Go up until no longer in center map bounds.
-             if(IsInMapBounds(xCoord,yCoord))
-             {
-                 center.Map[xCoord, yCoord] = 0;
-                 xCoord--;
-             }
-             else
-             {
-                 //Transition into upper map grid.
-                 xCoord = up.Width - 1;
-
-                 if(up.Map[xCoord,yCoord] != 0)
-                 {
-                     up.Map[xCoord, yCoord] = 0;
-                     xCoord--;
-                 }
-                 else
-                 {
-                     stop = true;
-                 }
-             }
-         } */
+        //Run Cellular Automata on the concatenated map 3 times to smooth out tunnels.
+        concatenatedMap = ApplyCellularAutomata(concatenatedMap, 1, 4);
     }
 
 
@@ -586,9 +667,14 @@ public class ForestGenerator : MonoBehaviour
 
     }
 
-    private bool IsInMapBounds(int x, int y)
+    private bool IsInMapBounds(int[,] map, int x, int y)
     {
-        if(x < 0 || y < 0 || x >= width || y >= height)
+        int _width, _height;
+
+        _width = map.GetLength(0);
+        _height = map.GetLength(1);
+
+        if(x < 0 || y < 0 || x >= _width || y >= _height)
         {
             return false;
         }
@@ -603,17 +689,17 @@ public class ForestGenerator : MonoBehaviour
         for (int count = 0; count< noOfIterations; count ++)
         {
             //Create map placeholder so we don't get any bias by overwriting directly on main map.
-            for (int x = 0; x < width; x++)
+            for (int x = 0; x < noiseMap.GetLength(0); x++)
             {
-                for (int y = 0; y < height; y++)
+                for (int y = 0; y < noiseMap.GetLength(1); y++)
                 {
                     tempMap[x, y] = noiseMap[x, y];
                 }
             }
 
-            for (int x = 0; x < width; x++)
+            for (int x = 0; x < noiseMap.GetLength(0); x++)
             {
-                for (int y = 0; y < height; y++)
+                for (int y = 0; y < noiseMap.GetLength(1); y++)
                 {
                     //Check Moore neighbours - if majority are ground, map[i][j] becomes ground. Same for wall.
                     int noOfNeighboursWalls = 0;
@@ -624,7 +710,7 @@ public class ForestGenerator : MonoBehaviour
                         for (int ny = y - 1; ny <= y + 1; ny++)
                         {
                             //Check if it's within map bounds.
-                            if (IsInMapBounds(nx, ny))
+                            if (IsInMapBounds( noiseMap,nx, ny))
                             {
                                 //Check neighbour value. Don't count current tile as its own neighbour.
                                 //if (tempMap[nx, ny] == 1 && (nx != x || ny != y))
@@ -662,7 +748,7 @@ public class ForestGenerator : MonoBehaviour
 
     private void FloodFill(int[,] map, int x, int y, List<Vector2> walkableAreaCoords)
     {
-        if(!IsInMapBounds(x,y) || map[x,y] == 1)
+        if(!IsInMapBounds(map, x,y) || map[x,y] == 1)
         {
             return;
         }
@@ -731,7 +817,7 @@ public class ForestGenerator : MonoBehaviour
 
         Vector2 notGroundReturn = new Vector2(-1, -1);
 
-        if(!IsInMapBounds(x,y) || checkedTiles[x,y] == 1)
+        if(!IsInMapBounds(map, x,y) || checkedTiles[x,y] == 1)
         {
             return notGroundReturn;
         }
