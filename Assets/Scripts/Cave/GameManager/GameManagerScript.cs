@@ -43,6 +43,9 @@ public class GameManagerScript : MonoBehaviour
     public GameObject minimapRef;
     public Camera minimapCamera;
 
+    public ForestGrid currentForestGrid;
+    public ForestGrid previousForestGrid;
+
     public void Reset()
     {
         dungeonInUse = false;

@@ -15,8 +15,8 @@ public class ForestEntry : MonoBehaviour
             GameManagerScript.instance.forestReadyForPlayer = false;
 
             //Spawn player next to forest entry point (child of this object).
-            GameManagerScript.instance.playerRef.transform.position = GameManagerScript.instance.latestPlayerEntryPoint.transform.GetChild(0).transform.position + new Vector3(1, 1, 0);
-            GameManagerScript.instance.playerRef.transform.SetParent(GameManagerScript.instance.dungeonMapRef.transform, true);
+            GameManagerScript.instance.playerRef.transform.position = GameManagerScript.instance.latestPlayerEntryPoint.transform.GetChild(0).transform.position;
+            GameManagerScript.instance.playerRef.transform.SetParent(GameManagerScript.instance.forestMapRef.transform, true);
 
             GameManagerScript.instance.playerIsCurrentlyTeleporting = false;
 
