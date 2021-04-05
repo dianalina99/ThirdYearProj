@@ -205,9 +205,41 @@ public class ForestGenerator : MonoBehaviour
             }
             else
             {
-                //Display forest on screen.
+                //Check if forest is missing any adjacent forest grids.
+                //If yes, generate them, ensure connectivity and then display.
+                if(forest.Left == null)
+                {
+                    seed = (Time.time + 2).ToString();
+                    ForestGrid left = GenerateNewMapGrid(seed);
+                    forest.Left = left;
+                    left.Right = forest;
+                }
+                if (forest.Right == null)
+                {
+                    seed = (Time.time + 1).ToString();
+                    ForestGrid right = GenerateNewMapGrid(seed);
+                    forest.Right = right;
+                    right.Left = forest;
+
+                }
+                if(forest.Up == null)
+                {
+                    seed = (Time.time + 3).ToString();
+                    ForestGrid up = GenerateNewMapGrid(seed);
+                    forest.Up = up;
+                    up.Down = forest;
+                }
+                if(forest.Down == null)
+                {
+                    seed = (Time.time + 4).ToString();
+                    ForestGrid down = GenerateNewMapGrid(seed);
+                    forest.Down = down;
+                    down.Up = forest;
+                }
+
+
                 this.centerMap = forest;
-                centerMesh.GenerateMesh(forest.Map, 2);
+                
             }
         }
         else
@@ -245,19 +277,23 @@ public class ForestGenerator : MonoBehaviour
             GameManagerScript.instance.currentForestGrid = this.centerMap;
 
 
-            //Ensure connectivity.
-            EnsureConnectivity(center, right, left, up, down);
-
-            //Detect entry points for each map.
-            AssignEntryPoints(right);
-            AssignEntryPoints(left);
-            AssignEntryPoints(up);
-            AssignEntryPoints(down);
-            AssignEntryPoints(center);
-
-            //Display maps on screen.
-            DisplayMapOnScreen(center, centerMesh);
         }
+
+        
+
+
+        //Ensure connectivity.
+        EnsureConnectivity(this.centerMap, this.centerMap.Right, this.centerMap.Left, this.centerMap.Up, this.centerMap.Down);
+
+        //Detect entry points for each map.
+        AssignEntryPoints(this.centerMap.Right);
+        AssignEntryPoints(this.centerMap.Left);
+        AssignEntryPoints(this.centerMap.Up);
+        AssignEntryPoints(this.centerMap.Down);
+        AssignEntryPoints(this.centerMap);
+
+        //Display maps on screen.
+        DisplayMapOnScreen(this.centerMap, centerMesh);
     }
 
     private void AssignEntryPoints(ForestGrid forest)
