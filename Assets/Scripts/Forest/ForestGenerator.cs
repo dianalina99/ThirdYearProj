@@ -13,6 +13,7 @@ public class ForestGrid
     private string seed;
     private ForestGrid left, right, up, down;
     private Vector2 entryL, entryR, entryU, entryD;
+    private Vector2 exitToDungeon;
 
     public int Width { get => width; set => width = value; }
     public int Height { get => height; set => height = value; }
@@ -30,6 +31,7 @@ public class ForestGrid
     public Vector2 EntryU { get => entryU; set => entryU = value; }
     public Vector2 EntryD { get => entryD; set => entryD = value; }
     public Vector2 EntryL { get => entryL; set => entryL = value; }
+    public Vector2 ExitToDungeon { get => exitToDungeon; set => exitToDungeon = value; }
 
 
     #endregion
@@ -48,7 +50,7 @@ public class ForestGrid
         this.width = width;
         this.height = height;
 
-        this.entryL = this.entryR = this.entryD = this.entryU = new Vector2(-1, -1);
+        this.entryL = this.entryR = this.entryD = this.entryU = this.ExitToDungeon = new Vector2(-1, -1);
     }
 
     public void SetAdjacentForestGrids(ForestGrid left, ForestGrid right, ForestGrid up, ForestGrid down)
@@ -134,20 +136,72 @@ public class ForestGenerator : MonoBehaviour
             GenerateCenterMap(null);
         }
         
-        //Remove any previous exit points.
         //Place entry and exit points.
-        exitRef = Instantiate(this.portalToDungeonPrefab, new Vector3(50, 50, 0), Quaternion.identity) as GameObject;
-        exitRef.transform.SetParent(this.transform, false);
-
-        //Check if player just entered the game.
-        if (GameManagerScript.instance.previousForestGrid == null)
+        if( GameManagerScript.instance.currentForestGrid.ExitToDungeon == new Vector2(-1,-1))
         {
-            //Place entry point somewhere in the middle of the map.
-            entryRef = Instantiate(this.forestEntrancePrefab, new Vector3(52, 52, 0), Quaternion.identity) as GameObject;
-            entryRef.transform.SetParent(this.transform, false);
-            GameManagerScript.instance.latestPlayerEntryPoint = entryRef;
+            //Pick a random place in walkable area.
+            System.Random rand = new System.Random();
+            int randomIndex = rand.Next(0, GameManagerScript.instance.currentForestGrid.WalkableArea.Count);
+
+            Vector2 spawnPoint = GameManagerScript.instance.currentForestGrid.WalkableArea[randomIndex];
+
+            //Multiply spawn point by 2 because the square cell size of the mesh is 2 in our case.
+            exitRef = Instantiate(this.portalToDungeonPrefab, spawnPoint * 2, Quaternion.identity) as GameObject;
+            exitRef.transform.SetParent(this.transform, false);
+            GameManagerScript.instance.currentForestGrid.ExitToDungeon = spawnPoint;
         }
         else
+        {
+            exitRef = Instantiate(this.portalToDungeonPrefab, GameManagerScript.instance.currentForestGrid.ExitToDungeon * 2, Quaternion.identity) as GameObject;
+            exitRef.transform.SetParent(this.transform, false);
+        }
+        
+
+        //Check if player just entered the game or if it came back from a dungeon.
+        if (GameManagerScript.instance.previousForestGrid == null)
+        {
+            
+            
+             //Place entry point somewhere in the middle of the map.
+             entryRef = Instantiate(this.forestEntrancePrefab, new Vector3(52, 52, 0), Quaternion.identity) as GameObject;
+             entryRef.transform.SetParent(this.transform, false);
+             GameManagerScript.instance.latestPlayerEntryPoint = entryRef;
+          
+        }
+        else if(GameManagerScript.instance.previousForestGrid == GameManagerScript.instance.currentForestGrid)
+        {
+            //If player came back from a dungeon, spawn it in the proximity of the exit portal previously used.
+            Vector2 left, right, up, down, spawnPoint = new Vector2(-1,-1);
+
+            left = new Vector2(GameManagerScript.instance.currentForestGrid.ExitToDungeon.x + 1, GameManagerScript.instance.currentForestGrid.ExitToDungeon.y );
+            right = new Vector2(GameManagerScript.instance.currentForestGrid.ExitToDungeon.x - 1, GameManagerScript.instance.currentForestGrid.ExitToDungeon.y );
+            up = new Vector2(GameManagerScript.instance.currentForestGrid.ExitToDungeon.x  , GameManagerScript.instance.currentForestGrid.ExitToDungeon.y - 1);
+            down = new Vector2(GameManagerScript.instance.currentForestGrid.ExitToDungeon.x, GameManagerScript.instance.currentForestGrid.ExitToDungeon.y + 1);
+
+
+            if (GameManagerScript.instance.currentForestGrid.WalkableArea.Contains(left))
+            {
+                spawnPoint = left * 2;
+            }
+            else if (GameManagerScript.instance.currentForestGrid.WalkableArea.Contains(right))
+            {
+                spawnPoint = right * 2;
+            }
+            else if (GameManagerScript.instance.currentForestGrid.WalkableArea.Contains(up))
+            {
+                spawnPoint = up * 2;
+            }
+            else if (GameManagerScript.instance.currentForestGrid.WalkableArea.Contains(down))
+            {
+                spawnPoint = down * 2;
+            }
+
+            entryRef = Instantiate(this.forestEntrancePrefab, spawnPoint, Quaternion.identity) as GameObject;
+            entryRef.transform.SetParent(this.transform, false);
+            GameManagerScript.instance.latestPlayerEntryPoint = entryRef;
+
+        }
+        else 
         {
             //See where the player came from and instantiate entry there.
             if(GameManagerScript.instance.previousForestGrid == GameManagerScript.instance.currentForestGrid.Down)
@@ -155,27 +209,22 @@ public class ForestGenerator : MonoBehaviour
                 //Spawn entry points on all available entries (L R D U) and mark them as not-active.
                 entryRef = Instantiate(this.forestEntrancePrefab, GameManagerScript.instance.currentForestGrid.EntryD * 2, Quaternion.identity) as GameObject;
                 entryRef.transform.SetParent(this.transform, false);
-                //entryRef.SetActive(false);
             }
             else if(GameManagerScript.instance.previousForestGrid == GameManagerScript.instance.currentForestGrid.Up)
             {
                 entryRef = Instantiate(this.forestEntrancePrefab, GameManagerScript.instance.currentForestGrid.EntryU * 2, Quaternion.identity) as GameObject;
                 entryRef.transform.SetParent(this.transform, false);
-                //entryRef.SetActive(false);
             }
             else if(GameManagerScript.instance.previousForestGrid == GameManagerScript.instance.currentForestGrid.Left)
             {
                 entryRef = Instantiate(this.forestEntrancePrefab, GameManagerScript.instance.currentForestGrid.EntryL * 2, Quaternion.identity) as GameObject;
                 entryRef.transform.SetParent(this.transform, false);
-                //entryRef.SetActive(false);
 
             }
             else if(GameManagerScript.instance.previousForestGrid == GameManagerScript.instance.currentForestGrid.Right)
             {
                 entryRef = Instantiate(this.forestEntrancePrefab, GameManagerScript.instance.currentForestGrid.EntryR * 2, Quaternion.identity) as GameObject;
                 entryRef.transform.SetParent(this.transform, false);
-                //entryRef.SetActive(false);
-
             }
 
             GameManagerScript.instance.latestPlayerEntryPoint = entryRef;

@@ -15,6 +15,9 @@ public class ForestToDungeonDoor : MonoBehaviour
             GameManagerScript.instance.dungeonNeedsRegeneration = true;
 
             GameManagerScript.instance.playerIsCurrentlyTeleporting = true;
+
+            //Mark the fact that player will return from dungeon, not from another forest.
+            GameManagerScript.instance.previousForestGrid = GameManagerScript.instance.currentForestGrid;
         }
     }
 }

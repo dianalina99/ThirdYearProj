@@ -11,7 +11,7 @@ public class GameManagerScript : MonoBehaviour
     {
         if (instance != null)
         {
-            Debug.LogWarning("More active bars found!");
+            Debug.LogWarning("More game managers found!!");
             return;
         }
         instance = this;
