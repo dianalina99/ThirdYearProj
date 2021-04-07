@@ -260,30 +260,33 @@ public class ForestGenerator : MonoBehaviour
                 {
                     seed = (Time.time + 2).ToString();
                     ForestGrid left = GenerateNewMapGrid(seed);
-                    forest.Left = left;
                     left.Right = forest;
+                    forest.Left = left;
                 }
                 if (forest.Right == null)
                 {
                     seed = (Time.time + 1).ToString();
                     ForestGrid right = GenerateNewMapGrid(seed);
-                    forest.Right = right;
                     right.Left = forest;
+                    forest.Right = right;
+
 
                 }
                 if(forest.Up == null)
                 {
                     seed = (Time.time + 3).ToString();
                     ForestGrid up = GenerateNewMapGrid(seed);
-                    forest.Up = up;
                     up.Down = forest;
+                    forest.Up = up;
+                    
                 }
                 if(forest.Down == null)
                 {
                     seed = (Time.time + 4).ToString();
                     ForestGrid down = GenerateNewMapGrid(seed);
-                    forest.Down = down;
                     down.Up = forest;
+                    forest.Down = down;
+                    
                 }
 
 
@@ -356,9 +359,9 @@ public class ForestGenerator : MonoBehaviour
                 {
                     if (forest.Map[x, y] == 0)
                     {
-                        forest.Map[x - 1, y] = 2;
+                        //forest.Map[x - 1, y] = 2;
                         //RIGHT-SIDE on screen
-                        //forest.EntryR = new Vector2(x - 1, y);
+                        //forest.EntryR = new Vector2(x - 2, y);
                         forest.EntryR = new Vector2(x , y);
                         x = -1;
                         break;
@@ -375,9 +378,9 @@ public class ForestGenerator : MonoBehaviour
                 {
                     if (forest.Map[x, y] == 0)
                     {
-                        forest.Map[x + 1, y] = 2;
+                        //forest.Map[x + 1, y] = 2;
                         //LEFT-SIDE on screen
-                        //forest.EntryL = new Vector2(x + 1, y);
+                        //forest.EntryL = new Vector2(x + 2, y);
                         forest.EntryL = new Vector2(x , y);
                         x = forest.Width;
                         break;
@@ -394,9 +397,9 @@ public class ForestGenerator : MonoBehaviour
                 {
                     if (forest.Map[x, y] == 0)
                     {
-                        forest.Map[x, y + 1] = 2;
+                        //forest.Map[x, y + 1] = 2;
                         //DOWN-SIDE on screen
-                        //forest.EntryD = new Vector2(x, y + 1);
+                        //forest.EntryD = new Vector2(x, y + 2);
                         forest.EntryD = new Vector2(x , y);
                         y = forest.Height;
                         break;
@@ -414,9 +417,9 @@ public class ForestGenerator : MonoBehaviour
                 {
                     if (forest.Map[x, y - 1] == 0)
                     {
-                        forest.Map[x, y] = 2;
+                        //forest.Map[x, y] = 2;
                         //UP-SIDE on screen
-                        //forest.EntryU = new Vector2(x, y - 1);
+                        //forest.EntryU = new Vector2(x, y - 2);
                         forest.EntryU = new Vector2(x , y);
                         y = -1;
                         break;

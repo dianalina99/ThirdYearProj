@@ -15,6 +15,15 @@ public class DungeonToForestDoor : MonoBehaviour
             GameManagerScript.instance.forestNeedsRegeneration = true;
 
             GameManagerScript.instance.playerIsCurrentlyTeleporting = true;
+
+            //Delete all created dungeon maps, except the first one.
+            foreach(Transform child in GameManagerScript.instance.dungeonMapRef.transform)
+            {
+                if(child.gameObject.name == "Environment(Clone)")
+                {
+                    GameObject.Destroy(child.gameObject);
+                }
+            }
         } 
     }
 }
