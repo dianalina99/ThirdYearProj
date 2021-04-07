@@ -5,16 +5,21 @@ using UnityEngine;
 public class BorderScript : MonoBehaviour
 {
     public string borderDirection;
+    public bool onHold = false;
  
     private void OnTriggerExit2D(Collider2D collision)
     {
         StopAllCoroutines();
+        this.onHold = false;
     }
 
-    private void OnTriggerStay2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Player" && !GameManagerScript.instance.playerIsCurrentlyTeleporting )
+        if (collision.gameObject.tag == "Player" && !GameManagerScript.instance.playerIsCurrentlyTeleporting && !this.onHold )
         {
+            this.onHold = true;
+            Debug.LogWarning("PLAYER HIT BORDER");
+
             StartCoroutine("UnlockAfterSeconds");
         }
             
@@ -51,5 +56,6 @@ public class BorderScript : MonoBehaviour
         }
 
         GameManagerScript.instance.forestNeedsRegeneration = true;
+        this.onHold = false;
     } 
 }

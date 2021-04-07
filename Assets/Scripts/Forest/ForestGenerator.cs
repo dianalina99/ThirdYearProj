@@ -291,7 +291,7 @@ public class ForestGenerator : MonoBehaviour
 
 
                 this.centerMap = forest;
-                
+
             }
         }
         else
@@ -331,9 +331,6 @@ public class ForestGenerator : MonoBehaviour
 
         }
 
-        
-
-
         //Ensure connectivity.
         EnsureConnectivity(this.centerMap, this.centerMap.Right, this.centerMap.Left, this.centerMap.Up, this.centerMap.Down);
 
@@ -361,7 +358,7 @@ public class ForestGenerator : MonoBehaviour
                     {
                         //forest.Map[x - 1, y] = 2;
                         //RIGHT-SIDE on screen
-                        //forest.EntryR = new Vector2(x - 2, y);
+                        
                         forest.EntryR = new Vector2(x , y);
                         x = -1;
                         break;
@@ -380,7 +377,7 @@ public class ForestGenerator : MonoBehaviour
                     {
                         //forest.Map[x + 1, y] = 2;
                         //LEFT-SIDE on screen
-                        //forest.EntryL = new Vector2(x + 2, y);
+                        
                         forest.EntryL = new Vector2(x , y);
                         x = forest.Width;
                         break;
@@ -399,7 +396,7 @@ public class ForestGenerator : MonoBehaviour
                     {
                         //forest.Map[x, y + 1] = 2;
                         //DOWN-SIDE on screen
-                        //forest.EntryD = new Vector2(x, y + 2);
+                        
                         forest.EntryD = new Vector2(x , y);
                         y = forest.Height;
                         break;
@@ -419,7 +416,7 @@ public class ForestGenerator : MonoBehaviour
                     {
                         //forest.Map[x, y] = 2;
                         //UP-SIDE on screen
-                        //forest.EntryU = new Vector2(x, y - 2);
+                        
                         forest.EntryU = new Vector2(x , y);
                         y = -1;
                         break;
