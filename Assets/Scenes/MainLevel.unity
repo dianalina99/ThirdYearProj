@@ -718,7 +718,7 @@ GameObject:
   - component: {fileID: 508401013}
   - component: {fileID: 508401014}
   - component: {fileID: 508401015}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: RightBorder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -799,8 +799,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   borderDirection: right
-  open: 0
-  secondsBuffer: 0
+  onHold: 0
 --- !u!1 &523344522
 GameObject:
   m_ObjectHideFlags: 0
@@ -2007,7 +2006,7 @@ GameObject:
   - component: {fileID: 1090609948}
   - component: {fileID: 1090609949}
   - component: {fileID: 1090609950}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: UpBorder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2088,8 +2087,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   borderDirection: up
-  open: 0
-  secondsBuffer: 0
+  onHold: 0
 --- !u!1 &1199261732
 GameObject:
   m_ObjectHideFlags: 0
@@ -2689,7 +2687,7 @@ GameObject:
   - component: {fileID: 1681304891}
   - component: {fileID: 1681304892}
   - component: {fileID: 1681304893}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: LeftBorder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2770,8 +2768,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   borderDirection: left
-  open: 0
-  secondsBuffer: 0
+  onHold: 0
 --- !u!1 &1713309443
 GameObject:
   m_ObjectHideFlags: 0
@@ -2784,7 +2781,7 @@ GameObject:
   - component: {fileID: 1713309445}
   - component: {fileID: 1713309446}
   - component: {fileID: 1713309447}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: DownBorder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2865,8 +2862,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   borderDirection: down
-  open: 0
-  secondsBuffer: 0
+  onHold: 0
 --- !u!1 &1769399659
 GameObject:
   m_ObjectHideFlags: 0

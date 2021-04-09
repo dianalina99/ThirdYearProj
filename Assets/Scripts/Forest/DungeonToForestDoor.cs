@@ -24,6 +24,9 @@ public class DungeonToForestDoor : MonoBehaviour
                     GameObject.Destroy(child.gameObject);
                 }
             }
+
+            //Update the latest generated dungeon environment variable so player can spawn correctly next time it enters the dungeon.
+           GameManagerScript.instance.latestGeneratedEnvironmentDungeon = GameManagerScript.instance.dungeonMapRef.transform.GetChild(0).transform.gameObject;
         } 
     }
 }

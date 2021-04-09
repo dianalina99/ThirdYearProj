@@ -15,6 +15,7 @@ public class BorderScript : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        Debug.Log("COLLIDING");
         if (collision.gameObject.tag == "Player" && !GameManagerScript.instance.playerIsCurrentlyTeleporting && !this.onHold )
         {
             this.onHold = true;
