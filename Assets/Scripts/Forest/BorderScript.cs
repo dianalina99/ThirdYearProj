@@ -27,7 +27,7 @@ public class BorderScript : MonoBehaviour
 
     IEnumerator UnlockAfterSeconds()
     {
-        yield return new WaitForSecondsRealtime(5f);
+        yield return new WaitForSecondsRealtime(3f);
 
         if (borderDirection == "up")
         {

@@ -160,8 +160,6 @@ public class ForestGenerator : MonoBehaviour
         //Check if player just entered the game or if it came back from a dungeon.
         if (GameManagerScript.instance.previousForestGrid == null)
         {
-            
-            
              //Place entry point somewhere in the middle of the map.
              entryRef = Instantiate(this.forestEntrancePrefab, new Vector3(52, 52, 0), Quaternion.identity) as GameObject;
              entryRef.transform.SetParent(this.transform, false);
@@ -256,41 +254,70 @@ public class ForestGenerator : MonoBehaviour
             {
                 //Check if forest is missing any adjacent forest grids.
                 //If yes, generate them, ensure connectivity and then display.
-                if(forest.Left == null)
+
+                if(forest.Left == null || forest.Right == null || forest.Up == null || forest.Down == null)
                 {
-                    seed = (Time.time + 2).ToString();
-                    ForestGrid left = GenerateNewMapGrid(seed);
-                    left.Right = forest;
-                    forest.Left = left;
-                }
-                if (forest.Right == null)
-                {
-                    seed = (Time.time + 1).ToString();
-                    ForestGrid right = GenerateNewMapGrid(seed);
-                    right.Left = forest;
-                    forest.Right = right;
+                    bool presentR, presentL, presentU, presentD;
+
+                    presentR = presentL = presentU = presentD = true;
+
+                    if (forest.Left == null)
+                    {
+                        presentL = false;
+                        seed = (Time.time + 2).ToString();
+                        ForestGrid left = GenerateNewMapGrid(seed);
+                        left.Right = forest;
+                        forest.Left = left;
+                    }
+                    if (forest.Right == null)
+                    {
+                        presentR = false;
+                        seed = (Time.time + 1).ToString();
+                        ForestGrid right = GenerateNewMapGrid(seed);
+                        right.Left = forest;
+                        forest.Right = right;
 
 
+                    }
+                    if (forest.Up == null)
+                    {
+                        presentU = false;
+                        seed = (Time.time + 3).ToString();
+                        ForestGrid up = GenerateNewMapGrid(seed);
+                        up.Down = forest;
+                        forest.Up = up;
+
+                    }
+                    if (forest.Down == null)
+                    {
+                        presentD = false;
+                        seed = (Time.time + 4).ToString();
+                        ForestGrid down = GenerateNewMapGrid(seed);
+                        down.Up = forest;
+                        forest.Down = down;
+
+                    }
+
+                    //Ensure connectivity.
+                    EnsureConnectivity(forest, forest.Right, forest.Left, forest.Up, forest.Down, presentR, presentL, presentU, presentD);
+
+                    //Detect entry points for each map.
+                    AssignEntryPoints(forest.Right);
+                    AssignEntryPoints(forest.Left);
+                    AssignEntryPoints(forest.Up);
+                    AssignEntryPoints(forest.Down);
+                    AssignEntryPoints(forest);
+
                 }
-                if(forest.Up == null)
-                {
-                    seed = (Time.time + 3).ToString();
-                    ForestGrid up = GenerateNewMapGrid(seed);
-                    up.Down = forest;
-                    forest.Up = up;
-                    
-                }
-                if(forest.Down == null)
-                {
-                    seed = (Time.time + 4).ToString();
-                    ForestGrid down = GenerateNewMapGrid(seed);
-                    down.Up = forest;
-                    forest.Down = down;
-                    
-                }
+
+
 
 
                 this.centerMap = forest;
+
+                //Display maps on screen.
+                DisplayMapOnScreen(this.centerMap, centerMesh);
+
 
             }
         }
@@ -328,21 +355,21 @@ public class ForestGenerator : MonoBehaviour
             GameManagerScript.instance.previousForestGrid = GameManagerScript.instance.currentForestGrid;
             GameManagerScript.instance.currentForestGrid = this.centerMap;
 
+            //Ensure connectivity.
+            EnsureConnectivity(this.centerMap, this.centerMap.Right, this.centerMap.Left, this.centerMap.Up, this.centerMap.Down, false, false, false, false);
 
+            //Detect entry points for each map.
+            AssignEntryPoints(this.centerMap.Right);
+            AssignEntryPoints(this.centerMap.Left);
+            AssignEntryPoints(this.centerMap.Up);
+            AssignEntryPoints(this.centerMap.Down);
+            AssignEntryPoints(this.centerMap);
+
+            //Display maps on screen.
+            DisplayMapOnScreen(this.centerMap, centerMesh);
         }
 
-        //Ensure connectivity.
-        EnsureConnectivity(this.centerMap, this.centerMap.Right, this.centerMap.Left, this.centerMap.Up, this.centerMap.Down);
-
-        //Detect entry points for each map.
-        AssignEntryPoints(this.centerMap.Right);
-        AssignEntryPoints(this.centerMap.Left);
-        AssignEntryPoints(this.centerMap.Up);
-        AssignEntryPoints(this.centerMap.Down);
-        AssignEntryPoints(this.centerMap);
-
-        //Display maps on screen.
-        DisplayMapOnScreen(this.centerMap, centerMesh);
+        
     }
 
     private void AssignEntryPoints(ForestGrid forest)
@@ -428,7 +455,8 @@ public class ForestGenerator : MonoBehaviour
        
     }
 
-    private void EnsureConnectivity(ForestGrid center, ForestGrid right, ForestGrid left, ForestGrid up, ForestGrid down)
+    private void EnsureConnectivity(ForestGrid center, ForestGrid right, ForestGrid left, ForestGrid up, ForestGrid down,
+                                    bool rightWasAlreadyPresent, bool leftWasAlreadyPresent, bool upWasAlreadyPresent, bool downWasAlreadyPresent)
     {
         /* We need to construct tunnels between center map and each adjacent map.
          * To do this, we need to find the closest ground tile to border in each 4 directions for center map.
@@ -778,12 +806,20 @@ public class ForestGenerator : MonoBehaviour
                 if (x < this.width && y >= this.height && y < this.height * 2)
                 {
                     //Up in matrix coord system.
-                    left.Map[x % this.width, y % this.height] = concatenatedMap[x, y];
+                    if(!leftWasAlreadyPresent)
+                    {
+                        left.Map[x % this.width, y % this.height] = concatenatedMap[x, y];
+                    }
+                    
                 }
                 else if (x >= this.width && x < this.width * 2 && y < this.height)
                 {
                     //Left in matrix coord system.
-                    down.Map[x % this.width, y % this.height] = concatenatedMap[x, y];
+                    if(!downWasAlreadyPresent)
+                    {
+                        down.Map[x % this.width, y % this.height] = concatenatedMap[x, y];
+                    }
+                    
                 }
                 else if (x >= this.width && x < this.width * 2 && y >= this.height && y < this.height * 2)
                 {
@@ -792,12 +828,20 @@ public class ForestGenerator : MonoBehaviour
                 else if (x >= this.width && x < this.width * 2 && y >= this.height * 2)
                 {
                     //Right in matrix coord system.
-                    up.Map[x % this.width, y % this.height] = concatenatedMap[x, y];
+                    if(!upWasAlreadyPresent)
+                    {
+                        up.Map[x % this.width, y % this.height] = concatenatedMap[x, y];
+                    }
+                    
                 }
                 else if (x >= this.width * 2 && y >= this.height && y < this.height * 2)
                 {
                     //Down in matrix coord system.
-                    right.Map[x % this.width, y % this.height] = concatenatedMap[x, y];
+                    if(!rightWasAlreadyPresent)
+                    {
+                        right.Map[x % this.width, y % this.height] = concatenatedMap[x, y];
+                    }
+                    
                 }
             }
         }
