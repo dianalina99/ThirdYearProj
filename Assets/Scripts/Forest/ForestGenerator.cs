@@ -439,7 +439,7 @@ public class ForestGenerator : MonoBehaviour
             {
                 for (int x = 0; x < forest.Width; x++)
                 {
-                    if (forest.Map[x, y - 1] == 0)
+                    if (forest.Map[x, y ] == 0)
                     {
                         //forest.Map[x, y] = 2;
                         //UP-SIDE on screen
