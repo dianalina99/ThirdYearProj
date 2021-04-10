@@ -46,6 +46,11 @@ public class GameManagerScript : MonoBehaviour
     public ForestGrid currentForestGrid;
     public ForestGrid previousForestGrid;
 
+
+    #region Enemies Variables
+    public AstarPath pathFinderAI;
+    #endregion
+
     public void Reset()
     {
         dungeonInUse = false;

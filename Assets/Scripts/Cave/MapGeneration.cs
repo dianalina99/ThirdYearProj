@@ -100,6 +100,7 @@ public class MapGeneration : MonoBehaviour
         portalInst2 = Instantiate(portalForestPrefab, new Vector2(-lastRoomPos.x * roomWidth + 2, -lastRoomPos.y * roomHeight), Quaternion.identity) as GameObject;
         portalInst2.transform.SetParent(GameManagerScript.instance.latestGeneratedEnvironmentDungeon.transform, false);
 
+
     }
 
     private Room getRoom(Vector2 pos)

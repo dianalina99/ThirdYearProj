@@ -27,15 +27,15 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - DungeonWalls
   - ForestTransitionBorder
   - Collectibles
   - Interactables
   - Decorations
   - Player
   - MinimapGizmo
-  - 
-  - 
+  - Enemies
+  - Door
   - 
   - 
   - 

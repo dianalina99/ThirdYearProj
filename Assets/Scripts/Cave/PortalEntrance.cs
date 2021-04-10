@@ -22,6 +22,9 @@ public class PortalEntrance : MonoBehaviour
             GameManagerScript.instance.playerIsCurrentlyTeleporting = false;
             Debug.Log("Spawing player in dungeon STOP...");
 
+            //Calculate area for the AI enemies.
+            AstarPath.active.Scan();
+
         }
     }
 }
