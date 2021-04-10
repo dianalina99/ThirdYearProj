@@ -23,15 +23,15 @@ public class FollowPlayer : MonoBehaviour
                 }
 
                 //Right
-                if(newPos.x > 243.302f)
+                if(newPos.x > 241.102f)
                 {
-                    newPos = new Vector3(243.302f, newPos.y, newPos.z);
+                    newPos = new Vector3(241.102f, newPos.y, newPos.z);
                 }
 
                 //Left
-                if(newPos.x < 158.397f)
+                if(newPos.x < 160.68f)
                 {
-                    newPos = new Vector3(158.397f, newPos.y, newPos.z);
+                    newPos = new Vector3(160.68f, newPos.y, newPos.z);
                 }
 
                 //Down
