@@ -17,14 +17,14 @@ public class MapGeneration : MonoBehaviour
     private bool stopCondition;
     public static Vector2 firstRoomPos, lastRoomPos;
 
-    public GameObject environment, parent, portalEntry, portalExit,hiddenRoomDoorPrefab ,environmentPrefab, mainMapRef, minimapRef, baseRoom, hiddenRoom;
+    public GameObject portalEntryPrefab, portalExitPrefab, portalForestPrefab ,hiddenRoomDoorPrefab ,environmentPrefab, mainMapRef, minimapRef, baseRoom, hiddenRoom;
     public int minNoRooms;
     public static bool readyForPlayer = false;
 
     private Dictionary<Vector2, GameObject> gameMap = new Dictionary<Vector2, GameObject>();
     private Dictionary<Vector2, Room> gameObjMap = new Dictionary<Vector2, Room>();
 
-    public static GameObject playerRef, entryPortalRef;
+    public static GameObject entryPortalRef;
 
     private void Init()
     {
@@ -51,22 +51,26 @@ public class MapGeneration : MonoBehaviour
     void Start()
     {
         Init();
-        GenerateMapGrid();
+        //GenerateMapGrid();
+        GameManagerScript.instance.dungeonMapRef = this.gameObject;
     }
 
     private void Update()
     {
-        //Check to see if new map needs to be generated.
-        if (PortalExit.generateNewMap)
+        if(GameManagerScript.instance.dungeonInUse && GameManagerScript.instance.dungeonNeedsRegeneration)
         {
-            GenerateNewMap();
-            PortalExit.generateNewMap = false;
+            Debug.Log("Generating dungeon...");
+
+            GameManagerScript.instance.Reset();
+            GameManagerScript.instance.dungeonInUse = true;
+
+            GenerateNewMap(); 
         }
     }
 
     private void DrawMap()
     {
-        GameObject portalInst;
+        GameObject portalInst1, portalInst2;
         bool temp;
 
         for (int i = 0; i <= 3; i++)
@@ -83,12 +87,18 @@ public class MapGeneration : MonoBehaviour
                 DrawAndGenerateRoom(map[i, j], i * roomHeight, j * roomWidth, temp);
             }
 
-        //Place portal in the first room and last one.
-        entryPortalRef = Instantiate(portalEntry, new Vector2(-firstRoomPos.x * roomWidth , firstRoomPos.y), Quaternion.identity) as GameObject;
-        entryPortalRef.transform.SetParent(environment.transform, false);
+        //Instantiate entry point.
+        GameManagerScript.instance.latestPlayerEntryPoint = Instantiate(portalEntryPrefab, new Vector2(-firstRoomPos.x * roomWidth, firstRoomPos.y), Quaternion.identity) as GameObject;
+        GameManagerScript.instance.latestPlayerEntryPoint.transform.SetParent(GameManagerScript.instance.latestGeneratedEnvironmentDungeon.transform, false);
 
-        portalInst = Instantiate(portalExit, new Vector2(-lastRoomPos.x * roomWidth , -lastRoomPos.y * roomHeight), Quaternion.identity) as GameObject;
-        portalInst.transform.SetParent(environment.transform, false);
+        //Instantiate portal to next dungeon room.
+        portalInst1 = Instantiate(portalExitPrefab, new Vector2(-lastRoomPos.x * roomWidth , -lastRoomPos.y * roomHeight), Quaternion.identity) as GameObject;
+        portalInst1.transform.SetParent(GameManagerScript.instance.latestGeneratedEnvironmentDungeon.transform, false);
+
+        //Instantiate portal to forest.
+        //portalInst2 = Instantiate(portalForestPrefab, GameManagerScript.instance.latestGeneratedEnvironmentDungeon.transform.GetChild(4).transform.position, Quaternion.identity) as GameObject;
+        portalInst2 = Instantiate(portalForestPrefab, new Vector2(-lastRoomPos.x * roomWidth + 2, -lastRoomPos.y * roomHeight), Quaternion.identity) as GameObject;
+        portalInst2.transform.SetParent(GameManagerScript.instance.latestGeneratedEnvironmentDungeon.transform, false);
 
     }
 
@@ -564,7 +574,7 @@ public class MapGeneration : MonoBehaviour
             room = Instantiate(hiddenRoom, position, Quaternion.identity) as GameObject;
         }
         
-        room.transform.SetParent(parent.transform, false);
+        room.transform.SetParent(GameManagerScript.instance.latestGeneratedEnvironmentDungeon.transform.GetChild(0).gameObject.transform, false);
 
         gameMap.Add(position, room);
 
@@ -575,8 +585,6 @@ public class MapGeneration : MonoBehaviour
 
     private void GenerateMapGrid()
     {
-       
-        readyForPlayer = false;
 
         //Pick first room. It is always 1.
         roomPos = rand.Next(0, 4);
@@ -759,9 +767,6 @@ public class MapGeneration : MonoBehaviour
         //PrintMap();
         DrawMap();
 
-        //Map is ready to spawn a player.
-        readyForPlayer = true;
-        
     }
 
 
@@ -805,22 +810,36 @@ public class MapGeneration : MonoBehaviour
         //Reset map matrix and delete all rooms.
         Init();
 
-        GameObject envInst, spawnPoint;
+        GameObject spawnPoint;
 
-        spawnPoint = environment.transform.GetChild(3).gameObject;
 
+        spawnPoint = GameManagerScript.instance.latestGeneratedEnvironmentDungeon.transform.GetChild(3).gameObject;
+        
         //Instantiate new environment.
-        envInst = Instantiate(environmentPrefab, spawnPoint.transform.position, Quaternion.identity) as GameObject;
-        envInst.transform.SetParent(mainMapRef.transform, true);
-
-        this.environment = envInst;
-        this.parent = environment.transform.GetChild(0).gameObject;
+        GameManagerScript.instance.latestGeneratedEnvironmentDungeon = Instantiate(environmentPrefab, spawnPoint.transform.position, Quaternion.identity) as GameObject;
+        GameManagerScript.instance.latestGeneratedEnvironmentDungeon.transform.SetParent(GameManagerScript.instance.dungeonMapRef.transform, true);
 
         //Generate new room
         GenerateMapGrid();
 
+        Debug.Log("Dungeon generated, ready for player...");
+        GameManagerScript.instance.dungeonReadyForPlayer = true;
+
         //Show new map on the minimap view.
-        minimapRef.transform.position = new Vector3(minimapRef.transform.position.x, minimapRef.transform.position.y - 4 * roomHeight, minimapRef.transform.position.z);
+        GameManagerScript.instance.minimapCamera.orthographicSize = 20;
+        if(GameManagerScript.instance.minimapRef.transform.position.x > 1000)
+        {
+            GameManagerScript.instance.minimapRef.transform.position = new Vector3(GameManagerScript.instance.minimapRef.transform.position.x - 200,
+                                                                                GameManagerScript.instance.minimapRef.transform.position.y - 4 * roomHeight,
+                                                                                GameManagerScript.instance.minimapRef.transform.position.z);
+        }
+        else
+        {
+            GameManagerScript.instance.minimapRef.transform.position = new Vector3(GameManagerScript.instance.minimapRef.transform.position.x,
+                                                                               GameManagerScript.instance.minimapRef.transform.position.y - 4 * roomHeight,
+                                                                               GameManagerScript.instance.minimapRef.transform.position.z);
+        }
+        
 
         
     }

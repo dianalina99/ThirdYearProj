@@ -17,7 +17,6 @@ public class PlayerStats : CharacterStats
 
     #endregion
 
-
     private StatUI healthStatUI;
     private StatUI strengthStatUI;
     private StatUI protectionStatUI;
