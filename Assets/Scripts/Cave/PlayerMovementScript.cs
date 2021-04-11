@@ -8,7 +8,8 @@ public class PlayerMovementScript : MonoBehaviour
     public Rigidbody2D player;
     public Animator animator;
     public Camera cam;
-    public LayerMask interactablesMask, collectiblesMask;
+    public LayerMask interactablesMask, collectiblesMask, enemyLayer;
+    public int attackRange;
 
     Vector2 movement;
     public Interactable focus;
@@ -41,8 +42,26 @@ public class PlayerMovementScript : MonoBehaviour
         //Handle mouse inputs.
         HandleInteractables();
 
-        //Collecting items is managed by ItemCollect.cs which extends Collecticle.cs.
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            Attack();
+        }
   
+    }
+
+    private void Attack()
+    {
+        //Play attack animation
+        animator.SetTrigger("Attack");
+
+        //Detect enemies in range.
+        Collider2D[] enemies =  Physics2D.OverlapCircleAll(this.transform.position, attackRange, enemyLayer );
+
+        //Damage enemies detected previously.
+        foreach(Collider2D enemy in enemies)
+        {
+            enemy.gameObject.GetComponent<EnemyStats>().TakeDamage(GameManagerScript.instance.playerRef.GetComponent<PlayerStats>().strength.GetValue());
+        }
     }
 
     private void HandleInteractables()

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class HiddenDoorCollision : MonoBehaviour
 {
+    public Item keyItemRef;
     private Room roomReference;
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -16,7 +17,26 @@ public class HiddenDoorCollision : MonoBehaviour
         if(collision.gameObject.tag == "Player")
         {
             //Check if the player has required key.
-            Destroy(this.gameObject);
+            if(Inventory.instance.itemAtIndex.ContainsValue(keyItemRef))
+            {
+                //Remove the key from inventory.
+                int index = -1;
+                Inventory.instance.indexForItem.TryGetValue(keyItemRef, out index);
+
+                if(index != -1)
+                {
+                    Item key;
+                    Inventory.instance.itemAtIndex.TryGetValue(index, out key);
+
+                    if(key != null)
+                    {
+                        key.RemoveFromInventory();
+                    }
+                }
+
+                Destroy(this.gameObject);
+            }
+            
         }
         
     }

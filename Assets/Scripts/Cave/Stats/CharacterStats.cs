@@ -14,14 +14,7 @@ public class CharacterStats : MonoBehaviour
         currentHealth = maxHealth;
     }
 
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.T))
-        {
-            TakeDamage(10);
-        }
-    }
-
+   
     //Overwritten by player.
     public virtual void TakeDamage(int damage)
     {

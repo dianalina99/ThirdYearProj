@@ -84,6 +84,13 @@ public class MapGeneration : MonoBehaviour
                 {
                     temp = true;
                 }
+
+                //Count the number of 0-type rooms.
+                if(map[i,j] == 0)
+                {
+                    GameManagerScript.instance.NoOfHiddenRooms++;
+                }
+
                 DrawAndGenerateRoom(map[i, j], i * roomHeight, j * roomWidth, temp);
             }
 
@@ -586,6 +593,9 @@ public class MapGeneration : MonoBehaviour
 
     private void GenerateMapGrid()
     {
+        //Reset the counter for 0-type rooms first.
+        GameManagerScript.instance.NoOfHiddenRooms = 0;
+        GameManagerScript.instance.NoOfAvailableKeys = 0;
 
         //Pick first room. It is always 1.
         roomPos = rand.Next(0, 4);

@@ -22,6 +22,7 @@ public class GameManagerScript : MonoBehaviour
     // Start is called before the first frame update
     public GameObject playerRef;
     public GameObject playerPrefab;
+    public GameObject keyPrefab;
 
     public bool dungeonReadyForPlayer = false;
     public bool forestReadyForPlayer = false;
@@ -49,6 +50,8 @@ public class GameManagerScript : MonoBehaviour
 
     #region Enemies Variables
     public AstarPath pathFinderAI;
+    public int NoOfHiddenRooms = 0;
+    public int NoOfAvailableKeys = 0;
     #endregion
 
     public void Reset()
@@ -63,4 +66,6 @@ public class GameManagerScript : MonoBehaviour
 
        // playerIsCurrentlyTeleporting = false;
     }
+
+    
 }
