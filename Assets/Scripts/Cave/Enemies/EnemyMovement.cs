@@ -9,6 +9,7 @@ public class EnemyMovement : MonoBehaviour
     public float speed = 200f;
     public float nextWaypointDistance = 3f;
     public Transform graphics;
+    public float triggerAreaRadius;
 
     private bool hasTarget = false;
     private Path path;
@@ -17,6 +18,8 @@ public class EnemyMovement : MonoBehaviour
     private Seeker seeker;
     private Rigidbody2D rb;
 
+    private float distanceToPlayer;
+
 
     // Start is called before the first frame update
     void Start()
@@ -24,14 +27,19 @@ public class EnemyMovement : MonoBehaviour
         seeker = GetComponent<Seeker>();
         rb = GetComponent<Rigidbody2D>();
 
-        InvokeRepeating("UpdatePath", 0f, .5f);   
+        InvokeRepeating("UpdatePath", 0f, .5f);
+
+        distanceToPlayer = 100;
     }
 
     void UpdatePath()
     {
-        if(GameManagerScript.instance.dungeonInUse)
+        if(GameManagerScript.instance.dungeonInUse && this.hasTarget)
         {
-            if (seeker.IsDone())
+            //Calculate distance to player.
+            distanceToPlayer = Vector3.Distance(rb.transform.position, target.position);
+
+            if (seeker.IsDone() && distanceToPlayer <= triggerAreaRadius)
             {
                 //AstarPath.active.Scan();
                 seeker.StartPath(rb.position, target.position, OnPathComplete);

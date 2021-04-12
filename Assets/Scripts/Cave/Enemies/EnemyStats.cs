@@ -7,6 +7,7 @@ public class EnemyStats : CharacterStats
     private StatUI healthUI;
     private PlayerStats playerStats;
     public bool hasKey = false;
+    public float attackDistance;
     
 
     void Start()
@@ -26,17 +27,16 @@ public class EnemyStats : CharacterStats
     private void AddKey()
     {
         //hasKey = true;
-        bool hasKey = (Random.value > 0.5f);
+        this.hasKey = (Random.value > 0.5f);
 
-        if(hasKey && GameManagerScript.instance.NoOfAvailableKeys < GameManagerScript.instance.NoOfHiddenRooms)
+        if(GameManagerScript.instance.NoOfAvailableKeys >= GameManagerScript.instance.NoOfLockedDoors)
+        {
+            this.hasKey = false;
+        }
+        else if(this.hasKey && GameManagerScript.instance.NoOfAvailableKeys < GameManagerScript.instance.NoOfLockedDoors)
         {
             GameManagerScript.instance.NoOfAvailableKeys++;
         }
-        else if(GameManagerScript.instance.NoOfAvailableKeys > GameManagerScript.instance.NoOfHiddenRooms)
-        {
-            hasKey = false;
-        }
-
     }
 
     public override void TakeDamage(int damage)
@@ -55,7 +55,7 @@ public class EnemyStats : CharacterStats
 
             distance = Vector3.Distance(this.transform.position, GameManagerScript.instance.playerRef.transform.position);
 
-            if (distance < 2f)
+            if (distance < attackDistance)
             {
                 GameManagerScript.instance.playerRef.GetComponent<PlayerStats>().TakeDamage(this.strength.GetValue());
             }
@@ -65,7 +65,7 @@ public class EnemyStats : CharacterStats
 
     public override void Die()
     {
-        base.Die();
+          base.Die();
 
         //Drop key on the ground if one is equiped.
         if(hasKey)
@@ -75,7 +75,6 @@ public class EnemyStats : CharacterStats
         }
 
         //Add some graphics to this.
-
         GameObject.Destroy(this.gameObject);
     }
     

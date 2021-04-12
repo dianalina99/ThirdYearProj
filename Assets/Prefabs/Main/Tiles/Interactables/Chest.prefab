@@ -60,11 +60,10 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -217,11 +216,10 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -374,11 +372,10 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -531,11 +528,10 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -688,11 +684,10 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -845,11 +840,10 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1002,11 +996,10 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1159,11 +1152,10 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1316,11 +1308,10 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1473,11 +1464,10 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: '  Chest'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1634,17 +1624,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 3900942676090634805}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.4245283, g: 0.21205176, b: 0.12615699, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 21300000, guid: d72135ce7bfa724409e6b8e1345cffc7, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
@@ -1654,6 +1643,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!114 &3900942676090634803
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1663,7 +1653,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3900942676090634805}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -2095666955, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
@@ -1733,17 +1723,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 3900942676758940099}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 21300000, guid: d72135ce7bfa724409e6b8e1345cffc7, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
@@ -1753,6 +1742,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &3900942677069539151
 GameObject:
   m_ObjectHideFlags: 0
@@ -1868,7 +1858,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3900942677486457195}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_UiScaleMode: 1
@@ -1890,7 +1880,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3900942677486457195}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1301386320, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreReversedGraphics: 1
@@ -1949,6 +1939,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1960,6 +1951,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -2061,6 +2053,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8c6ed9808fb839040a8021a4ca8df8e8, type: 2}
   - {fileID: 11400000, guid: d5111424ca8c2494e88040ec193978b6, type: 2}
   - {fileID: 11400000, guid: ac77bfe7446faaa4b9f987af6c9851ac, type: 2}
+  - {fileID: 11400000, guid: 5bbf12f8c49ffa148ab077be2cbbb56f, type: 2}
+  - {fileID: 11400000, guid: 5bbf12f8c49ffa148ab077be2cbbb56f, type: 2}
+  - {fileID: 11400000, guid: 5bbf12f8c49ffa148ab077be2cbbb56f, type: 2}
+  - {fileID: 11400000, guid: 738e29fa2ce7dc1479bd2335de6ed8a2, type: 2}
+  - {fileID: 11400000, guid: 738e29fa2ce7dc1479bd2335de6ed8a2, type: 2}
+  - {fileID: 11400000, guid: 7ac226196f29b354ca1b9533140e4658, type: 2}
 --- !u!114 &1651623421421865594
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2086,6 +2084,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: ChestSlot (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
+        type: 3}
+      propertyPath: chest
+      value: 
+      objectReference: {fileID: 4450449864156903371}
+    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
+        type: 3}
+      propertyPath: noOfItems
+      value: 
+      objectReference: {fileID: 537528234}
     - target: {fileID: 2309743851572277552, guid: 8eb3482a257925b42aea3965e547c92c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2191,16 +2199,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
-        type: 3}
-      propertyPath: chest
-      value: 
-      objectReference: {fileID: 4450449864156903371}
-    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
-        type: 3}
-      propertyPath: noOfItems
-      value: 
-      objectReference: {fileID: 537528234}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8eb3482a257925b42aea3965e547c92c, type: 3}
 --- !u!224 &2309743851606548786 stripped
@@ -2221,6 +2219,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: ChestSlot (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
+        type: 3}
+      propertyPath: chest
+      value: 
+      objectReference: {fileID: 4450449864156903371}
+    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
+        type: 3}
+      propertyPath: noOfItems
+      value: 
+      objectReference: {fileID: 1121099653}
     - target: {fileID: 2309743851572277552, guid: 8eb3482a257925b42aea3965e547c92c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2326,16 +2334,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
-        type: 3}
-      propertyPath: chest
-      value: 
-      objectReference: {fileID: 4450449864156903371}
-    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
-        type: 3}
-      propertyPath: noOfItems
-      value: 
-      objectReference: {fileID: 1121099653}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8eb3482a257925b42aea3965e547c92c, type: 3}
 --- !u!224 &2309743851674145482 stripped
@@ -2356,6 +2354,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: ChestSlot (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
+        type: 3}
+      propertyPath: chest
+      value: 
+      objectReference: {fileID: 4450449864156903371}
+    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
+        type: 3}
+      propertyPath: noOfItems
+      value: 
+      objectReference: {fileID: 1706351695}
     - target: {fileID: 2309743851572277552, guid: 8eb3482a257925b42aea3965e547c92c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2461,16 +2469,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
-        type: 3}
-      propertyPath: chest
-      value: 
-      objectReference: {fileID: 4450449864156903371}
-    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
-        type: 3}
-      propertyPath: noOfItems
-      value: 
-      objectReference: {fileID: 1706351695}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8eb3482a257925b42aea3965e547c92c, type: 3}
 --- !u!224 &2309743851664508827 stripped
@@ -2491,6 +2489,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: ChestSlot (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
+        type: 3}
+      propertyPath: chest
+      value: 
+      objectReference: {fileID: 4450449864156903371}
+    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
+        type: 3}
+      propertyPath: noOfItems
+      value: 
+      objectReference: {fileID: 1034825099}
     - target: {fileID: 2309743851572277552, guid: 8eb3482a257925b42aea3965e547c92c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2596,16 +2604,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
-        type: 3}
-      propertyPath: chest
-      value: 
-      objectReference: {fileID: 4450449864156903371}
-    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
-        type: 3}
-      propertyPath: noOfItems
-      value: 
-      objectReference: {fileID: 1034825099}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8eb3482a257925b42aea3965e547c92c, type: 3}
 --- !u!224 &2309743851157464807 stripped
@@ -2626,6 +2624,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: ChestSlot (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
+        type: 3}
+      propertyPath: chest
+      value: 
+      objectReference: {fileID: 4450449864156903371}
+    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
+        type: 3}
+      propertyPath: noOfItems
+      value: 
+      objectReference: {fileID: 1995674262}
     - target: {fileID: 2309743851572277552, guid: 8eb3482a257925b42aea3965e547c92c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2731,16 +2739,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
-        type: 3}
-      propertyPath: chest
-      value: 
-      objectReference: {fileID: 4450449864156903371}
-    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
-        type: 3}
-      propertyPath: noOfItems
-      value: 
-      objectReference: {fileID: 1995674262}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8eb3482a257925b42aea3965e547c92c, type: 3}
 --- !u!224 &2309743851238431735 stripped
@@ -2761,6 +2759,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: ChestSlot (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
+        type: 3}
+      propertyPath: chest
+      value: 
+      objectReference: {fileID: 4450449864156903371}
+    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
+        type: 3}
+      propertyPath: noOfItems
+      value: 
+      objectReference: {fileID: 1600823173}
     - target: {fileID: 2309743851572277552, guid: 8eb3482a257925b42aea3965e547c92c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2866,16 +2874,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
-        type: 3}
-      propertyPath: chest
-      value: 
-      objectReference: {fileID: 4450449864156903371}
-    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
-        type: 3}
-      propertyPath: noOfItems
-      value: 
-      objectReference: {fileID: 1600823173}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8eb3482a257925b42aea3965e547c92c, type: 3}
 --- !u!224 &2309743852652455621 stripped
@@ -2896,6 +2894,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: ChestSlot (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
+        type: 3}
+      propertyPath: chest
+      value: 
+      objectReference: {fileID: 4450449864156903371}
+    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
+        type: 3}
+      propertyPath: noOfItems
+      value: 
+      objectReference: {fileID: 944450811}
     - target: {fileID: 2309743851572277552, guid: 8eb3482a257925b42aea3965e547c92c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3001,16 +3009,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
-        type: 3}
-      propertyPath: chest
-      value: 
-      objectReference: {fileID: 4450449864156903371}
-    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
-        type: 3}
-      propertyPath: noOfItems
-      value: 
-      objectReference: {fileID: 944450811}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8eb3482a257925b42aea3965e547c92c, type: 3}
 --- !u!224 &2309743852133661142 stripped
@@ -3031,6 +3029,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: ChestSlot (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
+        type: 3}
+      propertyPath: chest
+      value: 
+      objectReference: {fileID: 4450449864156903371}
+    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
+        type: 3}
+      propertyPath: noOfItems
+      value: 
+      objectReference: {fileID: 573130394}
     - target: {fileID: 2309743851572277552, guid: 8eb3482a257925b42aea3965e547c92c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3136,16 +3144,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
-        type: 3}
-      propertyPath: chest
-      value: 
-      objectReference: {fileID: 4450449864156903371}
-    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
-        type: 3}
-      propertyPath: noOfItems
-      value: 
-      objectReference: {fileID: 573130394}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8eb3482a257925b42aea3965e547c92c, type: 3}
 --- !u!224 &2309743852587575161 stripped
@@ -3166,6 +3164,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: ChestSlot
       objectReference: {fileID: 0}
+    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
+        type: 3}
+      propertyPath: chest
+      value: 
+      objectReference: {fileID: 4450449864156903371}
+    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
+        type: 3}
+      propertyPath: noOfItems
+      value: 
+      objectReference: {fileID: 159818343}
     - target: {fileID: 2309743851572277552, guid: 8eb3482a257925b42aea3965e547c92c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3271,16 +3279,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
-        type: 3}
-      propertyPath: chest
-      value: 
-      objectReference: {fileID: 4450449864156903371}
-    - target: {fileID: 2309743851572277488, guid: 8eb3482a257925b42aea3965e547c92c,
-        type: 3}
-      propertyPath: noOfItems
-      value: 
-      objectReference: {fileID: 159818343}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8eb3482a257925b42aea3965e547c92c, type: 3}
 --- !u!224 &27769830145142367 stripped

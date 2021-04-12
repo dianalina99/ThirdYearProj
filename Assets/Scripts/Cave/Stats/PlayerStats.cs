@@ -40,8 +40,8 @@ public class PlayerStats : CharacterStats
     void InitializeSliders()
     {
         healthStatUI.SetAllSliderValues(0, maxHealth, maxHealth - 2);
-        strengthStatUI.SetAllSliderValues(0, 10, 0);
-        protectionStatUI.SetAllSliderValues(0, 10,0);
+        strengthStatUI.SetAllSliderValues(10, 30, 0);
+        protectionStatUI.SetAllSliderValues(0, 30,0);
     }
 
     void OnEquipmentChanged( Equipment newItem, Equipment oldItem)

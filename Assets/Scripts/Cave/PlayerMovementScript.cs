@@ -9,7 +9,7 @@ public class PlayerMovementScript : MonoBehaviour
     public Animator animator;
     public Camera cam;
     public LayerMask interactablesMask, collectiblesMask, enemyLayer;
-    public int attackRange;
+    public float attackRange;
 
     Vector2 movement;
     public Interactable focus;
@@ -44,6 +44,7 @@ public class PlayerMovementScript : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.Space))
         {
+            // StartCoroutine("AttackWithCooldown");
             Attack();
         }
   
@@ -62,6 +63,15 @@ public class PlayerMovementScript : MonoBehaviour
         {
             enemy.gameObject.GetComponent<EnemyStats>().TakeDamage(GameManagerScript.instance.playerRef.GetComponent<PlayerStats>().strength.GetValue());
         }
+
+        //Cooldown for half a second.
+
+    }
+
+    private IEnumerator AttackWithCooldown()
+    {
+        Attack();
+        return new WaitForSecondsRealtime(2f);
     }
 
     private void HandleInteractables()

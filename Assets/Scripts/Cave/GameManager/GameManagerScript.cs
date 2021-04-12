@@ -50,7 +50,7 @@ public class GameManagerScript : MonoBehaviour
 
     #region Enemies Variables
     public AstarPath pathFinderAI;
-    public int NoOfHiddenRooms = 0;
+    public int NoOfLockedDoors = 0;
     public int NoOfAvailableKeys = 0;
     #endregion
 

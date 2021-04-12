@@ -85,12 +85,6 @@ public class MapGeneration : MonoBehaviour
                     temp = true;
                 }
 
-                //Count the number of 0-type rooms.
-                if(map[i,j] == 0)
-                {
-                    GameManagerScript.instance.NoOfHiddenRooms++;
-                }
-
                 DrawAndGenerateRoom(map[i, j], i * roomHeight, j * roomWidth, temp);
             }
 
@@ -191,6 +185,9 @@ public class MapGeneration : MonoBehaviour
                     GameObject door = Instantiate(hiddenRoomDoorPrefab, new Vector3( child.position.x + 1, child.position.y + 0.5f, child.position.z), Quaternion.identity) as GameObject;
                     door.transform.SetParent(room.transform, true);
 
+                    //Increase the number of doors in the game manager.
+                    GameManagerScript.instance.NoOfLockedDoors++;
+
                     placedRoomRight = true;
                 
                 }
@@ -201,6 +198,9 @@ public class MapGeneration : MonoBehaviour
                     //Place door.
                     GameObject door = Instantiate(hiddenRoomDoorPrefab, new Vector3(child.position.x - 1 , child.position.y - 0.5f, child.position.z), Quaternion.identity) as GameObject;
                     door.transform.SetParent(room.transform, true);
+
+                    //Increase the number of doors in the game manager.
+                    GameManagerScript.instance.NoOfLockedDoors++;
 
                     placedRoomLeft = true;
 
@@ -594,7 +594,7 @@ public class MapGeneration : MonoBehaviour
     private void GenerateMapGrid()
     {
         //Reset the counter for 0-type rooms first.
-        GameManagerScript.instance.NoOfHiddenRooms = 0;
+        GameManagerScript.instance.NoOfLockedDoors = 0;
         GameManagerScript.instance.NoOfAvailableKeys = 0;
 
         //Pick first room. It is always 1.
