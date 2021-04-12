@@ -15,10 +15,11 @@ public class ActiveBarSlot : MonoBehaviour
         if(Input.GetKeyDown(activeKey))
         {
             //Use item from that slot.
-            item.Use();
+            if (item != null)
+            {
+                item.Use();
 
-            //Update UI.
-
+            }
         }
     }
 
