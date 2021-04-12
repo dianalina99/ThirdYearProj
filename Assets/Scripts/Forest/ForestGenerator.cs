@@ -139,11 +139,37 @@ public class ForestGenerator : MonoBehaviour
         //Place entry and exit points.
         if( GameManagerScript.instance.currentForestGrid.ExitToDungeon == new Vector2(-1,-1))
         {
-            //Pick a random place in walkable area.
+            bool stopCondition = false;
             System.Random rand = new System.Random();
-            int randomIndex = rand.Next(0, GameManagerScript.instance.currentForestGrid.WalkableArea.Count);
 
+            //Pick a random place in walkable area.
+            int randomIndex = rand.Next(0, GameManagerScript.instance.currentForestGrid.WalkableArea.Count);
             Vector2 spawnPoint = GameManagerScript.instance.currentForestGrid.WalkableArea[randomIndex];
+
+
+            while (!stopCondition)
+            {
+                //Check neighbours too as portal has an area of more than 1 unit.
+                bool left, right, up, down;
+
+                left = GameManagerScript.instance.currentForestGrid.WalkableArea.Contains(new Vector2(spawnPoint.x - 1, spawnPoint.y));
+                right = GameManagerScript.instance.currentForestGrid.WalkableArea.Contains(new Vector2(spawnPoint.x + 1, spawnPoint.y));
+                up = GameManagerScript.instance.currentForestGrid.WalkableArea.Contains(new Vector2(spawnPoint.x, spawnPoint.y + 1));
+                down = GameManagerScript.instance.currentForestGrid.WalkableArea.Contains(new Vector2(spawnPoint.x, spawnPoint.y - 1));
+
+                if (left && right && up && down)
+                {
+                    stopCondition = true;
+                }
+                else
+                {
+                    randomIndex = rand.Next(0, GameManagerScript.instance.currentForestGrid.WalkableArea.Count);
+                    spawnPoint = GameManagerScript.instance.currentForestGrid.WalkableArea[randomIndex];
+                }
+
+            }
+            
+
 
             //Multiply spawn point by 2 because the square cell size of the mesh is 2 in our case.
             exitRef = Instantiate(this.portalToDungeonPrefab, spawnPoint * 2, Quaternion.identity) as GameObject;
@@ -683,15 +709,29 @@ public class ForestGenerator : MonoBehaviour
 
         #region Draw Tunnels to connect adjacent map grids
 
-        
-
         Vector2 temp = centerUp;
 
+        System.Random rand = new System.Random();
+
         //CenterUp
-        while(temp.y < upDown.y)
+        while (temp.y < upDown.y)
         {
             temp.y++;
             concatenatedMap[(int)temp.x, (int)temp.y] = groundTunnelValue;
+
+            //Add small deviation so final shape of the tunnel is not a straight line.
+            bool deviateLeft = (0.5 < rand.NextDouble());
+            bool deviateRight = (0.5 < rand.NextDouble());
+            if (deviateLeft)
+            {
+                concatenatedMap[(int)temp.x + 1, (int)temp.y] = groundTunnelValue;
+            }
+
+            if (deviateRight)
+            {
+                concatenatedMap[(int)temp.x - 1, (int)temp.y] = groundTunnelValue;
+            }
+
         }
         
         if(upDown.x < temp.x)
@@ -701,6 +741,19 @@ public class ForestGenerator : MonoBehaviour
                 temp.x--;
                 concatenatedMap[(int)temp.x, (int)temp.y] = groundTunnelValue;
 
+                //Add small deviation so final shape of the tunnel is not a straight line.
+                bool deviateUp = (0.5 < rand.NextDouble());
+                bool deviateDown = (0.5 < rand.NextDouble());
+                if (deviateUp)
+                {
+                    concatenatedMap[(int)temp.x , (int)temp.y + 1] = groundTunnelValue;
+                }
+
+                if (deviateDown)
+                {
+                    concatenatedMap[(int)temp.x, (int)temp.y- 1] = groundTunnelValue;
+                }
+
             } while (upDown.x < temp.x);
         }
         else if (upDown.x > temp.x)
@@ -709,6 +762,19 @@ public class ForestGenerator : MonoBehaviour
             {
                 concatenatedMap[(int)temp.x, (int)temp.y] = groundTunnelValue;
                 temp.x++;
+
+                //Add small deviation so final shape of the tunnel is not a straight line.
+                bool deviateUp = (0.5 < rand.NextDouble());
+                bool deviateDown = (0.5 < rand.NextDouble());
+                if (deviateUp)
+                {
+                    concatenatedMap[(int)temp.x, (int)temp.y + 1] = groundTunnelValue;
+                }
+
+                if (deviateDown)
+                {
+                    concatenatedMap[(int)temp.x, (int)temp.y - 1] = groundTunnelValue;
+                }
             } while (upDown.x > temp.x);
         }
 
@@ -719,6 +785,21 @@ public class ForestGenerator : MonoBehaviour
         {
             temp.y--;
             concatenatedMap[(int)temp.x, (int)temp.y] = groundTunnelValue;
+
+            //Add small deviation so final shape of the tunnel is not a straight line.
+
+            
+            bool deviateLeft = (0.5f < rand.NextDouble());
+            bool deviateRight = (0.5f < rand.NextDouble());
+            if (deviateLeft)
+            {
+                concatenatedMap[(int)temp.x + 1, (int)temp.y] = groundTunnelValue;
+            }
+
+            if (deviateRight)
+            {
+                concatenatedMap[(int)temp.x - 1, (int)temp.y] = groundTunnelValue;
+            } 
         }
         if (downUp.x < temp.x)
         {
@@ -726,6 +807,19 @@ public class ForestGenerator : MonoBehaviour
             {
                 temp.x--;
                 concatenatedMap[(int)temp.x, (int)temp.y] = groundTunnelValue;
+
+                //Add small deviation so final shape of the tunnel is not a straight line.
+                bool deviateUp = (0.5 < rand.NextDouble());
+                bool deviateDown = (0.5 < rand.NextDouble());
+                if (deviateUp)
+                {
+                    concatenatedMap[(int)temp.x, (int)temp.y + 1] = groundTunnelValue;
+                }
+
+                if (deviateDown)
+                {
+                    concatenatedMap[(int)temp.x, (int)temp.y - 1] = groundTunnelValue;
+                }
 
             } while (downUp.x < temp.x);
         }
@@ -735,6 +829,19 @@ public class ForestGenerator : MonoBehaviour
             {
                 concatenatedMap[(int)temp.x, (int)temp.y] = groundTunnelValue;
                 temp.x++;
+
+                //Add small deviation so final shape of the tunnel is not a straight line.
+                bool deviateUp = (0.5 < rand.NextDouble());
+                bool deviateDown = (0.5 < rand.NextDouble());
+                if (deviateUp)
+                {
+                    concatenatedMap[(int)temp.x, (int)temp.y + 1] = groundTunnelValue;
+                }
+
+                if (deviateDown)
+                {
+                    concatenatedMap[(int)temp.x, (int)temp.y - 1] = groundTunnelValue;
+                }
             } while (downUp.x > temp.x);
         }
 
@@ -745,6 +852,19 @@ public class ForestGenerator : MonoBehaviour
         {
             temp.x--;
             concatenatedMap[(int)temp.x, (int)temp.y] = groundTunnelValue;
+
+            //Add small deviation so final shape of the tunnel is not a straight line.
+            bool deviateUp = (0.5 < rand.NextDouble());
+            bool deviateDown = (0.5 < rand.NextDouble());
+            if (deviateUp)
+            {
+                concatenatedMap[(int)temp.x, (int)temp.y + 1] = groundTunnelValue;
+            }
+
+            if (deviateDown)
+            {
+                concatenatedMap[(int)temp.x, (int)temp.y - 1] = groundTunnelValue;
+            }
         }
         if(leftRight.y < temp.y)
         {
@@ -752,7 +872,21 @@ public class ForestGenerator : MonoBehaviour
             {
                 temp.y--;
                 concatenatedMap[(int)temp.x, (int)temp.y] = groundTunnelValue;
+
+                //Add small deviation so final shape of the tunnel is not a straight line.
+                bool deviateLeft = (0.5 < rand.NextDouble());
+                bool deviateRight = (0.5 < rand.NextDouble());
+                if (deviateLeft)
+                {
+                    concatenatedMap[(int)temp.x + 1, (int)temp.y] = groundTunnelValue;
+                }
+
+                if (deviateRight)
+                {
+                    concatenatedMap[(int)temp.x - 1, (int)temp.y] = groundTunnelValue;
+                }
             } while (leftRight.y < temp.y);
+
          
         }
         else if(leftRight.y > temp.y)
@@ -761,6 +895,19 @@ public class ForestGenerator : MonoBehaviour
             {
                 temp.y++;
                 concatenatedMap[(int)temp.x, (int)temp.y] = groundTunnelValue;
+
+                //Add small deviation so final shape of the tunnel is not a straight line.
+                bool deviateLeft = (0.5 < rand.NextDouble());
+                bool deviateRight = (0.5 < rand.NextDouble());
+                if (deviateLeft)
+                {
+                    concatenatedMap[(int)temp.x + 1, (int)temp.y] = groundTunnelValue;
+                }
+
+                if (deviateRight)
+                {
+                    concatenatedMap[(int)temp.x - 1, (int)temp.y] = groundTunnelValue;
+                }
             } while (leftRight.y > temp.y);
 
         }
@@ -772,6 +919,19 @@ public class ForestGenerator : MonoBehaviour
         {
             temp.x++;
             concatenatedMap[(int)temp.x, (int)temp.y] = groundTunnelValue;
+
+            //Add small deviation so final shape of the tunnel is not a straight line.
+            bool deviateUp = (0.5 < rand.NextDouble());
+            bool deviateDown = (0.5 < rand.NextDouble());
+            if (deviateUp)
+            {
+                concatenatedMap[(int)temp.x, (int)temp.y + 1] = groundTunnelValue;
+            }
+
+            if (deviateDown)
+            {
+                concatenatedMap[(int)temp.x, (int)temp.y - 1] = groundTunnelValue;
+            }
         }
         if (rightLeft.y < temp.y)
         {
@@ -779,6 +939,21 @@ public class ForestGenerator : MonoBehaviour
             {
                 temp.y--;
                 concatenatedMap[(int)temp.x, (int)temp.y] = groundTunnelValue;
+
+                //Add small deviation so final shape of the tunnel is not a straight line.
+                bool deviateLeft = (0.5 < rand.NextDouble());
+                bool deviateRight = (0.5 < rand.NextDouble());
+                if (deviateLeft)
+                {
+                    concatenatedMap[(int)temp.x + 1, (int)temp.y] = groundTunnelValue;
+                }
+
+                if (deviateRight)
+                {
+                    concatenatedMap[(int)temp.x - 1, (int)temp.y] = groundTunnelValue;
+                }
+
+
             } while (rightLeft.y < temp.y);
 
         }
@@ -788,6 +963,19 @@ public class ForestGenerator : MonoBehaviour
             {
                 temp.y++;
                 concatenatedMap[(int)temp.x, (int)temp.y] = groundTunnelValue;
+
+                //Add small deviation so final shape of the tunnel is not a straight line.
+                bool deviateLeft = (0.5 < rand.NextDouble());
+                bool deviateRight = (0.5 < rand.NextDouble());
+                if (deviateLeft)
+                {
+                    concatenatedMap[(int)temp.x + 1, (int)temp.y] = groundTunnelValue;
+                }
+
+                if (deviateRight)
+                {
+                    concatenatedMap[(int)temp.x - 1, (int)temp.y] = groundTunnelValue;
+                }
             } while (rightLeft.y > temp.y);
 
         }
@@ -796,7 +984,8 @@ public class ForestGenerator : MonoBehaviour
 
 
         //Run Cellular Automata on the concatenated map 3 times to smooth out tunnels.
-        concatenatedMap = ApplyCellularAutomata(concatenatedMap, 1, 4);
+        //concatenatedMap = ApplyCellularAutomata(concatenatedMap, 1, 4);
+        concatenatedMap = ApplyCellularAutomata(concatenatedMap, 10, 4);
 
         //Break down concatenated map.
         for (int x = 0; x < this.width * 3; x++)
@@ -845,6 +1034,15 @@ public class ForestGenerator : MonoBehaviour
                 }
             }
         }
+
+
+        //Delete unreachable areas that might have been created.
+        EliminateUnreachableAreas(center.Map, center.WalkableArea);
+        EliminateUnreachableAreas(up.Map, up.WalkableArea);
+        EliminateUnreachableAreas(down.Map, down.WalkableArea);
+        EliminateUnreachableAreas(left.Map, left.WalkableArea);
+        EliminateUnreachableAreas(right.Map, right.WalkableArea);
+
 
     }
 
@@ -1111,6 +1309,7 @@ public class ForestGenerator : MonoBehaviour
 
         if(pos != new Vector2(-1,-1))
         {
+            walkableAreaCoords.Clear();
             FloodFill(map, (int)pos.x, (int)pos.y, walkableAreaCoords);
         }
         else
