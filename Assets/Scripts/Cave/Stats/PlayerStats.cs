@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerStats : CharacterStats
 {
@@ -78,6 +79,17 @@ public class PlayerStats : CharacterStats
 
         //Update health bar UI.
         healthStatUI.SetValue(currentHealth);
+    }
+
+    public override void Die()
+    {
+        base.Die();
+
+        //Load game over menu.
+        SceneManager.LoadScene("GameOverMenu");
+
+        //Unload main level.
+        //SceneManager.UnloadSceneAsync("MainLevel"); 
     }
 
 }

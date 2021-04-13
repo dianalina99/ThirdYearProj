@@ -186,10 +186,22 @@ public class ForestGenerator : MonoBehaviour
         //Check if player just entered the game or if it came back from a dungeon.
         if (GameManagerScript.instance.previousForestGrid == null)
         {
-             //Place entry point somewhere in the middle of the map.
-             entryRef = Instantiate(this.forestEntrancePrefab, new Vector3(52, 52, 0), Quaternion.identity) as GameObject;
-             entryRef.transform.SetParent(this.transform, false);
-             GameManagerScript.instance.latestPlayerEntryPoint = entryRef;
+            int[,] checkedTiles = new int[width, height];
+
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    checkedTiles[x, y] = 0;
+                }
+            }
+
+            //Place entry point somewhere in the walkable area of the map - closest to center point.
+            Vector2 pos = FindClosestTileWithValue(GameManagerScript.instance.currentForestGrid.Map, checkedTiles, width / 2, height / 2, 0);
+
+            entryRef = Instantiate(this.forestEntrancePrefab, pos * 2, Quaternion.identity) as GameObject;
+            entryRef.transform.SetParent(this.transform, false);
+            GameManagerScript.instance.latestPlayerEntryPoint = entryRef;
           
         }
         else if(GameManagerScript.instance.previousForestGrid == GameManagerScript.instance.currentForestGrid)
