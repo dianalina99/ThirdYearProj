@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManagerScript : MonoBehaviour
 {
@@ -54,6 +53,8 @@ public class GameManagerScript : MonoBehaviour
     public int NoOfAvailableKeys = 0;
     #endregion
 
+    private bool menuIsLoaded = false;
+
     public void Reset()
     {
         dungeonInUse = false;
@@ -67,5 +68,20 @@ public class GameManagerScript : MonoBehaviour
        // playerIsCurrentlyTeleporting = false;
     }
 
-    
+    private void Update()
+    {
+        bool escIsUsedForExitingChest = this.playerRef.GetComponent<PlayerMovementScript>().focus != null;
+        if(Input.GetKeyDown(KeyCode.Escape) && !escIsUsedForExitingChest  && !menuIsLoaded)
+        {
+            SceneManager.LoadSceneAsync("GameMenu", LoadSceneMode.Additive);
+            this.menuIsLoaded = true;
+        }
+        else if(Input.GetKeyDown(KeyCode.Escape) && !escIsUsedForExitingChest && menuIsLoaded)
+        {
+            SceneManager.UnloadSceneAsync("GameMenu");
+            this.menuIsLoaded = false;
+        }
+    }
+
+
 }
