@@ -9,18 +9,20 @@ public class BorderScript : MonoBehaviour
  
     private void OnTriggerExit2D(Collider2D collision)
     {
+        //When player exits border, reset all ongoing interactions with it.
         StopAllCoroutines();
         this.onHold = false;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("COLLIDING");
+        //Debug.Log("COLLIDING");
         if (collision.gameObject.tag == "Player" && !GameManagerScript.instance.playerIsCurrentlyTeleporting && !this.onHold )
         {
             this.onHold = true;
-            Debug.LogWarning("PLAYER HIT BORDER");
+            //Debug.LogWarning("PLAYER HIT BORDER");
 
+            //Wait a few seconds before transfering the player.
             StartCoroutine("UnlockAfterSeconds");
         }
             
@@ -30,6 +32,7 @@ public class BorderScript : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(3f);
 
+        //Transfer player to correct map based on the border direction.
         if (borderDirection == "up")
         {
             Debug.Log("Player hit UP border");

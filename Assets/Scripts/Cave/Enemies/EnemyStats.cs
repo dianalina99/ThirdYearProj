@@ -47,6 +47,7 @@ public class EnemyStats : CharacterStats
         healthUI.SetValue(currentHealth);
     }
 
+    //Method to inflict damage on all surrounding enemies.
     public void InflictDamage()
     {
         if(GameManagerScript.instance.dungeonInUse)

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+//Class to define a room object inside the dungeon.
 public class Room
 {
     private float[,] map; 

@@ -57,6 +57,7 @@ public class MapGeneration : MonoBehaviour
 
     private void Update()
     {
+        //If signals are true, generate a new map.
         if(GameManagerScript.instance.dungeonInUse && GameManagerScript.instance.dungeonNeedsRegeneration)
         {
             Debug.Log("Generating dungeon...");
@@ -140,12 +141,14 @@ public class MapGeneration : MonoBehaviour
 
         }
 
-        //Create new room template.
+        //Create new room template = generate random entry and exit points so map does not looks blocky.
         Room newRoom = new Room(roomType, position);
         GenerateRoomTemplate(newRoom);
 
         gameObjMap.Add(position, newRoom);
 
+        //Update the border of the room with the entries and exits generated previously.
+        //Plus, add hidden door if needed.
         UpdateRoomBorder(room, newRoom.getMap(), newRoom, LeftIsEmpty);
 
     }
@@ -616,6 +619,7 @@ public class MapGeneration : MonoBehaviour
                 stopCondition = true;
             }
 
+            //Check if we reached the last row and save position as the last room.
             if(row == 3)
             {
                 lastRoomPos = new Vector2(column, row);
@@ -627,10 +631,12 @@ public class MapGeneration : MonoBehaviour
                 map[row, column] = 1;
             }
 
+            //Make this room a 4-type (exits in all parts) if prev room was 3 and now we are going down, or if prev room was 2 and now we are going up.
             if ((prevMove[row, column] == 3 && map[row, column] == 2) || (prevMove[row, column] == 2 && map[row, column] == 3))
             {
                 map[row, column] = 4;
             }
+            //Else instantiate room as being the direction we came from.
             else if ((prevMove[row, column] == 3 || prevMove[row, column] == 2) && (map[row, column] == 1 || map[row, column] == 0))
             {
                 map[row, column] = prevMove[row, column];
@@ -798,6 +804,8 @@ public class MapGeneration : MonoBehaviour
         return true;
     }
 
+
+    //Method for debugging - print map room layout to file.
     void PrintMap()
     {
         using (StreamWriter writer = new StreamWriter("C:\\Users\\diana\\Desktop\\3rdYearProj\\ThirdYearProj\\map.txt"))
@@ -823,14 +831,14 @@ public class MapGeneration : MonoBehaviour
 
         GameObject spawnPoint;
 
-
+        //Set spawn point to the correct dungeon environment.
         spawnPoint = GameManagerScript.instance.latestGeneratedEnvironmentDungeon.transform.GetChild(3).gameObject;
         
         //Instantiate new environment.
         GameManagerScript.instance.latestGeneratedEnvironmentDungeon = Instantiate(environmentPrefab, spawnPoint.transform.position, Quaternion.identity) as GameObject;
         GameManagerScript.instance.latestGeneratedEnvironmentDungeon.transform.SetParent(GameManagerScript.instance.dungeonMapRef.transform, true);
 
-        //Generate new room
+        //Generate new map grid of rooms.
         GenerateMapGrid();
 
         Debug.Log("Dungeon generated, ready for player...");

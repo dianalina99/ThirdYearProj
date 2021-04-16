@@ -27,6 +27,7 @@ public class EnemyMovement : MonoBehaviour
         seeker = GetComponent<Seeker>();
         rb = GetComponent<Rigidbody2D>();
 
+        //Update the path of the enemy every half a second.
         InvokeRepeating("UpdatePath", 0f, .5f);
 
         distanceToPlayer = 100;

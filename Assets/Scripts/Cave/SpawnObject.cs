@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+//Script to spawn given object at a set probability (1/objects.length).
 public class SpawnObject : MonoBehaviour
 {
     public GameObject[] objects;

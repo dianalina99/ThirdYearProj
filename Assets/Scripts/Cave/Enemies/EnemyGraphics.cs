@@ -16,10 +16,12 @@ public class EnemyGraphics : MonoBehaviour
     {
         if(!hasTarget)
         {
+            //Set target only once in the game.
             destination.target = GameObject.FindGameObjectWithTag("Player").transform;
             hasTarget = true;
         }
 
+        //Flip sprite to make enemy oriented with the direction of moving.
         if(aiPath.desiredVelocity.x >= 0.01f)
         {
             transform.localScale = new Vector3(-1f, 1f, 1f);

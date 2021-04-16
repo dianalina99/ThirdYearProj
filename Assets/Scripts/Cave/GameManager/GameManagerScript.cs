@@ -70,6 +70,7 @@ public class GameManagerScript : MonoBehaviour
 
     private void Update()
     {
+        //Manage any general key inputs : CTRL for showing menu/ closing the chest.
         bool ctrlIsUsedForExitingChest = this.playerRef.GetComponent<PlayerMovementScript>().focus != null;
 
         if((Input.GetKeyDown(KeyCode.LeftControl) || Input.GetKeyDown(KeyCode.RightControl)) && !ctrlIsUsedForExitingChest  && !menuIsLoaded)

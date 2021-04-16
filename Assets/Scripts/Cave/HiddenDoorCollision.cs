@@ -10,11 +10,13 @@ public class HiddenDoorCollision : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        //If door collides with wall, remove the wall tile.
         if(collision.gameObject.tag == "WallTile")
         {
             Destroy(collision.gameObject);
         }
 
+        //Only open when player has key when colliding.
         if(collision.gameObject.tag == "Player" && locked)
         {
             //Check if the player has required key.

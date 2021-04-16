@@ -19,9 +19,7 @@ public class Equipment : Item
         EquipmentManager.instance.Equip(this);
 
         //Remove from inventory
-        RemoveFromInventory();
-
-        //Add it to equipment bar.
+        RemoveFromInventory();  
 
     }
 

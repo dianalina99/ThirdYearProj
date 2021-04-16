@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DecorFadeOnCollision : MonoBehaviour
 {
-
+    //On collision with any moving object, fade on enter and unfade on exit.
     private void OnTriggerEnter2D(Collider2D collision)
     {
         //Debug.Log("Collision"); //Collision is true
@@ -16,6 +16,7 @@ public class DecorFadeOnCollision : MonoBehaviour
         
     }
 
+    //Fade object slowly.
     IEnumerator FadeAlphaToZero(SpriteRenderer renderer, float duration)
     {
         Color startColor = renderer.color;
@@ -29,6 +30,7 @@ public class DecorFadeOnCollision : MonoBehaviour
         }
     }
 
+    //Unfade object slowly.
     IEnumerator UnFadeAlpha(SpriteRenderer renderer, float duration)
     {
         Color startColor = renderer.color;

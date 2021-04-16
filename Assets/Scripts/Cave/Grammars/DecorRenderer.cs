@@ -122,7 +122,7 @@ public class DecorRenderer : MonoBehaviour
 
             BoxCollider2D collider = temp.gameObject.GetComponent<BoxCollider2D>();
 
-            //Check if it collides with 
+            //Check if it collides with anything.
             if(collider.IsTouching(objCollider) && (temp.tag == "DecorTile" || temp.tag == "WallTile"))
             {
                 return true;

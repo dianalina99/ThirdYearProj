@@ -16,6 +16,7 @@ public class PlayerMovementScript : MonoBehaviour
 
     private void Start()
     {
+        //Save reference to the camera.
         cam = Camera.main;
     }
 
@@ -26,7 +27,7 @@ public class PlayerMovementScript : MonoBehaviour
 
         if(movement.x < 0.0f)
         {
-            //Flip sprite
+            //Flip sprite.
             this.transform.localScale = new Vector3(-1, this.transform.localScale.y, this.transform.localScale.z);
         }
         else
@@ -34,6 +35,7 @@ public class PlayerMovementScript : MonoBehaviour
             this.transform.localScale = new Vector3(1, this.transform.localScale.y, this.transform.localScale.z);
         }
 
+        //Make sprite have the correct orientation when pressing the move keys.
         animator.SetFloat("Horizontal", movement.x);
         animator.SetFloat("Vertical", movement.y);
         animator.SetFloat("speed", movement.sqrMagnitude);
@@ -111,7 +113,7 @@ public class PlayerMovementScript : MonoBehaviour
             }
         }
 
-        //Unfocus interactables when hitting ESC.
+        //Unfocus interactables when hitting CTRL.
         if (Input.GetKeyDown(KeyCode.LeftControl) || Input.GetKeyDown(KeyCode.RightControl))
         {
             RemoveFocus();

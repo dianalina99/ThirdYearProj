@@ -112,6 +112,7 @@ public class ForestGenerator : MonoBehaviour
 
     private void Update()
     {
+        //When triggers are true, generate new forest.
         if(GameManagerScript.instance.forestInUse && GameManagerScript.instance.forestNeedsRegeneration || regenerate)
         {
             regenerate = false;

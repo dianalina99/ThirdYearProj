@@ -10,6 +10,7 @@ public class PortalEntrance : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //If dungeon has finished generating, spawn player in.
         if(GameManagerScript.instance.dungeonReadyForPlayer)
         {
             Debug.Log("Spawing player in dungeon START...");

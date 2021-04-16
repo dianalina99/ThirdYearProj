@@ -33,6 +33,7 @@ public class EquipmentManager : MonoBehaviour
         int slotIndex = (int) newItem.equipSlot;
         Equipment oldItem = null;
 
+        //If something else is already equiped, switch.
         if(currentEquipment[slotIndex] != null)
         {
             oldItem = currentEquipment[slotIndex];
@@ -41,6 +42,7 @@ public class EquipmentManager : MonoBehaviour
 
         currentEquipment[slotIndex] = newItem;
 
+        //Update the UI/ all subscribers to this trigger.
         if (onEquipmentChanged != null)
         {
             onEquipmentChanged.Invoke(newItem, oldItem);
@@ -49,6 +51,7 @@ public class EquipmentManager : MonoBehaviour
 
     public void Unequip(int slotIndex)
     {
+        //Unequip an item and tranfer back to the inventory.
         if(currentEquipment[slotIndex] != null)
         {
             Equipment oldItem = currentEquipment[slotIndex];
