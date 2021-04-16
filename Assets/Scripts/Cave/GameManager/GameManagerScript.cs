@@ -70,13 +70,14 @@ public class GameManagerScript : MonoBehaviour
 
     private void Update()
     {
-        bool escIsUsedForExitingChest = this.playerRef.GetComponent<PlayerMovementScript>().focus != null;
-        if(Input.GetKeyDown(KeyCode.Escape) && !escIsUsedForExitingChest  && !menuIsLoaded)
+        bool ctrlIsUsedForExitingChest = this.playerRef.GetComponent<PlayerMovementScript>().focus != null;
+
+        if((Input.GetKeyDown(KeyCode.LeftControl) || Input.GetKeyDown(KeyCode.RightControl)) && !ctrlIsUsedForExitingChest  && !menuIsLoaded)
         {
             SceneManager.LoadSceneAsync("GameMenu", LoadSceneMode.Additive);
             this.menuIsLoaded = true;
         }
-        else if(Input.GetKeyDown(KeyCode.Escape) && !escIsUsedForExitingChest && menuIsLoaded)
+        else if((Input.GetKeyDown(KeyCode.LeftControl) || Input.GetKeyDown(KeyCode.RightControl)) && !ctrlIsUsedForExitingChest && menuIsLoaded)
         {
             SceneManager.UnloadSceneAsync("GameMenu");
             this.menuIsLoaded = false;

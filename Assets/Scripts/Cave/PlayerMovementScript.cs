@@ -61,7 +61,7 @@ public class PlayerMovementScript : MonoBehaviour
         //Damage enemies detected previously.
         foreach(Collider2D enemy in enemies)
         {
-            enemy.gameObject.GetComponent<EnemyStats>().TakeDamage(GameManagerScript.instance.playerRef.GetComponent<PlayerStats>().strength.GetValue());
+                enemy.gameObject.GetComponent<EnemyStats>().TakeDamage(GameManagerScript.instance.playerRef.GetComponent<PlayerStats>().strength.GetValue());
         }
 
         //Cooldown for half a second.
@@ -112,7 +112,7 @@ public class PlayerMovementScript : MonoBehaviour
         }
 
         //Unfocus interactables when hitting ESC.
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.LeftControl) || Input.GetKeyDown(KeyCode.RightControl))
         {
             RemoveFocus();
         }
